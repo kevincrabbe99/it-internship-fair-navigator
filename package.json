@@ -1,0 +1,22 @@
+{
+  "name": "intern-navigator",
+  "version": "1.0.0",
+  "description": "internship navigator for IT326",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevincrabbe99/it-internship-fair-navigator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kevincrabbe99/it-internship-fair-navigator/issues"
+  },
+  "homepage": "https://github.com/kevincrabbe99/it-internship-fair-navigator#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
