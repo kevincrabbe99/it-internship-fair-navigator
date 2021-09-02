@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/kevincrabbe99/it-internship-fair-navigator#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pan-zoom": "^3.5.2"
   }
 }
