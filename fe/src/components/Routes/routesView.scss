@@ -1,0 +1,47 @@
+#routes_list {
+  position: absolute;
+  top: 3em;
+}
+
+#routes_list ul {
+  list-style-type: none;
+}
+
+#routes_container {
+  height: calc(90% - 3em);
+  position: absolute;
+  right: 2em;
+  top: calc(5% + 3em);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  width: 20em;
+}
+
+#routes_heaer {
+  position: relative;
+}
+
+#routes_header ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+}
+
+#routes_header li {
+  display: inline;
+  padding: 0.3em;
+}
+
+#routes_header_title {
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em;
+}
+
+#routes_header_title h4 {
+  margin: 0;
+  padding: 0;
+}
