@@ -1,0 +1,19 @@
+FROM node:14
+
+WORKDIR /usr/src
+
+ENV PATH /node_modules/.bin:$PATH
+
+COPY package.json ./
+COPY package-lock.json ./
+
+RUN npm install
+RUN npm install react-scripts@3.4.1 -g
+RUN npm install serve -g
+
+COPY . .
+
+EXPOSE 3000
+
+RUN npm run build
+CMD serve -s build -l 3000
