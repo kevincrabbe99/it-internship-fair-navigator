@@ -1,8 +1,8 @@
 # it-internship-fair-navigator
 
-## PROD URL:
+### PROD URL:
 
-https://it-internship-navigator.web.app/
+https://it-internship-navigator.web.app/ \
 https://it-internship-navigator.firebaseapp.com/
 
 ## Git Workflow
