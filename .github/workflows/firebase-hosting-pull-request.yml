@@ -11,6 +11,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           cd fe
+          npm install
           npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
