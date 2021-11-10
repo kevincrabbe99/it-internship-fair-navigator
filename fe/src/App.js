@@ -17,7 +17,7 @@ function App() {
         <Header/>
         <Switch>
           <Route exact path="/" component={Map}/>
-          <Route exact path="/admin" component={Admin} />
+          {/* <Route exact path="/admin" component={Admin} /> */}
         </Switch>
       </div>
     </Router>
