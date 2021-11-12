@@ -1,0 +1,5 @@
+Flask
+pymongo[srv]
+Flask-PyMongo
+pytest
+python-dotenv
