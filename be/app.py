@@ -11,12 +11,3 @@ def index():
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=8080)
-
-
-m = MongoConnection()
-collection = m.db["it_nav"]
-data = {
-    'test': 'test2',
-    'something': 1234
-}
-

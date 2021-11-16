@@ -72,6 +72,20 @@ class Map:
     tables = property(get_tables, set_tables)
     data = property(get_data)
 
+    def addTable(self, table):
+        self._tables.append(table)
+        return
+    
+    def removeTable(self, table):
+        self._tables.remove(table)
+        return
+
+    def yearExist(self, year):
+        if (year in self._available_years):
+            return True
+        else:
+            return False
+
 class Table:
     def __init__(self, id, num, company, marked):
         self._id = id
