@@ -9,7 +9,7 @@ https://it-internship-navigator.firebaseapp.com/
 
 ### Master Branch
 
-Master branch is connected to https://it-internship-navigator.firebaseapp.com/
+Master branch is connected to https://itfnavigator.com & https://api.itfnavifator.com
 Any merge into to master branch will make changes to the production site.
 Merges into master must pass react-scripts test and the docker container must fully build in Github Actions.
 
