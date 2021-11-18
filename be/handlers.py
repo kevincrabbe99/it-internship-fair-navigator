@@ -2,9 +2,6 @@ from abc import ABC, abstractmethod
 from models import *
 # might not be the right libraries
 import pymongo
-import flask_pymongo
-import pydantic
-import fastapi
 
 # Last updated: 11/11/2021
 # skeleton classes
