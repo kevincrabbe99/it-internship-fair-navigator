@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import { SidebarData } from './SidebarData';
+import { SidebarData } from './SidebarData.js';
 import './Navbar.css';
 import { IconContext } from 'react-icons';
 
@@ -10,6 +10,11 @@ function Navbar() {
   const [sidebar, setSidebar] = useState(false);
 
   const showSidebar = () => setSidebar(!sidebar);
+
+  const handleClick = (address) => {
+    window.open(address);
+    }
+  
 
   return (
     <>
@@ -31,7 +36,7 @@ function Navbar() {
                 <li key={index} className={item.cName}>
                   <Link to={item.path}>
                     {item.icon}
-                    <span>{item.title}</span>
+                    <span onClick={() => handleClick(item.address)}>{item.title}</span>
                   </Link>
                 </li>
               );

@@ -1,7 +1,7 @@
 // import logo from './logo.svg';
 import React from 'react';
 import Header from './components/header/Header';
-import Sidebar from './components/Navbar';
+import Sidebar from './components/sideBar/Navbar.js';
 import Map from './pages/map/Map';
 import './App.css';
 
