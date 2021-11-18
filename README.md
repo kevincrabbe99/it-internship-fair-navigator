@@ -18,9 +18,8 @@ Merges into master must pass react-scripts test and the docker container must fu
 Use this branch to create new branches.
 Once a branch is complete, create a PR into 'dev' branch.
 
-### Preview Pull Requests
+## GCP ENVIRONMENT
 
-When a PR is created you can preview the changes in on Firebase -> Hosting -> Preview.
+### /fe
 
-Setup node Environment on windows
-https://www.tutorialsteacher.com/nodejs/setup-nodejs-development-environment
+React app .env file is used for local development.
