@@ -1,4 +1,4 @@
-from be.models import *
+from be.app.models import *
 import pytest
 
 def test_document_get():
