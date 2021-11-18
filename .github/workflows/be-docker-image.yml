@@ -12,7 +12,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Build fe the Docker image
+      - name: Build be the Docker image
         run: |
-          cd fe
-          docker build . --file Dockerfile --tag fe-test-image:$(date +%s)
+          cd be
+          docker build . --file Dockerfile --tag be-test-image:$(date +%s)
