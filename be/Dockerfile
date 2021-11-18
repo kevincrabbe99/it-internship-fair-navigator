@@ -14,4 +14,6 @@ COPY . /app
 
 ENTRYPOINT [ "python" ]
 
-CMD [ "python -u app.py" ]
+EXPOSE 8080
+
+CMD [ "app.py" ]
