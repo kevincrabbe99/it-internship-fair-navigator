@@ -9,7 +9,7 @@ https://it-internship-navigator.firebaseapp.com/
 
 ### Master Branch
 
-Master branch is connected to https://it-internship-navigator.firebaseapp.com/
+Master branch is connected to https://itfnavigator.com & https://api.itfnavifator.com
 Any merge into to master branch will make changes to the production site.
 Merges into master must pass react-scripts test and the docker container must fully build in Github Actions.
 
@@ -18,9 +18,22 @@ Merges into master must pass react-scripts test and the docker container must fu
 Use this branch to create new branches.
 Once a branch is complete, create a PR into 'dev' branch.
 
-### Preview Pull Requests
 
-When a PR is created you can preview the changes in on Firebase -> Hosting -> Preview.
+## Google Cloud Platform Environment
+No .env file should be commited to the repository.
+GCP Defines env vars. 
 
-Setup node Environment on windows
-https://www.tutorialsteacher.com/nodejs/setup-nodejs-development-environment
+### /fe (Front end react app)
+https://itfnavigator.com
+### /be (Backend Python Flask API)
+https://api.itfnavifator.com
+
+## LocalHost Env
+Set in local .env file within corresponding directory
+
+### /fe (Front end react app)
+http://localhost:3000
+### /be (Backend Python Flask API)
+http://localhost:8080
+
+
