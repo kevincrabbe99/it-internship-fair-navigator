@@ -63,6 +63,12 @@ class Map:
         self._tables = t
         self._data["tables"] = t
 
+    def add_table(self, t):
+        self._tables.append(t)
+
+    def remove_table(self, t):
+        self._tables.remove(t)
+
     def get_data(self):
         return self._data
 
