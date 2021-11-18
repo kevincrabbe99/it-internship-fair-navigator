@@ -27,18 +27,21 @@ class MapHandler(DatabaseObject):
         self.map = self.buildMapFromJSON(mapJSON)
     
     def addTable(self, table):
+        map.add_table(table)
         return
 
     def removeTable(self, table):
+        map.remove_table(table)
         return
 
     def buildMapFromJSON(mapJSON):
         return
     
-    def getConnection():
+    def getConnection(self):
+
         return
 
-    def closeConnection():
+    def closeConnection(self):
         return
 
 class TableHandler(DatabaseObject):
@@ -55,10 +58,10 @@ class TableHandler(DatabaseObject):
     def buildTableFromJSON(mapJSON):
         return
     
-    def getConnection():
+    def getConnection(self):
         return
 
-    def closeConnection():
+    def closeConnection(self):
         return
 
 class CompanyHandler(DatabaseObject):
@@ -75,10 +78,10 @@ class CompanyHandler(DatabaseObject):
     def setCompanyName(self, name):
         return
     
-    def getConnection():
+    def getConnection(self):
         return
 
-    def closeConnection():
+    def closeConnection(self):
         return
 
 class DocumentHandler(DatabaseObject):
@@ -89,10 +92,10 @@ class DocumentHandler(DatabaseObject):
     def downloadDocument(self, link):
         return
 
-    def getConnection():
+    def getConnection(self):
         return
 
-    def closeConnection():
+    def closeConnection(self):
         return
 
 class EmailListHandler(DatabaseObject):
@@ -109,8 +112,8 @@ class EmailListHandler(DatabaseObject):
     def generateEmailList():
         return list()
     
-    def getConnection():
+    def getConnection(self):
         return
 
-    def closeConnection(): 
+    def closeConnection(self): 
         return

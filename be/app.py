@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
-from api.api import navigator_api
-from mongo_connection import MongoConnection
+from api import navigator_api
+from app.mongo_connection import MongoConnection
 
 app = Flask(__name__)
 CORS(app)
