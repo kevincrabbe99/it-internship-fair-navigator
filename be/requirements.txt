@@ -1,6 +1,8 @@
 Flask==2.0.2
+bson
 pymongo[srv]
 Flask-PyMongo
 flask-cors
+flask-admin
 pytest
 python-dotenv
