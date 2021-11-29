@@ -11,6 +11,7 @@ navigator_api = Blueprint(
 m = MongoConnection()
 
 # CRUD FOR TABLES
+# ALL THESE WILL REQUIRE AN AUTH HEADER, NOT SURE HOW TO IMPLEMENT THAT YET NEEDS SOME RESEARCH
 @navigator_api.route('/tables', methods=['GET'])
 def get_tables():
     response = m.read_all('tables', {})
