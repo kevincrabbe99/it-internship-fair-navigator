@@ -45,7 +45,7 @@ class MongoConnection(object):
 
     def update(self, collection, item = {}, data = {}):
         if collection in self.collection_list:
-            response = self.db[collection].update_one(item, data)
+            response = self.db[collection].replace_one(item, data, True)
             return response
 
     def delete(self, collection, item = {}):
