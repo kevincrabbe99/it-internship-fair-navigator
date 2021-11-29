@@ -1,5 +1,7 @@
 from flask import Flask, Blueprint, json, request, jsonify, Response
 from app.mongo_connection import *
+from app.util import encode, validate
+from app.user import Admin
 from bson.objectid import ObjectId
 
 
@@ -109,4 +111,39 @@ def delete_table(id):
                     status=404,
                     mimetype='application/json')
     return response
+
+# Admin login and logout
+@navigator_api.route('/login', methods=['POST'])
+def admin_login():
+    username = request.values['username']
+    password = request.values['password']
+
+    if username and password and request.method == 'POST':
+        # we can replace this if later. Eventually it'll be validated in the admin class
+        if validate(username, password):
+            key = encode(password)
+            id = {'_id': 1}
+            data = {'key': key}
+            raw = m.update('admin', id, data)
+            response = {'_id': 1, 'key': key}
+            response = json.dumps(response, default=str)
+            response = jsonify(response)
+        else:
+            response = Response(response="Refused Credentials",
+                        status=401,
+                        mimetype='application/json')
+    else:
+        response = Response(response="Bad Request",
+                    status=404,
+                    mimetype='application/json')
+    return response
+
+@navigator_api.route('/logout', methods=['DELETE'])
+def admin_logout():
+
+    #key = request.values['key']
+    # if key is valid (check in database)
+
+    m.delete('admin', {'_id': 1})
+    return "Success"
 
