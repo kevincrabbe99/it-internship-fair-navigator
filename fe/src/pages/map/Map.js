@@ -6,7 +6,7 @@ export default function Map() {
     return (
         <div>
             <RoutesView />
-            <ImageZoom/>
+            <ImageZoom />
         </div>
     )
 }
