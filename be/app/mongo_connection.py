@@ -18,8 +18,11 @@ class MongoConnection(object):
             cls.dbname = os.getenv('DBNAMEDEV')
             cls.dbstring = f"mongodb+srv://{cls.user}:{cls.pwd}@navigatordb.vkpij.mongodb.net/{cls.dbname}?retryWrites=true&w=majority"
             cls.client = pymongo.MongoClient(cls.dbstring, tlsAllowInvalidCertificates=True)
-            cls.db = cls.client['ITNavigatorDB']
+            cls.db = cls.client[cls.dbname]
+            cls.collection_list = cls.db.list_collection_names()
         return cls._instance
+        
+
 
 
     

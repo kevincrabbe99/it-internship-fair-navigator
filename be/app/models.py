@@ -1,4 +1,13 @@
 class Document:
+    """
+    A class used to represent the Document model
+
+    Attributes:
+    name (str): The name of the document
+    link (str): The link to download the document
+    data (dict): A dictionary containing the attributes of the model
+        For easy json conversion
+    """
     def __init__(self, name, link):
         self._name = name
         self._link = link
@@ -27,23 +36,25 @@ class Document:
     data = property(get_data)
 
 class Map:
-    def __init__(self, id, mr_year, avail_years, tables):
-        self._id = id
+    """
+    A class used to represent the Map model
+
+    Attributes:
+    most_recent_year (int): The most recent year of the map
+    available_years (list(int)): A list of the available years of maps
+    tables (list(str)): A list containing IDs of the map's tables
+    data (dict): A dictionary containing the attributes of the model
+        For easy json conversion
+    """
+    def __init__(self, mr_year, avail_years, tables):
         self._most_recent_year = mr_year
         self._available_years = avail_years
         self._tables = tables
         self._data = {
-            "id": self._id,
             "most_recent_year": self._most_recent_year,
             "available_years": self._available_years,
             "tables": self._tables
         }
-
-    def get_id(self):
-        return self._id
-    def set_id(self, id):
-        self._id = id
-        self._data["id"] = id
 
     def get_most_recent_year(self):
         return self._most_recent_year
@@ -72,44 +83,37 @@ class Map:
     def get_data(self):
         return self._data
 
-    id = property(get_id, set_id)
-    most_recent_year = property(get_most_recent_year, set_most_recent_year)
-    available_years = property(get_available_years, set_available_years)
-    tables = property(get_tables, set_tables)
-    data = property(get_data)
-
-    def addTable(self, table):
-        self._tables.append(table)
-        return
-    
-    def removeTable(self, table):
-        self._tables.remove(table)
-        return
-
     def yearExist(self, year):
         if (year in self._available_years):
             return True
         else:
             return False
 
+    most_recent_year = property(get_most_recent_year, set_most_recent_year)
+    available_years = property(get_available_years, set_available_years)
+    tables = property(get_tables, set_tables)
+    data = property(get_data)
+
 class Table:
-    def __init__(self, id, num, company, marked):
-        self._id = id
+    """
+    A class used to represent the Table model
+
+    Attributes:
+    number (int): The position (number) of the table in the map
+    company (str): The ID of table's company
+    marked (bool): Is the table marked or not
+    data (dict): A dictionary containing the attributes of the model
+        For easy json conversion
+    """
+    def __init__(self, num, company, marked):
         self._number = num
         self._company = company
         self._marked = marked
         self._data = {
-            "id": self._id,
             "number": self._number,
             "company": self._company,
             "marked": self._marked
         }
-
-    def get_id(self):
-        return self._id
-    def set_id(self, id):
-        self._id = id
-        self._data["id"] = id
 
     def get_number(self):
         return self._number
@@ -132,32 +136,34 @@ class Table:
     def get_data(self):
         return self._data
 
-    id = property(get_id, set_id)
     number = property(get_number, set_number)
     company = property(get_company, set_company)
     marked = property(get_marked, set_marked)
     data = property(get_data)
 
 class Company:
-    def __init__(self, id, name, num_reps, site, other):
-        self._id = id
+    """
+    A class used to represent the Company model
+
+    Attributes:
+    name (str): The name of the company
+    number_of_reps (int): The number of representatives of the company
+    website (str): The URL of the company's website
+    other_info (str): Any other pertinent info
+    data (dict): A dictionary containing the attributes of the model
+        For easy json conversion
+    """
+    def __init__(self, name, num_reps, site, other):
         self._name = name
         self._number_of_reps = num_reps
         self._website = site
         self._other_info = other
         self._data = {
-            "id": self._id,
             "name": self._name,
             "number_of_reps": self._number_of_reps,
             "website": self._website,
             "other_info": self._other_info
         }
-
-    def get_id(self):
-        return self._id
-    def set_id(self, id):
-        self._id = id
-        self._data["id"] = id
 
     def get_name(self):
         return self._name
@@ -186,7 +192,6 @@ class Company:
     def get_data(self):
         return self._data
 
-    id = property(get_id, set_id)
     name = property(get_name, set_name)
     number_of_reps = property(get_number_of_reps, set_number_of_reps)
     website = property(get_website, set_website)
@@ -194,6 +199,14 @@ class Company:
     data = property(get_data)
 
 class EmailList:
+    """
+    A class used to represent the Email List model
+
+    Attributes:
+    email_list (list(str)): A list containing the email addresses subscribed
+    data (dict): A dictionary containing the attributes of the model
+        For easy json conversion
+    """
     def __init__(self, emails):
         self._email_list = emails
         self._data = {
@@ -208,6 +221,16 @@ class EmailList:
 
     def get_data(self):
         return self._data
+
+    def subscribe(self, email):
+        if email in self.email_list:
+            return
+        else:
+            self.email_list.append(email)
+
+    def unsubscribe(self, email):
+        if email in self.email_list:
+            self.email_list.remove(email)
 
     email_list = property(get_email_list, set_email_list)
     data = property(get_data)
