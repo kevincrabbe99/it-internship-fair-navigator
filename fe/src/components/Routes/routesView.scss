@@ -13,10 +13,12 @@
   height: calc(90% - 3em);
   position: absolute;
   right: 2em;
-  top: calc(5% + 5.2em);
+  top: 0;
   border: 1px solid var(--border-color);
   border-radius: 5px;
   width: 20em;
+  background-color: white;
+  z-index: 30;
 }
 
 #routes_heaer {
