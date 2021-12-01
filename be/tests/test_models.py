@@ -1,37 +1,6 @@
 from ..app.models import *
 import pytest
 
-def test_document_get():
-    name = "test"
-    link = "link"
-    data = {
-            "name": name,
-            "link": link
-    }
-
-    d = Document(name, link)
-
-    assert d.name == name, "Test Failed"
-    assert d.link == link, "Test Failed"
-    assert d.data == data, "Test Failed"
-
-def test_document_set():
-    name = "test"
-    name2 = "test2"
-    link = "link"
-    link2 = "link2"
-    data = {
-        "name": name2,
-        "link": link2
-    }
-
-    d = Document(name, link)
-    d.name = name2
-    d.link = link2
-
-    assert d.name == name2, "Test Failed"
-    assert d.link == link2, "Test Failed"
-    assert d.data == data, "Test Failed"
 
 def test_map_get():
     most_recent_year = 2021

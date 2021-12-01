@@ -4,5 +4,6 @@ pymongo[srv]
 Flask-PyMongo
 flask-cors
 flask-admin
+bcrypt
 pytest
 python-dotenv

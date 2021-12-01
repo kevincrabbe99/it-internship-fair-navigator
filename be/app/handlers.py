@@ -2,19 +2,16 @@ import json
 
 from abc import ABC, ABCMeta, abstractmethod
 
-from ..app.models import *
-from ..app.mongo_connection import *
-from ..app.util import check_email
+from flask.json import jsonify
+from bson.objectid import ObjectId
 
-# Last updated: 11/11/2021
-# skeleton classes
-# All methods have a return statement for now to get rid of the errors
+from app.models import *
+from app.mongo_connection import *
+from app.util import check_email
 
 class DatabaseObject(metaclass=ABCMeta):
-    def __init__(self, databaseCon, accessToken, user):
+    def __init__(self, databaseCon: MongoConnection):
         self.databaseCon = databaseCon
-        self.accessToken = accessToken
-        self.user = user
 
     @abstractmethod
     def getConnection():
@@ -24,56 +21,162 @@ class DatabaseObject(metaclass=ABCMeta):
     def closeConnection():
         raise NotImplementedError
 
+    def _read_all(self, collection, search = {}):
+        if collection in self.databaseCon.collection_list:
+            documents = self.databaseCon.db[collection].find(search)
+            if documents is not None:
+                return list(documents)
+            else:
+                return None
+
+    def _read_one(self, collection, search = {}):
+        if collection in self.databaseCon.collection_list:
+            documents = self.databaseCon.db[collection].find_one(search)
+            if documents is not None:
+                return documents
+            else:
+                return None
+
+    def _write(self, collection, data = {}):
+        if collection in self.databaseCon.collection_list:
+            response = self.databaseCon.db[collection].insert_one(data)
+            return response
+
+    def _update(self, collection, item = {}, data = {}):
+        if collection in self.databaseCon.collection_list:
+            response = self.databaseCon.db[collection].replace_one(item, data, True)
+            return response
+
+    def _delete(self, collection, item = {}):
+        if collection in self.databaseCon.collection_list:
+            response = self.databaseCon.db[collection].delete_one(item)
+            return response
+
 class MapHandler(DatabaseObject):
     """
     A class used to handle CRUD operations between Map model and the DB
 
     Attributes:
     databaseCon (MongoConnection): The MongoConnection singleton
-    accessToken (str): Unsure of usage
-    user (User): Unsure of usage
-    mapJSON (str): The JSON object containing table data
     """
 
-    def __init__(self, databaseCon, accessToken, user, mapJSON):
+    collection = "maps"
+
+    def __init__(self, databaseCon: MongoConnection):
         """
         Parameters:
         databaseCon (MongoConnection): The MongoConnection singleton
-        accessToken (str): Unsure of usage
-        user (User): Unsure of usage
-        mapJSON (str): The JSON object containing table data
         """
-        super().__init__(databaseCon, accessToken, user)
-        self.map = self.buildMapFromJSON(mapJSON)
+        super().__init__(databaseCon)
     
-    def addTable(self, table):
+    def createMap(self, map: Map):
         """
-        Static method that adds a table to the map
+        Method to add map to DB
 
         Parameters:
-        table (str): The string containing the ID of the table to add
+        map (Map): The map to use
 
         Returns:
-        Nothing
+        str: ObjectID of the inserted map
         """
-        self.map.add_table(table)
-        return
+        data = map.data
+        try:
+            raw = super()._write(self.collection, data)
+            new_id = raw.inserted_id
+            return str(new_id)
+        except:
+            return None
 
-    def removeTable(self, table):
+    def readMapByID(self, id: str):
         """
-        Class method that removes a table from the map
+        Method to query a specific company
+        Parameters:
+        id (str): The ObjectID(_id) of the company to query
+        
+        Returns:
+        dictionary: The queried document
+        """
+        search = {'_id': ObjectId(id)}
+
+        try:
+            result = super()._read_one(self.collection, search)
+            return result
+        except:
+            return None
+
+    def readMapByYear(self, year: int):
+        """
+        Method to query a specific map
+        Parameters:
+        year (int): The year of the map to query
+        
+        Returns:
+        dictionary: The queried document
+        """
+        search = {'most_recent_year': year}
+
+        try:
+            result = super()._read_one(self.collection, search)
+            return result
+        except:
+            return None
+
+    def readAllMaps(self):
+        """
+        Method to query all maps
+        
+        Returns:
+        list: List of maps
+        """
+        try:
+            result = super()._read_all(self.collection)
+            return result
+        except: 
+            return None
+
+    def updateMap(self, id: str, map: Map):
+        """
+        Method to update an existing map in the DB
+            Replaces an existing map (in db) with
+            the map parameter, maintaining id
 
         Parameters:
-        table (str): The string containing the ID of the table to remove
-
+        id (str): The ObjectID(_id) of the map to update
+        map (Map): The new map object
+        
         Returns:
-        Nothing
+        string: Count of modified documents (should be 1)
         """
-        self.map.remove_table(table)
-        return
+        item = {'_id': ObjectId(id)}
+        data = map.data
+
+        try:
+            raw = super()._update(self.collection, item, data)
+            result = raw.modified_count
+            return result
+        except:
+            return None
+
+    def deleteMap(self, id: str):
+        """
+        Method to remove a map from the DB
+
+        Parameters:
+        id (str): The ObjectID(_id) of the map to remove
+        
+        Returns:
+        int: Count of deleted objects (should be 1)
+        """
+        item = {'_id': ObjectId(id)}
+        try:
+            raw = super()._delete(self.collection, item)
+            result = raw.deleted_count
+            return result
+        except: 
+            return None
 
     @staticmethod
-    def s_addTable(map: Map, table: str):
+    def addTable(map: Map, table: str):
         """
         Static method that adds a table to any map
 
@@ -88,7 +191,7 @@ class MapHandler(DatabaseObject):
         return
 
     @staticmethod
-    def s_removeTable(map: Map, table):
+    def removeTable(map: Map, table: str):
         """
         Static method that removes a table from any map
 
@@ -102,12 +205,13 @@ class MapHandler(DatabaseObject):
         map.remove_table(table)
         return
 
-    def buildMapFromJSON(self, mapJSON):
+    @staticmethod
+    def buildMapFromJSON(mapJSON: str):
         """
-        Class method that build the map object from a json string
+        Static method that build the map object from a json string
 
         Parameters:
-        mapJSON (str): The JSON object containing map parameters
+        mapJSON (json): The JSON object containing map parameters
 
         Returns:
         Map: The built map object
@@ -118,7 +222,21 @@ class MapHandler(DatabaseObject):
         tables = data["tables"]
         m = Map(most_recent_year, available_years, tables)
         return m
-    
+
+    @staticmethod
+    def jsonifyMap(map: Map):
+        """
+        Static method to return a json object of the map model
+
+        Parameters:
+        map (Map): The Map to use
+
+        Returns:
+        str: The json object
+        """
+        data = json.dumps(map.data)
+        return data
+
     def getConnection(self):
         """
         Method to return the reference to the mongo_connection singleton
@@ -129,6 +247,13 @@ class MapHandler(DatabaseObject):
         return self.databaseCon
 
     def closeConnection(self):
+        '''
+        Method to remove the reference to mongo_connection
+        
+        Returns:
+        Nothing
+        '''
+        self.databaseCon = None
         return
 
 class TableHandler(DatabaseObject):
@@ -137,50 +262,128 @@ class TableHandler(DatabaseObject):
 
     Attributes:
     databaseCon (MongoConnection): The MongoConnection singleton
-    accessToken (str): Unsure of usage
-    user (User): Unsure of usage
-    tableJSON (str): The JSON object containing table data
     """
 
-    def __init__(self, databaseCon, accessToken, user, tableJSON):
+    collection = "tables"
+
+    def __init__(self, databaseCon: MongoConnection):
         """
         Parameters:
         databaseCon (MongoConnection): The MongoConnection singleton
-        accessToken (str): Unsure of usage
-        user (User): Unsure of usage
-        tableJSON (str): The JSON object containing table data
         """
-        super().__init__(databaseCon, accessToken, user)
-        self.table = self.buildTableFromJSON(tableJSON)
+        super().__init__(databaseCon)
     
-    def setTableLocation(self, number):
+    
+    def createTable(self, table: Table):
         """
-        Class method that sets a table's location in the map
+        Method to add table to DB
 
         Parameters:
-        number (int): The position of the table in the map
+        table (Table): The table to use
 
         Returns:
-        Nothing
+        string: ObjectID of the inserted table
         """
-        self.table.number = number
-        return
+        data = table.data
+        try:
+            raw = super()._write(self.collection, data)
+            new_id = raw.inserted_id
+            return str(new_id)
+        except:
+            return None
 
-    def setTableCompany(self, company):
+    def readTableByID(self, id: str):
         """
-        Class method that sets a table's company
+        Method to query a specific table
 
         Parameters:
-        company (str): The ID of the company to set
-
+        id (str): The ObjectID(_id) of the table to query
+        
         Returns:
-        Nothing
+        dictionary: The queried document
         """
-        self.table.company = company
-        return
+        search = {'_id': ObjectId(id)}
+
+        try:
+            result = super()._read_one(self.collection, search)
+            return result
+        except:
+            return None
+
+    def readTableByNumber(self, number: int):
+        """
+        Method to query a specific table
+
+        Parameters:
+        name (str): The name of the table to query
+        
+        Returns:
+        dictionary: The queried document
+        """
+        search = {'number': number}
+
+        try:
+            result = super()._read_one(self.collection, search)
+            return result
+        except:
+            return None
+
+    def readAllTables(self):
+        """
+        Method to query all tables
+        
+        Returns:
+        list: List of tables
+        """
+        try:
+            result = super()._read_all(self.collection)
+            return result
+        except: 
+            return None
+
+    def updateTable(self, id: str, table: Table):
+        """
+        Method to update an existing table in the DB
+            Replaces an existing table (in db) with
+            the table parameter, maintaining id
+
+        Parameters:
+        id (str): The ObjectID(_id) of the table to update
+        table (Table): The new table object
+        
+        Returns:
+        string: Count of modified documents (should be 1)
+        """
+        item = {'_id': ObjectId(id)}
+        data = table.data
+
+        try:
+            raw = super()._update(self.collection, item, data)
+            result = raw.modified_count
+            return result
+        except:
+            return None
+
+    def deleteTable(self, id: str):
+        """
+        Method to remove a table from the DB
+
+        Parameters:
+        id (str): The ObjectID(_id) of the table to remove
+        
+        Returns:
+        int: Count of deleted objects (should be 1)
+        """
+        item = {'_id': ObjectId(id)}
+        try:
+            raw = super()._delete(self.collection, item)
+            result = raw.deleted_count
+            return result
+        except: 
+            return None
 
     @staticmethod
-    def s_setTableLocation(table: Table, number):
+    def setTableLocation(table: Table, number):
         """
         Static method that sets a table's location in the map
 
@@ -189,13 +392,13 @@ class TableHandler(DatabaseObject):
         number (int): The position of the table in the map
 
         Returns:
-        Nothing
+        Table: The updated table
         """
         table.number = number
-        return
+        return table
 
     @staticmethod
-    def s_setTableCompany(table: Table, company: str):
+    def setTableCompany(table: Table, company: str):
         """
         Static method that sets a table's company
 
@@ -204,12 +407,13 @@ class TableHandler(DatabaseObject):
         company (str): The ID of the company to set
 
         Returns:
-        Nothing
+        Table: The updated table
         """
         table.company = company
-        return
+        return table
 
-    def buildTableFromJSON(self, tableJSON):
+    @staticmethod
+    def buildTableFromJSON(tableJSON: str):
         """
         Class method that build the table object from a json string
 
@@ -225,6 +429,20 @@ class TableHandler(DatabaseObject):
         marked = data["marked"]
         t = Table(number, company, marked)
         return t
+
+    @staticmethod
+    def jsonifyTable(table: Table):
+        """
+        Static method to return a json object of the table model
+
+        Parameters:
+        table (Table): The Map to use
+
+        Returns:
+        string: The json object
+        """
+        data = json.dumps(table.data)
+        return data
     
     def getConnection(self):
         """
@@ -236,6 +454,13 @@ class TableHandler(DatabaseObject):
         return self.databaseCon
 
     def closeConnection(self):
+        '''
+        Method to remove the reference to mongo_connection
+        
+        Returns:
+        Nothing
+        '''
+        self.databaseCon = None
         return
 
 class CompanyHandler(DatabaseObject):
@@ -244,28 +469,144 @@ class CompanyHandler(DatabaseObject):
 
     Attributes:
     databaseCon (MongoConnection): The MongoConnection singleton
-    accessToken (str): Unsure of usage
-    user (User): Unsure of usage
-    companyJSON (str): The JSON object containing company data
+    collection (str): The collection in the DB
     """
 
-    def __init__(self, databaseCon, accessToken, user, companyJSON):
+    collection = "companies"
+
+    def __init__(self, databaseCon: MongoConnection):
         """
         Parameters:
         dataBaseCon (MongoConnection): The MongoConnection singleton
-        accesToken (str):
-        user (User):
-        companyJSON (str): The JSON object containing company data
         """
-        super().__init__(databaseCon, accessToken, user)
-        self.company = self.buildCompanyFromJSON(companyJSON)
+        super().__init__(databaseCon)
     
-    def addCompany(self, company):
-        return
-
-    def buildCompanyFromJSON(self, companyJSON):
+    def createCompany(self, company: Company):
         """
-        Class method that build the company object from a json string
+        Method to add company to DB
+
+        Parameters:
+        company (Company): The company to use
+
+        Returns:
+        string: ObjectID of the inserted company
+        """
+        data = company.data
+        try:
+            raw = super()._write(self.collection, data)
+            new_id = raw.inserted_id
+            return str(new_id)
+        except:
+            return None
+
+    def readCompanyByID(self, id: str):
+        """
+        Method to query a specific company
+        Parameters:
+        id (str): The ObjectID(_id) of the company to query
+        
+        Returns:
+        dictionary: The queried document
+        """
+        search = {'_id': ObjectId(id)}
+
+        try:
+            result = super()._read_one(self.collection, search)
+            return result
+        except:
+            return None
+
+    def readCompanyByName(self, name: str):
+        """
+        Method to query a specific company
+        Parameters:
+        name (str): The name of the company to query
+        
+        Returns:
+        dictionary: The queried document
+        """
+        search = {'name': name}
+
+        try:
+            result = super()._read_one(self.collection, search)
+            return result
+        except:
+            return None
+
+    def readAllCompanies(self):
+        """
+        Method to query all companies
+        
+        Returns:
+        list: List of companies
+        """
+        try:
+            result = super()._read_all(self.collection)
+            return result
+        except: 
+            return None
+
+    def updateCompany(self, id: str, company: Company):
+        """
+        Method to update an existing company in the DB
+            Replaces an existing company (in db) with
+            the company parameter, maintaining id
+
+        Parameters:
+        id (str): The ObjectID(_id) of the company to update
+        company (Company): The new company object
+        
+        Returns:
+        string: Count of modified documents (should be 1)
+        """
+        item = {'_id': ObjectId(id)}
+        data = company.data
+
+        try:
+            raw = super()._update(self.collection, item, data)
+            result = raw.modified_count
+            return result
+        except:
+            return None
+
+    def deleteCompany(self, id: str):
+        """
+        Method to remove a company from the DB
+
+        Parameters:
+        id (str): The ObjectID(_id) of the company to remove
+        
+        Returns:
+        int: Count of deleted objects (should be 1)
+        """
+        item = {'_id': ObjectId(id)}
+        try:
+            raw = super()._delete(self.collection, item)
+            result = raw.deleted_count
+            return result
+        except: 
+            return None
+
+
+    @staticmethod
+    def setCompanyName(company: Company, name: str):
+        """
+        Static method that sets the name of company
+
+        Parameters:
+        company (Company): The company to use
+        name (str): The name of the company to change
+
+        Returns:
+        Company: The updated Company
+        """
+        company.name = name
+        return company
+
+    @staticmethod
+    def buildCompanyFromJSON(companyJSON: str):
+        """
+        Static method that build the company object from a json string
 
         Parameters:
         companyJSON (str): The JSON object containing company parameters
@@ -281,33 +622,19 @@ class CompanyHandler(DatabaseObject):
         c = Company(name, number_of_reps, website, other_info)
         return c
 
-    def setCompanyName(self, name):
-        """
-        Class method that sets the name of the company attribute
-
-        Parameters:
-        name (str): The name of the company to change
-
-        Returns:
-        Nothing
-        """
-        self.company.name = name
-        return
-
     @staticmethod
-    def s_setCompanyName(company: Company, name):
+    def jsonifyCompany(company: Company):
         """
-        Static method that sets the name of company
+        Static method to return a json object of the table model
 
         Parameters:
-        company (Company): The company to use
-        name (str): The name of the company to change
+        table (Table): The Map to use
 
         Returns:
-        Nothing
+        str: The json object
         """
-        company.name = name
-        return
+        data = json.dumps(company.data)
+        return data
     
     def getConnection(self):
         """
@@ -319,62 +646,13 @@ class CompanyHandler(DatabaseObject):
         return self.databaseCon
 
     def closeConnection(self):
-        return
-
-class DocumentHandler(DatabaseObject):
-    """
-    A class used to handle CRUD operations between Document model and the DB
-
-    Attributes:
-    databaseCon (MongoConnection): The MongoConnection singleton
-    accessToken (str): Unsure of usage
-    user (User): Unsure of usage
-    document (Document): The document to 'handle'
-    """
-
-    def __init__(self, databaseCon, accessToken, user, document):
-        """
-        Parameters:
-        dataBaseCon (MongoConnection): The MongoConnection singleton
-        accesToken (str):
-        user (User):
-        document (Document): The document object to 'handle'
-        """
-        super().__init__(databaseCon, accessToken, user)
-        self.document = document
-    
-    def downloadDocument(self):
-        """
-        Class method that returns the link of the document attribute
-
+        '''
+        Method to remove the reference to mongo_connection
+        
         Returns:
-        str: The link to the documents download
-        """
-        return self.document.link
-
-    @staticmethod
-    def s_downloadDocument(document: Document):
-        """
-        Static method that returns the link of a document
-
-        Parameters:
-        document (Document): The document to downloaded
-
-        Returns:
-        str: The link to the documents download
-        """
-        return document.link
-
-    def getConnection(self):
-        """
-        Method to return the reference to the mongo_connection singleton
-
-        Returns:
-        MongoConnection: The reference to the singleton
-        """
-        return self.databaseCon
-
-    def closeConnection(self):
+        Nothing
+        '''
+        self.databaseCon = None
         return
 
 class EmailListHandler(DatabaseObject):
@@ -383,82 +661,116 @@ class EmailListHandler(DatabaseObject):
 
     Attributes:
     databaseCon (MongoConnection): The MongoConnection singleton
-    accessToken (str): Unsure of usage
-    user (User): Unsure of usage
     """
+    
+    collection = "email_list"
 
-    def __init__(self, databaseCon: MongoConnection, accessToken, user, emaillist):
+    def __init__(self, databaseCon: MongoConnection):
         """
         Parameters:
         dataBaseCon (MongoConnection): The MongoConnection singleton
         accesToken (str):
         user (User):
         """
-        super().__init__(databaseCon, accessToken, user)
-        self.emailList = emaillist
+        super().__init__(databaseCon)
+
+    def createEmail(self, email: str):
+        """
+        Method to add an email to DB
+
+        Parameters:
+        email (str): The email to insert
+
+        Returns:
+        string: ObjectID of the inserted email
+        """
+
+        data = {"email": email}
+        try:
+            raw = super()._write(self.collection, data)
+            new_id = raw.inserted_id
+            return str(new_id)
+        except:
+            return None
+
+    def readEmailList(self):
+        """
+        Method to query all stored emails
+        
+        Returns:
+        list: List of emails & ids
+        """
+        try:
+            result = super()._read_all(self.collection)
+            return result
+        except: 
+            return None
+
+    def readEmail(self, email: str):
+        """
+        Method to query a specific email
+        
+        Parameters:
+        email (str): The email to query
+
+        Returns:
+        dictionary: The queried email
+        """
+        search = {'email': email}
+
+        try:
+            result = super()._read_one(self.collection, search)
+            return result
+        except:
+            return None
+
+    def deleteEmail(self, id: str):
+        """
+        Method to remove an email from the DB
+
+        Parameters:
+        id (str): The ObjectID(_id) of the email to remove
+        
+        Returns:
+        int: Count of deleted objects (should be 1)
+        """
+        item = {'_id': ObjectId(id)}
+        try:
+            raw = super()._delete(self.collection, item)
+            result = raw.deleted_count
+            return result
+        except: 
+            return None
     
-    def signUpForEmailList(self, email):
-        """
-        Class method that adds an email to the email_list attribute
-
-        Parameters:
-        email (string): The string containing the email to add
-
-        Returns:
-        Nothing
-        """
-        if check_email(email):
-            self.emailList.subscribe(email)
-        return
-
-    def unsubscribeFromEmailList(self, email):
-        """
-        Class method that removes an email from any emaillist
-
-        Parameters:
-        email (string): The string containing the email to remove
-
-        Returns:
-        Nothing
-        """
-        if check_email(email):
-            self.emailList.unsubscribe(email)
-        return
-
     @staticmethod
-    def s_signUpForEmailList(email_list: EmailList, email):
+    def signUpForEmailList(email_list: EmailList, email: str):
         """
-        Static method that adds an email to any emaillist
+        Static method that adds an email to the email_list attribute
 
         Parameters:
-        email_list (EmailList): The email_list object to use
         email (string): The string containing the email to add
 
         Returns:
-        Nothing
+        EmailList: The updated EmailList
         """
         if check_email(email):
             email_list.subscribe(email)
-        return
+        return email_list
 
     @staticmethod
-    def s_unsubscribeFromEmailList(email_list: EmailList, email):
+    def unsubscribeFromEmailList(email_list: EmailList, email: str):
         """
         Static method that removes an email from any emaillist
 
         Parameters:
-        email_list (EmailList): The email_list object to use
         email (string): The string containing the email to remove
 
         Returns:
-        Nothing
+        EmailList: The updated EmailList
         """
         if check_email(email):
             email_list.unsubscribe(email)
-        return
-
-    def generateEmailList():
-        return list()
+        return email_list
     
     def getConnection(self):
         """
@@ -470,4 +782,104 @@ class EmailListHandler(DatabaseObject):
         return self.databaseCon
 
     def closeConnection(self): 
+        '''
+        Method to remove the reference to mongo_connection
+        
+        Returns:
+        Nothing
+        '''
+        self.databaseCon = None
+        return
+
+class AdminHandler(DatabaseObject):
+    """
+    A class used to handle operations between Admin object and the DB
+
+    Attributes:
+    databaseCon (MongoConnection): The MongoConnection singleton
+    """
+    
+    collection = "admin"
+
+    def __init__(self, databaseCon: MongoConnection):
+        """
+        Parameters:
+        dataBaseCon (MongoConnection): The MongoConnection singleton
+        accesToken (str):
+        user (User):
+        """
+        super().__init__(databaseCon)
+
+    def insertAdminSessionUUID(self, uuid: str):
+        """
+        Method to insert an admin session into the db
+
+        Parameters:
+        uuid (str): The uuid to insert
+
+        Returns:
+        str: The ObjectID(_id) of the inserted uuid
+        """
+        data = {"uuid": uuid}
+        try:
+            raw = super()._write(self.collection, data)
+            new_id = raw.inserted_id
+            return str(new_id)
+        except:
+            return None
+
+    def getUUID_ObjectID(self, uuid: str):
+        """
+        Method to query a uuid, returning the ObjectId
+            *needed for deletion
+
+        Parameters:
+        uuid (str): The uuid to query
+
+        Returns:
+        id (str): The ObjectId() of the uuid
+        """
+        search = {'uuid': uuid}
+
+        try:
+            result = super()._read_one(self.collection, search)
+            return result['_id']
+        except:
+            return None
+
+    def deleteAdminSessionUUID(self, id: str):
+        """
+        Method to delete an admin session UUID from db
+
+        Parameters:
+        id (str): The ObjectId of the session to remove *NOT THE UUID*
+
+        Returns:
+        int: Count of deleted objects (should be 1)
+        """
+        item = {'_id': ObjectId(id)}
+        try:
+            raw = super()._delete(self.collection, item)
+            result = raw.deleted_count
+            return result
+        except: 
+            return None
+
+    def getConnection(self):
+        """
+        Method to return the reference to the mongo_connection singleton
+
+        Returns:
+        MongoConnection: The reference to the singleton
+        """
+        return self.databaseCon
+
+    def closeConnection(self): 
+        '''
+        Method to remove the reference to mongo_connection
+        
+        Returns:
+        Nothing
+        '''
+        self.databaseCon = None
         return

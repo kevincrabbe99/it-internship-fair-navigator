@@ -7,7 +7,7 @@ app = Flask(__name__)
 CORS(app)
 app.register_blueprint(navigator_api)
 
-@app.route('/')
+@app.route('/test')
 def index():
     return Response(response=json.dumps({"Status": "UP"}),
                     status=200,
