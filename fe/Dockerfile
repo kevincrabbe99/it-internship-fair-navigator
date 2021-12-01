@@ -3,7 +3,7 @@ FROM node:14
 WORKDIR /usr/src
 
 ENV PATH /node_modules/.bin:$PATH
-ENV REACT_APP_ITIFN_API ${_REACT_APP_ITIFN_API}
+# ENV REACT_APP_ITIFN_API ${_REACT_APP_ITIFN_API}
 
 COPY package.json ./
 COPY package-lock.json ./
