@@ -1,8 +1,12 @@
 # it-internship-fair-navigator
 
 ## PRODUCTION URL:
-
 https://itfnavigator.com
+
+## Front End STAGING URL (branch 'dev')
+https://staging.itfnavigator.com <br>
+<b>NOTE:</b> This staging env is only for the front end reactjs application.  API is still handling PROD data.  Only use this for UI tests.
+
 <br><br>
 
 # DEV ENVIRONMENTS AND IMAGES
@@ -63,10 +67,13 @@ Automatically deployed by GCP Cloud Build Trigger
 # Git Workflow
 
 ## Master Branch
-Master branch is connected to https://itfnavigator.com
+`Master` branch is connected to https://itfnavigator.com
 Any merge into to master branch will rebuild and redeploy all containers on the production site.
 
 ## Dev Branch
+`Dev` branch is connected to https://staging.itfnavigator.com
+Any merge into to `dev` branch will rebuild and redeploy all containers on the `staging` site.
+
 Use this branch to create new branches.
 Once a branch is complete, create a PR into 'dev' branch.
 <br><br>
