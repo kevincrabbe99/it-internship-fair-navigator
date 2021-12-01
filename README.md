@@ -11,13 +11,13 @@ https://itfnavigator.com
 Runs on `localhost:3000`
 ```
 $ cd fe
-& npm start
+$ npm start
 ```
 ### Python Backend Application
 Runs on `localhost:8080`
 ```
 $ cd ../be
-& python3 -u app.py
+$ python3 -u app.py
 ```
 ### .env file for local environment <br>
 `/be/.env` SCHEMA
@@ -35,7 +35,7 @@ https://drive.google.com/file/d/1zXI2bmEIGzMkHOlpznIr_HxLojGvs6O1/view?usp=shari
 ### ReactJS Application
 Statically Served on `https://itfnavigator.com`
 ```
-$ build
+- build
     - '--no-cache'
     - '-t'
     - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
