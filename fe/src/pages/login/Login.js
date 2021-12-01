@@ -19,11 +19,11 @@ export default function Login() {
             console.log("username: " + username)
             console.log("password: " + password)
             let res = await loginUser(username, password)
-            console.log("RES: ", res)
+            console.log("login response: ", res)
             if (res) {
                 console.log("login successful")
                 setLoginError(false)
-                window.location = "/"
+                // window.location = "/"
             } else {
                 console.log("login failed")
                 setLoginError(true)
