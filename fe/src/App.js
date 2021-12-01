@@ -3,6 +3,7 @@ import React from 'react';
 import Header from './components/header/Header';
 import Sidebar from './components/sideBar/Navbar.js';
 import Map from './pages/map/Map';
+import Login from './pages/login/Login';
 import './App.css';
 
 import { 
@@ -20,6 +21,7 @@ function App() {
         <Sidebar />
         <Switch>
           <Route exact path="/" component={Map}/>
+          <Route exact path="/login" component={Login}/>
           {/* <Route exact path="/admin" component={Admin} /> */}
         </Switch>
       </div>
