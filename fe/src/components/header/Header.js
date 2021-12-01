@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './header.scss'
 
 export default function Header() {
@@ -7,12 +8,16 @@ export default function Header() {
             <div id = "header">
                 <div id = "header-left">
                     <div id = "header-left-logo">
-                        <h1>IT Navigator</h1>
+                        <h1>
+                            <Link to = "/">IT Navigator</Link>
+                        </h1>
                     </div>
                 </div>
                 <div id = "header-right">
                     <div id = "header-right-account">
-                        <label>Account</label>
+                        <label>
+                            <Link to = "/login">Admin Login</Link>
+                        </label>
                     </div>
                 </div>
             </div>

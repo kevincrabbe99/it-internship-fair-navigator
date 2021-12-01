@@ -1,0 +1,35 @@
+@import "../../util/colors.scss";
+
+.submit-button-container {
+  padding-top: 1em;
+}
+
+.login-container {
+  width: 20em;
+  height: 20em;
+  margin: 0px auto;
+  border: 1px solid var(--border-color);
+}
+
+.login-title {
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  padding-top: 1em;
+}
+
+.login-container label {
+  width: 6em;
+  font-size: 0.9em;
+}
+
+.login-container .row {
+  margin-bottom: 0.5em;
+  margin: 1em;
+}
+
+.login-wrapper {
+  width: 100%;
+  position: absolute;
+  top: 15em;
+}
