@@ -80,6 +80,7 @@ class MapHandler(DatabaseObject):
         str: ObjectID of the inserted map
         """
         data = map.data
+        data.pop('id', None)
         try:
             raw = super()._write(self.collection, data)
             new_id = raw.inserted_id
@@ -113,7 +114,7 @@ class MapHandler(DatabaseObject):
         Returns:
         dictionary: The queried document
         """
-        search = {'most_recent_year': year}
+        search = {'year': year}
 
         try:
             result = super()._read_one(self.collection, search)
@@ -148,8 +149,9 @@ class MapHandler(DatabaseObject):
         string: Count of modified documents (should be 1)
         """
         item = {'_id': ObjectId(id)}
-        data = map.data
-
+        data = {"year": map.data['year'],
+                "archived": map.data['archived'],
+                "tables": map.data['tables']}
         try:
             raw = super()._update(self.collection, item, data)
             result = raw.modified_count
@@ -174,6 +176,53 @@ class MapHandler(DatabaseObject):
             return result
         except: 
             return None
+    
+    def getAllYears(self):
+        """
+        Method to return a list of all years in db
+
+        Returns:
+        list(): List of all years
+        """
+        years = list()
+
+        maps = self.readAllMaps()
+        for map in maps:
+            year = map['year']
+            years.append(year)
+
+        return years
+
+    def jsonifyAllMapData(self, map: Map):
+        """
+        Method to return a json object of the map model including all sub models
+
+        Parameters:
+        map (Map): The Map to use
+
+        Returns:
+        str: The json object
+        """ 
+        th = TableHandler(self.databaseCon)
+        ch = CompanyHandler(self.databaseCon)
+
+        data = map.data
+        tables_list = list()
+        for table in data['tables']:
+            table_data = th.readTableByID(table)
+            comp = table_data['company']
+            company_data = ch.readCompanyByID(comp)
+            new_table_data = {'_id': table,
+                              'x_coord': table_data['x_coord'],
+                              'y_coord': table_data['y_coord'],
+                              'company': company_data}
+            tables_list.append(new_table_data)
+
+        new_data = {'_id': data['id'],
+                    'tables': tables_list,
+                    'archived': data['archived'],
+                    'year': data['year']}
+        return json.dumps(new_data, default=str)
 
     @staticmethod
     def addTable(map: Map, table: str):
@@ -217,10 +266,11 @@ class MapHandler(DatabaseObject):
         Map: The built map object
         """
         data = json.loads(mapJSON)
-        most_recent_year = data["most_recent_year"]
-        available_years = data["available_years"]
+        id = data["_id"]
+        year = data["year"]
+        archived = data["archived"]
         tables = data["tables"]
-        m = Map(most_recent_year, available_years, tables)
+        m = Map(id, year, archived, tables)
         return m
 
     @staticmethod
@@ -285,6 +335,7 @@ class TableHandler(DatabaseObject):
         string: ObjectID of the inserted table
         """
         data = table.data
+        data.pop('id', None)
         try:
             raw = super()._write(self.collection, data)
             new_id = raw.inserted_id
@@ -303,24 +354,6 @@ class TableHandler(DatabaseObject):
         dictionary: The queried document
         """
         search = {'_id': ObjectId(id)}
-
-        try:
-            result = super()._read_one(self.collection, search)
-            return result
-        except:
-            return None
-
-    def readTableByNumber(self, number: int):
-        """
-        Method to query a specific table
-
-        Parameters:
-        name (str): The name of the table to query
-        
-        Returns:
-        dictionary: The queried document
-        """
-        search = {'number': number}
 
         try:
             result = super()._read_one(self.collection, search)
@@ -356,6 +389,7 @@ class TableHandler(DatabaseObject):
         """
         item = {'_id': ObjectId(id)}
         data = table.data
+        data.pop('id', None)
 
         try:
             raw = super()._update(self.collection, item, data)
@@ -383,18 +417,20 @@ class TableHandler(DatabaseObject):
             return None
 
     @staticmethod
-    def setTableLocation(table: Table, number):
+    def setTableLocation(table: Table, x: int, y: int):
         """
         Static method that sets a table's location in the map
 
         Parameters:
         table (Table): The table to use
-        number (int): The position of the table in the map
+        x (int): The position of the table in the map
+        y (int): The position of the table in the map
 
         Returns:
         Table: The updated table
         """
-        table.number = number
+        table.x_coord = x
+        table.y_coord = y
         return table
 
     @staticmethod
@@ -424,10 +460,11 @@ class TableHandler(DatabaseObject):
         Table: The built table object
         """
         data = json.loads(tableJSON)
-        number = data["number"]
+        id = data["_id"]
+        x_coord = data["x_coord"]
+        y_coord = data["y_coord"]
         company = data["company"]
-        marked = data["marked"]
-        t = Table(number, company, marked)
+        t = Table(id, x_coord, y_coord, company)
         return t
 
     @staticmethod
@@ -492,6 +529,7 @@ class CompanyHandler(DatabaseObject):
         string: ObjectID of the inserted company
         """
         data = company.data
+        data.pop('id', None)
         try:
             raw = super()._write(self.collection, data)
             new_id = raw.inserted_id
@@ -561,6 +599,7 @@ class CompanyHandler(DatabaseObject):
         """
         item = {'_id': ObjectId(id)}
         data = company.data
+        data.pop('id', None)
 
         try:
             raw = super()._update(self.collection, item, data)
@@ -615,11 +654,12 @@ class CompanyHandler(DatabaseObject):
         Company: The built company object
         """
         data = json.loads(companyJSON)
+        id = data['_id']
         name = data["name"]
         number_of_reps = data["number_of_reps"]
         website = data["website"]
         other_info = data["other_info"]
-        c = Company(name, number_of_reps, website, other_info)
+        c = Company(id, name, number_of_reps, website, other_info)
         return c
 
     @staticmethod
