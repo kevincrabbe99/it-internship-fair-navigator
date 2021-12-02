@@ -5,6 +5,8 @@ from api import navigator_api
 app = Flask(__name__)
 app.register_blueprint(navigator_api)
 cors = CORS(app)
+
+
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/test')
