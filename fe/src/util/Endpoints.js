@@ -10,22 +10,26 @@ export async function loginEndpoint(username, password) {
 
     const headers = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': `${process.env.REACT_APP_ITIFN_API}`
     }
 
     // call to process.env.REACT_APP_ITIFN_API
-    axios.post(`${process.env.REACT_APP_ITIFN_API}/login`, {
-        username: username,
-        password: password
-        },{
-            headers: headers
-        }).then(response => {
-            console.log(response.data);
-            return response.data;
-        }).catch(error => {
-            console.log(error);
-            return error;
-        });
+
+
+    // axios post call to process.env.REACT_APP_ITIFN_API/login
+    // pass username and password as parameters
+    // include CORS hearder
+    // return response.data
+    const response = await axios.post(`${process.env.REACT_APP_ITIFN_API}/login`, {
+        username,
+        password
+    }, {
+        headers
+    });
+
+    console.log("LOGIN RESLPONSE: ", response);
+
+    return response.data;
 
 }
 

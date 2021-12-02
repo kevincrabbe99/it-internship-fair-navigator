@@ -124,8 +124,10 @@ def delete_table(id):
 @navigator_api.route('/login', methods=['POST'])
 @cross_origin()
 def admin_login():
-    username = request.values['username']
-    password = request.values['password']
+    print("LOGIN REQ VARS: ", request.json)
+    print("LOGIN REQ JSON: ", request.json.get('username'))
+    username = request.json.get('username')
+    password = request.json.get('password')
 
     if request.method != 'POST':
         response = bad_request
@@ -147,7 +149,7 @@ def admin_login():
             response = refuse_credentials
     else:
         response = bad_request
-    return jsonify(response)
+    return response
 
 @navigator_api.route('/logout', methods=['DELETE'])
 @cross_origin()
