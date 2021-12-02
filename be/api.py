@@ -21,6 +21,7 @@ refuse_credentials = Response(response="401 Refused Credentials",
 # ENDPOINTS FOR YEAR/MAP
 
 @navigator_api.route('/year', methods=['GET'])
+@cross_origin()
 def get_year():
     if request.method != 'GET':
         return bad_request
@@ -47,6 +48,7 @@ def get_year():
 
 # REQUIRES AUTH
 @navigator_api.route('/year', methods=['PUT'])
+@cross_origin()
 def add_year():
     if request.method != "PUT":
         return bad_request
@@ -62,14 +64,27 @@ def add_year():
         if mh.readMapByYear(year) is not None:
             return "Map already exists for this year"
         
-        new_map = Map(0, year, "false", "none")
+        new_map = Map(0, year, "false", "[]")
         mh.createMap(new_map)
         years = jsonify(mh.getAllYears())
 
         mh.closeConnection()
     return years
 
+@navigator_api.route('/years', methods=['GET'])
+@cross_origin()
+def get_years():
+    if request.method != "GET":
+        return bad_request
+    else:
+        mh = MapHandler(m)
+        years = jsonify(mh.getAllYears())
+        mh.closeConnection()
+    return years
+
+
 @navigator_api.route('/year/archive', methods=['POST'])
+@cross_origin()
 def archive_map():
     if request.method != "POST":
         return bad_request
@@ -108,6 +123,7 @@ def archive_map():
 
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['PUT'])
+@cross_origin()
 def add_table():
     if request.method != "PUT":
         return bad_request
@@ -115,31 +131,165 @@ def add_table():
         req_json = request.get_json()
         if 'Authorization' not in request.headers:
             return refuse_credentials
-        
-    return
+        if 'x_coord' and 'y_coord' and 'company' and 'year' not in req_json:
+            return bad_request
+
+        x_coord = req_json['x_coord']
+        y_coord = req_json['y_coord']
+        company = req_json['company']
+        year = req_json['year']
+
+        company_name = company['name']
+
+        mh = MapHandler(m)
+        th = TableHandler(m)
+        ch = CompanyHandler(m)
+
+        # check if the company exists
+        if ch.readCompanyByName(company_name):
+            existing_company = ch.readCompanyByName(company_name)
+            company_id = existing_company['_id']
+            table_data = {'_id': company_id,
+                          'x_coord': x_coord,
+                          'y_coord': y_coord,
+                          'company': company_id}
+            table_data = json.dumps(table_data, default=str)
+            new_table = th.buildTableFromJSON(table_data)
+        else:
+            company['_id'] = "n/a"
+            new_company = ch.buildCompanyFromJSON(json.dumps(company, default=str))
+            company_id = ch.createCompany(new_company)
+            table_data = {'_id': company_id,
+                          'x_coord': x_coord,
+                          'y_coord': y_coord,
+                          'company': company_id}
+            table_data = json.dumps(table_data, default=str)
+            new_table = th.buildTableFromJSON(table_data)
+
+        new_table_id = th.createTable(new_table)
+
+        current_map = mh.readMapByYear(year)
+        map_json = json.dumps(current_map, default=str)
+
+        new_map = MapHandler.buildMapFromJSON(map_json)
+        mh.addTable(new_map, new_table_id)
+
+        item = new_map.data['id']
+        mh.updateMap(item, new_map)
+
+        map_json = mh.jsonifyAllMapData(new_map)
+
+        mh.closeConnection()
+        th.closeConnection()
+        ch.closeConnection()
+    return map_json
 
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['POST'])
+@cross_origin()
 def update_table():
-    return
+    if request.method != "POST":
+        return bad_request
+    else:
+        req_json = request.get_json()
+        if 'Authorization' not in request.headers:
+            return refuse_credentials
+        if '_id' and 'x_coord' and 'y_coord' and 'company' and 'year' not in req_json:
+            return bad_request
+
+        id = req_json['_id']
+        x_coord = req_json['x_coord']
+        y_coord = req_json['y_coord']
+        company = req_json['company']
+        year = req_json['year']
+
+        company_name = company['name']
+
+        mh = MapHandler(m)
+        th = TableHandler(m)
+        ch = CompanyHandler(m)
+
+        # check if the company exists
+        if ch.readCompanyByName(company_name):
+            existing_company = ch.readCompanyByName(company_name)
+            company_id = existing_company['_id']
+            table_data = {'_id': company_id,
+                          'x_coord': x_coord,
+                          'y_coord': y_coord,
+                          'company': company_id}
+            table_data = json.dumps(table_data, default=str)
+            new_table = th.buildTableFromJSON(table_data)
+        else:
+            company['_id'] = "n/a"
+            new_company = ch.buildCompanyFromJSON(json.dumps(company, default=str))
+            company_id = ch.createCompany(new_company)
+            table_data = {'_id': company_id,
+                          'x_coord': x_coord,
+                          'y_coord': y_coord,
+                          'company': company_id}
+            table_data = json.dumps(table_data, default=str)
+            new_table = th.buildTableFromJSON(table_data)
+
+        th.updateTable(id, new_table)
+
+        current_map = mh.readMapByYear(year)
+        map_json = json.dumps(current_map, default=str)
+
+        the_map = MapHandler.buildMapFromJSON(map_json)
+
+        map_json = mh.jsonifyAllMapData(the_map)
+
+        mh.closeConnection()
+        th.closeConnection()
+        ch.closeConnection()
+    return map_json
 
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['DELETE'])
+@cross_origin()
 def delete_table():
-    return
+    if request.method != "DELETE":
+        return bad_request
+    else:
+        req_json = request.get_json()
+        if 'Authorization' not in request.headers:
+            return refuse_credentials
+        if '_id' and 'year' not in req_json:
+            return bad_request
+
+        id = req_json['_id']
+        year = req_json['year']
+
+        mh = MapHandler(m)
+        th = TableHandler(m)
+
+        temp_map = mh.readMapByYear(year)
+        map_json = json.dumps(temp_map, default=str)
+
+        the_map = MapHandler.buildMapFromJSON(map_json)
+        MapHandler.removeTable(the_map, id)
+        mh.updateMap(temp_map['_id'], the_map)
+
+        th.deleteTable(id)
+
+        data_json = mh.jsonifyAllMapData(the_map)
+    return data_json
 
 
 # ENDPOINTS FOR EMAIL LIST
 
 @navigator_api.route('/subscribe', methods=['PUT'])
+@cross_origin()
 def subscribe():
     return
 
 @navigator_api.route('/unsubscribe', methods=['DELETE'])
+@cross_origin()
 def unsubscribe():
     return
 
 @navigator_api.route('/emaillist', methods=['GET'])
+@cross_origin()
 def get_emaillist():
     return
 

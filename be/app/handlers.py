@@ -152,6 +152,7 @@ class MapHandler(DatabaseObject):
         data = {"year": map.data['year'],
                 "archived": map.data['archived'],
                 "tables": map.data['tables']}
+
         try:
             raw = super()._update(self.collection, item, data)
             result = raw.modified_count
