@@ -1,0 +1,22 @@
+@import "../../util/colors.scss";
+
+.map-container {
+  width: 100%;
+  height: calc(100%);
+  position: absolute;
+  left: 0;
+  overflow: scroll;
+}
+
+.map-container table {
+  z-index: 0;
+}
+
+.map-container tr {
+  height: 11em;
+}
+
+.map-container td {
+  width: 15em;
+  padding: 1em;
+}

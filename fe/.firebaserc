@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "it-internship-navigator"
+  },
+  "targets": {
+    "it-internship-navigator": {
+      "hosting": {
+        "itin": [
+          "it-internship-navigator"
+        ],
+        "dev-itin": [
+          "dev-it-internship-navigator"
+        ]
+      }
+    }
   }
 }

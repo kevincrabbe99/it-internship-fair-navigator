@@ -1,7 +1,7 @@
 .box {
     border: 1px dashed #000;
     height: 500px;
-    width: 400px;
+    width: 800px;
   }
   
   .circle {
@@ -14,3 +14,10 @@
     justify-content: center;
     width: 120px;
   }
+
+  .map-container {
+    width: 100%;
+    height: calc(100%);
+    position: absolute;
+    left: 0;
+}

@@ -1,0 +1,65 @@
+@import "../../../util/colors.scss";
+
+.table-footer {
+  background-color: var(--border-color);
+  position: absolute;
+  bottom: 0em;
+  left: 0;
+  height: 2em;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-container {
+  height: 100%;
+}
+
+.footer-container .row {
+  height: 100%;
+}
+
+.table-footer .col-md-6 {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  height: 100%;
+}
+
+.table-container .contactInfo {
+  font-size: 0.8em;
+  padding-left: 1em;
+}
+
+.table-container .contactTitle {
+  font-size: 1em;
+  font-weight: bold;
+}
+
+.table-container .companyName {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 0.5em;
+}
+
+.table-container .container {
+  width: 100%;
+  margin: 0.5em;
+}
+
+.table-container {
+  width: 15em;
+  height: 11em;
+  position: relative;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.border {
+  border: 1px solid var(--border-color);
+}

@@ -2,10 +2,10 @@ import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 import PanZoom from "@sasza/react-panzoom";
 import "./styles.css";
+import Table from  '../../pages/map/table/Table';
 
 const ImageZoom = () => (
   <Fragment>
-    <h2>Zoomable Map</h2>
     <div className="box">
       <PanZoom
         boundary={{
@@ -13,7 +13,13 @@ const ImageZoom = () => (
         }}
         disableUserSelect
       >
-        <div className="circle" />
+      
+        <div className="map-container">
+        <Table/>
+        <Table/>
+        <Table/>
+        <Table/>
+        </div>
       </PanZoom>
     </div>
   </Fragment>

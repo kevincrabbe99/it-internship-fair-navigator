@@ -1,26 +1,97 @@
 # it-internship-fair-navigator
 
-### PROD URL:
+## PRODUCTION URL:
+https://itfnavigator.com
 
-https://it-internship-navigator.web.app/ \
-https://it-internship-navigator.firebaseapp.com/
+## Front End STAGING URL (branch 'dev')
+https://staging.itfnavigator.com <br>
+<b>NOTE:</b> This staging env is only for the front end reactjs application.  API is still handling PROD data.  Only use this for UI tests.
 
-## Git Workflow
+<br><br>
 
-### Master Branch
+# DEV ENVIRONMENTS AND IMAGES
+## Development
+### ReactJS Application
+Runs on `localhost:3000`
+```
+$ cd fe
+$ npm start
+```
+### Python Backend Application
+Runs on `localhost:8080`
+```
+$ cd ../be
+$ python3 -u app.py
+```
+### .env file for local environment <br>
+`/be/.env` SCHEMA
+```
+DBUSER = u...r
+DBPWD = E..o
+DBNAMEDEV = I...V
+DBNAMEPROD = I...B
+```
+https://drive.google.com/file/d/1zXI2bmEIGzMkHOlpznIr_HxLojGvs6O1/view?usp=sharing
+<br><br>
 
-Master branch is connected to https://it-internship-navigator.firebaseapp.com/
-Any merge into to master branch will make changes to the production site.
-Merges into master must pass react-scripts test and the docker container must fully build in Github Actions.
 
-### Dev Branch
+## Production
+### ReactJS Application
+Statically Served on `https://itfnavigator.com`
+```
+- build
+    - '--no-cache'
+    - '-t'
+    - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+    - fe
+    - '-f'
+    - fe/Dockerfile
+```
+Automatically deployed by GCP Cloud Build Trigger
+<br>
+### Python Backend Application
+Runs on `https://api.itfnavigator.com`
+```
+- build
+    - '--no-cache'
+    - '-t'
+    - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+    - be
+    - '-f'
+    - be/Dockerfile
+```
+Automatically deployed by GCP Cloud Build Trigger
+
+<br><br>
+
+# Git Workflow
+
+## Master Branch
+`Master` branch is connected to https://itfnavigator.com
+Any merge into to master branch will rebuild and redeploy all containers on the production site.
+
+## Dev Branch
+`Dev` branch is connected to https://staging.itfnavigator.com
+Any merge into to `dev` branch will rebuild and redeploy all containers on the `staging` site.
 
 Use this branch to create new branches.
 Once a branch is complete, create a PR into 'dev' branch.
+<br><br>
 
-### Preview Pull Requests
+# External Links
+### Google Cloud Platform
+https://console.cloud.google.com/home/dashboard?project=itifn-332516
 
-When a PR is created you can preview the changes in on Firebase -> Hosting -> Preview.
+### Google Domains DNS Settings
+https://domains.google.com/registrar/itfnavigator.com
 
-Setup node Environment on windows
-https://www.tutorialsteacher.com/nodejs/setup-nodejs-development-environment
+### MongoDB
+https://mongodb.com
+
+### Trello KanBan Dv Board
+https://trello.com/b/eS1w2h00/kanban-dev-board
+
+### Google Drive Resources
+https://drive.google.com/drive/folders/1ImD_tsF3vkpQE9kT58JDhQ5ZK4rnBz7N
+
+
