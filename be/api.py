@@ -21,11 +21,7 @@ refuse_credentials = Response(response="401 Refused Credentials",
 # ENDPOINTS FOR YEAR/MAP
 
 @navigator_api.route('/year', methods=['GET'])
-<<<<<<< HEAD
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
-=======
-@cross_origin()
->>>>>>> 6b6e828838ad8f277e68bdbc6ba3c534d30c9b4d
 def get_year():
     if request.method != 'GET':
         return bad_request
@@ -52,11 +48,7 @@ def get_year():
 
 # REQUIRES AUTH
 @navigator_api.route('/year', methods=['PUT'])
-<<<<<<< HEAD
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
-=======
-@cross_origin()
->>>>>>> 6b6e828838ad8f277e68bdbc6ba3c534d30c9b4d
 def add_year():
     if request.method != "PUT":
         return bad_request
@@ -80,11 +72,7 @@ def add_year():
     return years
 
 @navigator_api.route('/years', methods=['GET'])
-<<<<<<< HEAD
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
-=======
-@cross_origin()
->>>>>>> 6b6e828838ad8f277e68bdbc6ba3c534d30c9b4d
 def get_years():
     if request.method != "GET":
         return bad_request
@@ -96,11 +84,7 @@ def get_years():
 
 
 @navigator_api.route('/year/archive', methods=['POST'])
-<<<<<<< HEAD
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
-=======
-@cross_origin()
->>>>>>> 6b6e828838ad8f277e68bdbc6ba3c534d30c9b4d
 def archive_map():
     if request.method != "POST":
         return bad_request
@@ -139,11 +123,7 @@ def archive_map():
 
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['PUT'])
-<<<<<<< HEAD
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
-=======
-@cross_origin()
->>>>>>> 6b6e828838ad8f277e68bdbc6ba3c534d30c9b4d
 def add_table():
     if request.method != "PUT":
         return bad_request
@@ -206,11 +186,7 @@ def add_table():
 
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['POST'])
-<<<<<<< HEAD
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
-=======
-@cross_origin()
->>>>>>> 6b6e828838ad8f277e68bdbc6ba3c534d30c9b4d
 def update_table():
     if request.method != "POST":
         return bad_request
