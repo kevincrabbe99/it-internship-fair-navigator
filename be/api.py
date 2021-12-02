@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint, json, request, jsonify, Response
+from flask_cors import CORS, cross_origin
 from app.mongo_connection import *
 from app.user import *
 from app.handlers import *
@@ -19,6 +20,7 @@ refuse_credentials = Response(response="Refused Credentials",
 # CRUD FOR TABLES
 # ALL THESE WILL REQUIRE AN AUTH HEADER, NOT SURE HOW TO IMPLEMENT THAT YET NEEDS SOME RESEARCH
 @navigator_api.route('/tables', methods=['GET'])
+@cross_origin()
 def get_tables():
     if request.method != 'GET':
         response = bad_request
@@ -32,6 +34,7 @@ def get_tables():
     return jsonify(response)
 
 @navigator_api.route('/table', methods=['GET'])
+@cross_origin()
 def get_table():
     if request.method != 'GET':
         response = bad_request
@@ -56,6 +59,7 @@ def get_table():
     return jsonify(response)
     
 @navigator_api.route('/table/update', methods=['PUT'])
+@cross_origin()
 def update_table():
     req_json = request.json
     id = req_json['_id']
@@ -80,6 +84,7 @@ def update_table():
     return jsonify(response)
 
 @navigator_api.route('/table/new', methods=['POST'])
+@cross_origin()
 def new_table():
     req_json = request.json
     number = req_json['number']
@@ -103,6 +108,7 @@ def new_table():
     return jsonify(response)
 
 @navigator_api.route('/table/delete/<id>', methods=['DELETE'])
+@cross_origin()
 def delete_table(id):
     if request.method != 'DELETE':
         response = bad_request
@@ -116,6 +122,7 @@ def delete_table(id):
 
 # Admin login and logout
 @navigator_api.route('/login', methods=['POST'])
+@cross_origin()
 def admin_login():
     username = request.values['username']
     password = request.values['password']
@@ -143,6 +150,7 @@ def admin_login():
     return jsonify(response)
 
 @navigator_api.route('/logout', methods=['DELETE'])
+@cross_origin()
 def admin_logout():
     uuid = request.values['uuid']
     if request.method != 'DELETE':
