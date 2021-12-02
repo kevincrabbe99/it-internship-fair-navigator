@@ -51,7 +51,7 @@ export default function Map() {
         )
     }
 
-    test();
+    // test();
 
     return (
         <div className="map-container">

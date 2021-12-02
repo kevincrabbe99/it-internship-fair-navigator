@@ -1,72 +1,44 @@
-class Document:
-    """
-    A class used to represent the Document model
-
-    Attributes:
-    name (str): The name of the document
-    link (str): The link to download the document
-    data (dict): A dictionary containing the attributes of the model
-        For easy json conversion
-    """
-    def __init__(self, name, link):
-        self._name = name
-        self._link = link
-        self._data = {
-            "name": self._name,
-            "link": self._link
-        }
-
-    def get_name(self):
-        return self._name
-    def set_name(self, n):
-        self._name = n
-        self._data["name"] = n
-
-    def get_link(self):
-        return self._link
-    def set_link(self, l):
-        self._link = l
-        self._data["link"] = l
-
-    def get_data(self):
-        return self._data
-
-    name = property(get_name, set_name)
-    link = property(get_link, set_link)
-    data = property(get_data)
-
 class Map:
     """
     A class used to represent the Map model
 
     Attributes:
-    most_recent_year (int): The most recent year of the map
-    available_years (list(int)): A list of the available years of maps
+    id (str): The ObjectID from mongodb
+    year (int): The year of the map
+    archived (bool): Is the map archived
     tables (list(str)): A list containing IDs of the map's tables
     data (dict): A dictionary containing the attributes of the model
         For easy json conversion
     """
-    def __init__(self, mr_year, avail_years, tables):
-        self._most_recent_year = mr_year
-        self._available_years = avail_years
+    def __init__(self, id, year, arc, tables):
+        self._id = id
+        self._year = year
+        self._archived = arc
         self._tables = tables
         self._data = {
-            "most_recent_year": self._most_recent_year,
-            "available_years": self._available_years,
+            "id": self._id,
+            "year": self._year,
+            "archived": self._archived,
             "tables": self._tables
         }
 
-    def get_most_recent_year(self):
-        return self._most_recent_year
-    def set_most_recent_year(self, mry):
-        self._most_recent_year = mry
-        self._data["most_recent_year"] = mry
+    def get_id(self):
+        return self._id
+    def set_id(self, id):
+        self._id = id
+        self._data['id'] = id
 
-    def get_available_years(self):
-        return self._available_years
-    def set_available_years(self, ay):
-        self._available_years = ay
-        self._data["available_years"] = ay
+    def get_year(self):
+        return self._year
+    def set_year(self, y):
+        self._year = y
+        self._data["year"] = y
+
+    def get_archived(self):
+        return self._archived
+    def set_archived(self, a):
+        self._archived = a
+        self._data["archived"] = a
 
     def get_tables(self):
         return self._tables
@@ -83,14 +55,9 @@ class Map:
     def get_data(self):
         return self._data
 
-    def yearExist(self, year):
-        if (year in self._available_years):
-            return True
-        else:
-            return False
-
-    most_recent_year = property(get_most_recent_year, set_most_recent_year)
-    available_years = property(get_available_years, set_available_years)
+    id = property(get_id, set_id)
+    year = property(get_year, set_year)
+    archived = property(get_archived, set_archived)
     tables = property(get_tables, set_tables)
     data = property(get_data)
 
@@ -99,27 +66,42 @@ class Table:
     A class used to represent the Table model
 
     Attributes:
-    number (int): The position (number) of the table in the map
+    id (str): The ObjectId from mongodb
+    x_coord (int): The x coordinates in the map
+    y_coord (int): The y coordinates in the map
     company (str): The ID of table's company
-    marked (bool): Is the table marked or not
     data (dict): A dictionary containing the attributes of the model
         For easy json conversion
     """
-    def __init__(self, num, company, marked):
-        self._number = num
+    def __init__(self, id, x_coord, y_coord, company):
+        self._id = id
+        self._x_coord = x_coord
+        self._y_coord = y_coord
         self._company = company
-        self._marked = marked
         self._data = {
-            "number": self._number,
+            "id": self._id,
+            "x_coord": self._x_coord,
+            "y_coord": self._y_coord,
             "company": self._company,
-            "marked": self._marked
         }
 
-    def get_number(self):
-        return self._number
-    def set_number(self, n):
-        self._number = n
-        self._data["number"] = n
+    def get_id(self):
+        return self._id
+    def set_id(self, id):
+        self._id = id
+        self._data['id'] = id
+
+    def get_x_coord(self):
+        return self._x_coord
+    def set_x_coord(self, x):
+        self._x_coord = x
+        self._data['x_coord'] = x
+
+    def get_y_coord(self):
+        return self._y_coord
+    def set_y_coord(self, y):
+        self._y_coord = y
+        self._data['y_coord'] = y
 
     def get_company(self):
         return self._company
@@ -127,18 +109,13 @@ class Table:
         self._company = c
         self._data["company"] = c
 
-    def get_marked(self):
-        return self._marked
-    def set_marked(self, m):
-        self._marked = m
-        self._data["marked"] = m
-
     def get_data(self):
         return self._data
 
-    number = property(get_number, set_number)
+    id = property(get_id, set_id)
+    x_coord = property(get_x_coord, set_x_coord)
+    y_coord = property(get_y_coord, set_y_coord)
     company = property(get_company, set_company)
-    marked = property(get_marked, set_marked)
     data = property(get_data)
 
 class Company:
@@ -146,6 +123,7 @@ class Company:
     A class used to represent the Company model
 
     Attributes:
+    id (str): The ObjectID of the company in mongodb
     name (str): The name of the company
     number_of_reps (int): The number of representatives of the company
     website (str): The URL of the company's website
@@ -153,17 +131,25 @@ class Company:
     data (dict): A dictionary containing the attributes of the model
         For easy json conversion
     """
-    def __init__(self, name, num_reps, site, other):
+    def __init__(self, id, name, num_reps, site, other):
+        self._id = id
         self._name = name
         self._number_of_reps = num_reps
         self._website = site
         self._other_info = other
         self._data = {
+            "id": self._id,
             "name": self._name,
             "number_of_reps": self._number_of_reps,
             "website": self._website,
             "other_info": self._other_info
         }
+
+    def get_id(self):
+        return self._id
+    def set_id(self, id):
+        self._id = id
+        self._data['id'] = id
 
     def get_name(self):
         return self._name
@@ -192,6 +178,7 @@ class Company:
     def get_data(self):
         return self._data
 
+    id = property(get_id, set_id)
     name = property(get_name, set_name)
     number_of_reps = property(get_number_of_reps, set_number_of_reps)
     website = property(get_website, set_website)

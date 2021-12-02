@@ -1,16 +1,14 @@
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 import { loginEndpoint } from "../util/Endpoints";
 
-export const UserContext = createContext(null)
+export const UserContext = createContext({})
 
 
 export const loginUser = async (username, password) => {
     const response = await loginEndpoint(username, password)
 
-    if (response && response.sessionuuid) {
-        return response.sessionToken
-    }
+    localStorage.setItem("adminToken", JSON.stringify(response) )
 
-    return null
+    return response
 
 }
