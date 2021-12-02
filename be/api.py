@@ -359,17 +359,17 @@ def submit_feedback():
     if request.method != 'PUT':
         return bad_request
     else:
-        req_json = request.get_json()
-        if 'feedback' not in req_json:
+        req_json = request.json
+        if 'message' not in req_json:
             return bad_request
-        feedback = req_json['feedback']
+        feedback = req_json['message']
         fh = FeedbackHandler(m)
         response = fh.submit_feedback(feedback)
         fh.closeConnection()
         response = json.dumps(response, default=str)
         if response is None:
             return bad_request
-    return jsonify(response)
+    return "Thanks for the feedback! :)"
 
 # REQUIRES AUTH
 @navigator_api.route('/feedback', methods=['GET'])

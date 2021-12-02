@@ -15,6 +15,20 @@ const headers = {
 //     return response.data;
 // }
 
+export async function sendFeedback(email, message) {
+
+    const response = await axios.put(`${process.env.REACT_APP_ITIFN_API}/feedback`, {
+        email,
+        message
+    }, {
+        headers
+    });
+
+    console.log("FEEDBACK RESPONSE: ", response.data);
+    return response.data;
+
+}
+
 export async function getAvailableYears() {
 
     const response = await axios.get(`${process.env.REACT_APP_ITIFN_API}/years`, {}, { headers });
@@ -51,3 +65,4 @@ export async function loginEndpoint(username, password) {
     return response.data;
 
 }
+
