@@ -71,6 +71,18 @@ def add_year():
         mh.closeConnection()
     return years
 
+@navigator_api.route('/years', methods=['GET'])
+@cross_origin()
+def get_years():
+    if request.method != "GET":
+        return bad_request
+    else:
+        mh = MapHandler(m)
+        years = jsonify(mh.getAllYears())
+        mh.closeConnection()
+    return years
+
+
 @navigator_api.route('/year/archive', methods=['POST'])
 @cross_origin()
 def archive_map():
