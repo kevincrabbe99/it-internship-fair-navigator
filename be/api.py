@@ -236,7 +236,32 @@ def update_table():
 @navigator_api.route('/table', methods=['DELETE'])
 @cross_origin()
 def delete_table():
-    return
+    if request.method != "DELETE":
+        return bad_request
+    else:
+        req_json = request.get_json()
+        if 'Authorization' not in request.headers:
+            return refuse_credentials
+        if '_id' and 'year' not in req_json:
+            return bad_request
+
+        id = req_json['_id']
+        year = req_json['year']
+
+        mh = MapHandler(m)
+        th = TableHandler(m)
+
+        temp_map = mh.readMapByYear(year)
+        map_json = json.dumps(temp_map, default=str)
+
+        the_map = MapHandler.buildMapFromJSON(map_json)
+        MapHandler.removeTable(the_map, id)
+        mh.updateMap(temp_map['_id'], the_map)
+
+        th.deleteTable(id)
+
+        data_json = mh.jsonifyAllMapData(the_map)
+    return data_json
 
 
 # ENDPOINTS FOR EMAIL LIST
