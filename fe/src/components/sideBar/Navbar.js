@@ -33,9 +33,10 @@ function Navbar() {
 
   const showSidebar = () => setSidebar(!sidebar);
 
+
   const handleClick = (address) => {
-    window.location = address;
-    }
+    window.open(address);
+  }
 
   // use effect for when window loads
   // load years
