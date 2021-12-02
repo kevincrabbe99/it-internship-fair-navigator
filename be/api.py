@@ -293,6 +293,42 @@ def unsubscribe():
 def get_emaillist():
     return
 
+# ENDPOINTS FOR FEEDBACK
+
+# ENDPOINTS FOR COMPANIES
+@navigator_api.route('/companies', methods=['GET'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+def get_all_companies():
+    if request.method != 'GET':
+        return bad_request
+    else:
+        ch = CompanyHandler(m)
+        response = ch.readAllCompanies()
+        ch.closeConnection()
+        response = json.dumps(response, default=str)
+        if response is None:
+            response = bad_request
+    return response
+
+@navigator_api.route('/company', methods=['GET'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+def get_company():
+    if request.method != 'GET':
+        return bad_request
+    else:
+        req_json = request.get_json()
+        if 'name' not in req_json:
+            return bad_request
+        name = req_json['name']
+        ch = CompanyHandler(m)
+        company_data = ch.readCompanyByName(name)
+        if company_data is None:
+            return bad_request
+        company_data = json.dumps(company_data, default=str)
+        response = jsonify(company_data)
+        
+    return response
+
 
 # ENDPOINTS FOR ADMIN LOGIN/LOGOUT
 
