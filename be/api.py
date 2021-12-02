@@ -21,6 +21,7 @@ refuse_credentials = Response(response="401 Refused Credentials",
 # ENDPOINTS FOR YEAR/MAP
 
 @navigator_api.route('/year', methods=['GET'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def get_year():
     if request.method != 'GET':
         return bad_request
@@ -47,6 +48,7 @@ def get_year():
 
 # REQUIRES AUTH
 @navigator_api.route('/year', methods=['PUT'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def add_year():
     if request.method != "PUT":
         return bad_request
@@ -69,7 +71,20 @@ def add_year():
         mh.closeConnection()
     return years
 
+@navigator_api.route('/years', methods=['GET'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+def get_years():
+    if request.method != "GET":
+        return bad_request
+    else:
+        mh = MapHandler(m)
+        years = jsonify(mh.getAllYears())
+        mh.closeConnection()
+    return years
+
+
 @navigator_api.route('/year/archive', methods=['POST'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def archive_map():
     if request.method != "POST":
         return bad_request
@@ -108,6 +123,7 @@ def archive_map():
 
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['PUT'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def add_table():
     if request.method != "PUT":
         return bad_request
@@ -120,11 +136,13 @@ def add_table():
 
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['POST'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def update_table():
     return
 
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['DELETE'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def delete_table():
     return
 
@@ -179,7 +197,7 @@ def admin_login():
     return response
 
 @navigator_api.route('/logout', methods=['DELETE'])
-@cross_origin()
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def admin_logout():
     uuid = request.get_json()['uuid']
     if request.method != 'DELETE':
