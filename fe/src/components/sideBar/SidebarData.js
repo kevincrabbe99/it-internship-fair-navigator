@@ -1,6 +1,8 @@
 import React from 'react';
 import * as MdIcons from 'react-icons/md';
 import * as BiIcons from 'react-icons/bi'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserCog } from '@fortawesome/free-solid-svg-icons';
 
 export const SidebarData = [
   {
@@ -16,5 +18,12 @@ export const SidebarData = [
     icon: <BiIcons.BiSpreadsheet size={70} />,
     cName: 'nav-text',
     address: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMUAAAEACAMAAAA0tEJxAAAAclBMVEX///8AAADDw8Nqamr5+fn29vYvLy/KysrFxcUkJCSLi4sODg7j4+OmpqZBQUHn5+c6Ojrv7+9jY2NxcXFcXFzb29spKSkbGxsXFxdTU1OYmJhFRUW6urp9fX2bm5uQkJDS0tKxsbEsLCxMTEx3d3eFhYWhgS3WAAAC40lEQVR4nO3d23KiQBRGYRUaPEUFNSqeZ8b3f8WJNRdR04ONJd0L/ddlpIr9VQqS2onSark1n7Wx5UNHRJaHHrWs3FGRJqEnLWvpqOiiFe33UyyKDq1uUVnRSx2P9lj6EoqOFJik4CQFJyk4ScFJCk5ScJKCU4kizobXjY+fZ8VxPAxd5qwwx2g9umqdDL6OHSSj4OUb46hALzyS1E0RF4EHLW8XOylMP/Cc5fVNFcWAV3XF+oPXurIisrwSuqi6Ira8FLZYCkxScJKCkxScpOAkBScpOJUozGYb3TQ5v/Dr9qsBOhpXxa4Nbu+q6AUd806juaMi6JT3Srrvp1iFvo5/thpUVgCX4YdeZUXH74QupVJgkoKTFJyk4CQFJyk4ScFJCk5ScJKCkxScpOAkBScpOEnBSQpOUnCSgpMUnKTgJAUnKThJwUkKTlJwkoKTFJyk4CQFJyk4ScFJCk5ScJKCkxScpOAkBScpOEnBSQpOUlxkMn/VpsiKqbe2lk+zeY5ivGp7a2l+nl+K77JpMvHV79oUrfHcW7anmelOy0kKTlJwkoKTFJyk4CQFJyk4ScFJCk5ScHqSIhv7qzZF1l/NfBVpw/kGiixafHqqt65vTxs4KThJwUkKTlJwkoKTFJyk4CQFJyk4ScFJCk7a014gXmKr9hobTp+KQX172v0s99Wf2v5DuxV7zHJ63Wk5ScHpxRXXz8tNG6qYXD/wtKEKW1LUWhVF7yUUu+YpJrdPNN5uTPMUfcsvwFLUmhScpOAkBScpOD1J0Yx3Rt9RNGTDCVIsXkJR3/fCfJz6njoVj+9p7yhaxmOW0+tOy+mfonO5ujcNVSym++/LZ9+fNFNhSwrv/Vdhuy03TjE62I5GKwbr27cwnQ7Wo9GKr58X9/+OeY6ucEuKOpOCkxScpOAkBScpOL2tIq11oId6QFF0O7SKRWUFtTdTLENPWlbiesHmoSctK7d9uratIZgxmzsi/gJvctjqQrFXrQAAAABJRU5ErkJggg=='
+  },
+  {
+    title: 'Admin Login',
+    path: '/',
+    icon: <FontAwesomeIcon icon={faUserCog} />,
+    cName: 'nav-text',
+    address: 'login'
   }
 ];
