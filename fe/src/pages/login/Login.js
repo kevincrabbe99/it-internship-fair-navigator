@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useState } from 'react'
 import { withRouter } from 'react-router'
 import '../../util/colors.scss'
 import './login.scss'
-import { loginUser } from '../../contexts/userContext'
+import { loginUser, UserContext } from '../../contexts/userContext'
 
 
 
 export default function Login() {
+
+    const { user, setUser } = useContext(UserContext)
 
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -23,7 +25,8 @@ export default function Login() {
             if (res) {
                 console.log("login successful")
                 setLoginError(false)
-                // window.location = "/"
+                setUser(res)
+                window.location = "/"
             } else {
                 console.log("login failed")
                 setLoginError(true)

@@ -10,8 +10,8 @@ navigator_api = Blueprint(
     'navigator_api', __name__, url_prefix='/api/navigator')
 
 m = MongoConnection()
-bad_request = Response(response="404 Bad Request",
-                    status=404,
+bad_request = Response(response="400 Bad Request",
+                    status=400,
                     mimetype='application/json')
 refuse_credentials = Response(response="401 Refused Credentials",
                         status=401,
@@ -147,11 +147,14 @@ def get_emaillist():
 # ENDPOINTS FOR ADMIN LOGIN/LOGOUT
 
 @navigator_api.route('/login', methods=['POST'])
-@cross_origin()
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def admin_login():
 
-    username = request.get_json()['username']
-    password = request.get_json()['password']
+    print("LOGIN REQ VARS: ", request.json)
+    print("LOGIN REQ JSON: ", request.json.get('username'))
+    username = request.json.get('username')
+    password = request.json.get('password')
+
 
     if request.method != 'POST':
         response = bad_request
@@ -173,7 +176,7 @@ def admin_login():
             response = refuse_credentials
     else:
         response = bad_request
-    return jsonify(response)
+    return response
 
 @navigator_api.route('/logout', methods=['DELETE'])
 @cross_origin()
