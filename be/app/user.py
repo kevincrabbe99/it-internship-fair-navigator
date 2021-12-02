@@ -1,10 +1,16 @@
-from models import *
+from app.models import *
+import uuid
+import os
+import bcrypt
+from dotenv import load_dotenv
 
 class User:
-    def __init__(self, uid):
-        self.uid = uid
-        self.route = Route.__init__(self)
-        self.favorites = UserFavorites.__init__(self)
+    def __init__(self):
+        self.session_uuid = str(uuid.uuid4())
+        self.expire_time = 30
+        # self.uid = uid
+        # self.route = Route.__init__(self)
+        # self.favorites = UserFavorites.__init__(self)
 
     def downloadDocument(link):
         return
@@ -19,45 +25,62 @@ class User:
         return
 
 class Admin(User):
-    def __init__(self, uid, position):
-        super().__init__(self, uid)
-        self.position = position
-
+    def __init__(self):
+        super().__init__()
+        
     def adminLogin():
-        return
-    
-    def validateCredentials(self, name, pwd):
         return
 
     def uploadDocument(self, link):
         return
 
-class UserFavorites:
+class AccountManager:
+
     def __init__(self):
-        self.favorites = list()
+        self.admin = Admin()
 
-    def addFavorite(tableId):
-        return
+    def get_session_details(self):
+        return self.admin.expire_time, self.admin.session_uuid
 
-    def removeFavorite(tableId):
-        return
+    @staticmethod
+    def check_valid(uname: str, pwd: str):
+        load_dotenv()
+        username = os.getenv('NAVUSER')
+        hashed = os.getenv('NAVHASH')
 
-    def getFavorites():
-        return
-
-class UserFeedback:
-    def __init__(self):
-        self.feedback = list()
-
-    def submitFeedback(string):
-        return
-
-class Route:
-    def __init__(self):
-        self.tablesInRoute = self.generateRoute()
-
-    def generateRoute():
-        return list()
+        if (username == uname) and (bcrypt.checkpw(pwd.encode('utf-8'), hashed.encode('utf-8'))):
+            return True
+        else:
+            return False
     
-    def addTableToRoute(self, table):
-        return
+
+
+# class UserFavorites:
+#     def __init__(self):
+#         self.favorites = list()
+
+#     def addFavorite(tableId):
+#         return
+
+#     def removeFavorite(tableId):
+#         return
+
+#     def getFavorites():
+#         return
+
+# class UserFeedback:
+#     def __init__(self):
+#         self.feedback = list()
+
+#     def submitFeedback(string):
+#         return
+
+# class Route:
+#     def __init__(self):
+#         self.tablesInRoute = self.generateRoute()
+
+#     def generateRoute():
+#         return list()
+    
+#     def addTableToRoute(self, table):
+#         return
