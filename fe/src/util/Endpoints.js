@@ -17,10 +17,10 @@ const headers = {
 
 export async function getAvailableYears() {
 
-    // const response = await axios.get(`${process.env.REACT_APP_ITIFN_API}/year`, {}, { headers });
+    const response = await axios.get(`${process.env.REACT_APP_ITIFN_API}/years`, {}, { headers });
 
-    // console.log("GET YEARS INIT RESPONSE: ", response.data);
-    // return response.data;
+    console.log("GET YEARS INIT RESPONSE: ", response.data);
+    return response.data;
 
     return null
 }
