@@ -12,3 +12,15 @@ export const loginUser = async (username, password) => {
     return response
 
 }
+
+export const isAdmin = () => {
+    // check local storage
+    const token = localStorage.getItem("adminToken")
+    if (token !== null) {
+        return true
+    } 
+
+    // TODO: check if admin endpoint
+
+    return false
+}
