@@ -9,7 +9,7 @@ export async function test() {
 export async function loginEndpoint(username, password) {
 
     // call to process.env.REACT_APP_ITIFN_API
-    axios.post(`${process.env.REACT_APP_ITIFN_API}/login`, {
+    axios.post(`${process.env.REACT_APP_ITIFN_API}/api/navigator/login`, {
         username: username,
         password: password
         }).then(response => {
