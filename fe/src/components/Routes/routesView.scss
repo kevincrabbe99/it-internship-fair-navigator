@@ -11,14 +11,13 @@
 
 #routes_container {
   height: calc(90% - 3em);
-  position: absolute;
+  position: fixed;
   right: 2em;
-  top: 0;
+  top: 5.5em;
   border: 1px solid var(--border-color);
   border-radius: 5px;
   width: 20em;
   background-color: white;
-  z-index: 30;
 }
 
 #routes_heaer {

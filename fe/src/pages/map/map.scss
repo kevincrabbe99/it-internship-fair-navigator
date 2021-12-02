@@ -2,10 +2,10 @@
 
 .map-container {
   width: 100%;
-  height: calc(100% - 10em);
+  height: calc(100%);
   position: absolute;
-  top: 10em;
   left: 0;
+  overflow: scroll;
 }
 
 .map-container table {
