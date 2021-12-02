@@ -14,6 +14,7 @@ import {
 } from 'react-router-dom';
 import { UserContext } from './contexts/userContext';
 import { YearContext } from './contexts/yearContext';
+import Feedback from './pages/feedback/Feedback';
 
 function App() { 
 
@@ -38,7 +39,7 @@ function App() {
             <Switch>
               <Route exact path="/" component={Map}/>
               <Route exact path="/login" component={Login}/>
-              {/* <Route exact path="/admin" component={Admin} /> */}
+              <Route exact path="/feedback" component={Feedback}/> 
             </Switch>
             <Sidebar />
           </div>
