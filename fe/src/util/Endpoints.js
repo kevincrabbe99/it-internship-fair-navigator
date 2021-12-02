@@ -10,7 +10,7 @@ export async function loginEndpoint(username, password) {
 
     const headers = {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': `${process.env.REACT_APP_ITIFN_API}`
+        'Access-Control-Allow-Origin': '*'
     }
 
     // call to process.env.REACT_APP_ITIFN_API
