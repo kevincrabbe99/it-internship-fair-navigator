@@ -4,29 +4,11 @@ import os
 import bcrypt
 from dotenv import load_dotenv
 
-class User:
+
+class Admin():
     def __init__(self):
         self.session_uuid = str(uuid.uuid4())
         self.expire_time = 30
-        # self.uid = uid
-        # self.route = Route.__init__(self)
-        # self.favorites = UserFavorites.__init__(self)
-
-    def downloadDocument(link):
-        return
-
-    def signUpForEmailList(email):
-        return
-
-    def submitFeedback(feedback):
-        return
-
-    def unsubscribeFromEmailList(email):
-        return
-
-class Admin(User):
-    def __init__(self):
-        super().__init__()
         
     def adminLogin():
         return
@@ -35,7 +17,6 @@ class Admin(User):
         return
 
 class AccountManager:
-
     def __init__(self):
         self.admin = Admin()
 

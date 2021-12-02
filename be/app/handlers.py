@@ -725,14 +725,16 @@ class EmailListHandler(DatabaseObject):
         Returns:
         string: ObjectID of the inserted email
         """
-
-        data = {"email": email}
-        try:
-            raw = super()._write(self.collection, data)
-            new_id = raw.inserted_id
-            return str(new_id)
-        except:
-            return None
+        if check_email(email):
+            data = {"email": email}
+            try:
+                raw = super()._write(self.collection, data)
+                new_id = raw.inserted_id
+                return str(new_id)
+            except:
+                return None
+        else:
+            return "Invalid email"
 
     def readEmailList(self):
         """
@@ -782,36 +784,6 @@ class EmailListHandler(DatabaseObject):
             return result
         except: 
             return None
-    
-    @staticmethod
-    def signUpForEmailList(email_list: EmailList, email: str):
-        """
-        Static method that adds an email to the email_list attribute
-
-        Parameters:
-        email (string): The string containing the email to add
-
-        Returns:
-        EmailList: The updated EmailList
-        """
-        if check_email(email):
-            email_list.subscribe(email)
-        return email_list
-
-    @staticmethod
-    def unsubscribeFromEmailList(email_list: EmailList, email: str):
-        """
-        Static method that removes an email from any emaillist
-
-        Parameters:
-        email (string): The string containing the email to remove
-
-        Returns:
-        EmailList: The updated EmailList
-        """
-        if check_email(email):
-            email_list.unsubscribe(email)
-        return email_list
     
     def getConnection(self):
         """
@@ -905,6 +877,75 @@ class AdminHandler(DatabaseObject):
             return result
         except: 
             return None
+
+    def getConnection(self):
+        """
+        Method to return the reference to the mongo_connection singleton
+
+        Returns:
+        MongoConnection: The reference to the singleton
+        """
+        return self.databaseCon
+
+    def closeConnection(self): 
+        '''
+        Method to remove the reference to mongo_connection
+        
+        Returns:
+        Nothing
+        '''
+        self.databaseCon = None
+        return
+
+class FeedbackHandler(DatabaseObject):
+    """
+    A class used to handle operations between feedback and the DB
+
+    Attributes:
+    databaseCon (MongoConnection): The MongoConnection singleton
+    """
+    
+    collection = "feedback"
+
+    def __init__(self, databaseCon: MongoConnection):
+        """
+        Parameters:
+        dataBaseCon (MongoConnection): The MongoConnection singleton
+        accesToken (str):
+        user (User):
+        """
+        super().__init__(databaseCon)
+
+    def submit_feedback(self, feedback: str):
+        """
+        Submits userfeedback to the database
+
+        Parameters:
+        feedback (str): The feedback to submit
+
+        Returns:
+        dictionary: The inserted object
+        """
+        try:
+            data = {'feedback': feedback}
+            result = super()._write(self.collection, data).inserted_id
+            return result
+        except:
+            return None
+
+    def get_feedback(self):
+        """
+        Returns all the user feedback from the database
+
+        Returns:
+        list: All feedback
+        """
+        try:
+            result = super()._read_all(self.collection)
+            return result
+        except: 
+            return None
+
 
     def getConnection(self):
         """
