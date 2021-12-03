@@ -3,6 +3,7 @@ import * as MdIcons from 'react-icons/md';
 import * as BiIcons from 'react-icons/bi'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCog } from '@fortawesome/free-solid-svg-icons';
+import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 
 export const SidebarData = [
   {
@@ -25,5 +26,12 @@ export const SidebarData = [
     icon: <FontAwesomeIcon icon={faUserCog} />,
     cName: 'nav-text',
     address: 'login'
+  },
+  {
+    title: 'Feedback',
+    path: '/',
+    icon: <FontAwesomeIcon icon={faCommentDots} />,
+    cName: 'nav-text',
+    address: 'feedback'
   }
 ];

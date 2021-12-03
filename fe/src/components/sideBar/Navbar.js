@@ -30,6 +30,7 @@ function Navbar() {
   const [availableYears, setAvailableYears] = useState([]);
   const [newYearValue, setNewYearValue] = useState(null);
   const [submitAddYear, setSubmitAddYear] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
 
   const showSidebar = () => setSidebar(!sidebar);
 
@@ -41,35 +42,42 @@ function Navbar() {
   // use effect for when window loads
   // load years
   // TODO: load tables
-  // useEffect(() => {
-  //   async function getAvailableYearsAsyncWrapper() {
-  //     const res = await getAvailableYears();
-  //     if (res === null) {
-  //       return
-  //     }
+  useEffect(() => {
+    async function getAvailableYearsAsyncWrapper() {
+      const res = await getAvailableYears();
+      if (res === null) {
+        return
+      }
 
-  //     var selected = (yearData && yearData.selected) ? yearData.selected : res[res.length - 1];
+      var selected = (yearData && yearData.selected) ? yearData.selected : res[res.length - 1];
 
-  //     const yearState = structureYearState(selected, res)
-  //     console.log("YEAR STATE: ", yearState)
-  //     // setYearData(yearState)
-  //   }
+      const yearState = structureYearState(selected, res)
+      console.log("YEAR STATE: ", yearState)
+      setYearData(yearState)
+    }
 
-  //   getAvailableYearsAsyncWrapper();
-  // }, [window])
+    getAvailableYearsAsyncWrapper();
+  }, [window])
   
   useEffect(() => { 
     async function submitNewYearAsyncWrapper() {
       const res = await addNewYear(user.uuid, newYearValue);
       console.log("ARRAY WITH ALL VALID YEARS: ", res);
 
-      if (res !== 'DUPLICATE') {
+      if (res != 'Map already exists for this year' && res.includes(newYearValue)) {
         // structure yearData
-        const yearState = structureYearState(null, res)
+        const yearState = structureYearState(newYearValue, res)
         console.log("YEAR STATE: ", yearState)
         setYearData(yearState)
         setAvailableYears(res)
         setModalShowing(false) 
+      } else {
+        if (yearData && yearData.available.includes(newYearValue)) {
+          const yearState = structureYearState(newYearValue, yearData.available)
+          setYearData(yearState)
+          setModalShowing(false)
+          console.log("setting to already existing year: ", yearState)
+        }
       }
 
     }
@@ -118,8 +126,8 @@ function Navbar() {
     )
   }
 
-  const generateYearsDowpdown = () => {
-    
+  const setYearTo = (val) => {
+    setYearData(structureYearState(val, yearData.available))
   }
 
   return (
@@ -139,11 +147,22 @@ function Navbar() {
             <ul>
               <li>
                 <div className='dropdown'>
-                  <select>
+                  <select onChange={e => setYearTo(e.target.value)} value = {yearData && yearData.selected}>
                     {
-                      availableYears.map((year, index) => {
-                        <option value={year} key={index}>{year} me</option>
+                      // create 10 options
+                      yearData &&
+                      yearData.available &&
+                      yearData.available.length > 0 &&
+                      [...Array(yearData.available.length).keys()].map(i => {
+                        
+                        var val = <option value={yearData.available[i]} >{yearData.available[i]}</option>
+                        if (yearData.selected == yearData.available[i]) {
+                          val = <option value={yearData.available[i]} selected>{yearData.available[i]}</option>
+                        }
+
+                        return val
                       })
+                      
                     }
                   </select>
                 </div>
