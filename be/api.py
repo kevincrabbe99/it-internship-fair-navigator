@@ -314,7 +314,7 @@ def subscribe():
     return bad_request
 
 @navigator_api.route('/unsubscribe', methods=['DELETE'])
-@cross_origin()
+@cross_origin(origin='*', headers=['Content-Type'])
 def unsubscribe():
     if request.method != 'DELETE':
         return bad_request

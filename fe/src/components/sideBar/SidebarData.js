@@ -4,6 +4,7 @@ import * as BiIcons from 'react-icons/bi'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserCog } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
+import { faAddressBook } from '@fortawesome/free-solid-svg-icons';
 
 export const SidebarData = [
   {
@@ -33,5 +34,12 @@ export const SidebarData = [
     icon: <FontAwesomeIcon icon={faCommentDots} />,
     cName: 'nav-text',
     address: 'feedback'
+  },
+  {
+    title: 'Subscribe to Mailing List',
+    path: '/',
+    icon: <FontAwesomeIcon icon={faAddressBook} />,
+    cName: 'nav-text',
+    address: 'subscribe'
   }
 ];

@@ -15,6 +15,8 @@ import {
 import { UserContext } from './contexts/userContext';
 import { YearContext } from './contexts/yearContext';
 import Feedback from './pages/feedback/Feedback';
+import Subscribe from './pages/subscribe/Subscribe';
+import Unsubscribe from './pages/unsubscribe/Unsubscribe';
 
 function App() { 
 
@@ -40,6 +42,8 @@ function App() {
               <Route exact path="/" component={Map}/>
               <Route exact path="/login" component={Login}/>
               <Route exact path="/feedback" component={Feedback}/> 
+              <Route exact path="/subscribe" component={Subscribe}/> 
+              <Route exact path="/unsubscribe" component={Unsubscribe}/> 
             </Switch>
             <Sidebar />
           </div>
