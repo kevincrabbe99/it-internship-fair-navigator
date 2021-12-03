@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import ReactDOM from "react-dom";
 import PanZoom from "@sasza/react-panzoom";
 import "./styles.css";
-import Table from  '../../pages/map/table/Table';
+import Map from  '../../pages/map/Map';
 
 const ImageZoom = () => (
   <Fragment>
@@ -13,13 +13,7 @@ const ImageZoom = () => (
         }}
         disableUserSelect
       >
-      
-        <div className="map-container">
-        <Table/>
-        <Table/>
-        <Table/>
-        <Table/>
-        </div>
+      <Map/>
       </PanZoom>
     </div>
   </Fragment>

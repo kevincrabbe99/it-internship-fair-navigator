@@ -1,9 +1,9 @@
 import React from 'react'
 import RoutesView from '../../components/Routes/RoutesView'
-import ImageZoom from '../../components/panZoom/ImageZoom'
+//import ImageZoom from '../../components/panZoom/ImageZoom'
 import "./map.scss"
 import Table from './table/Table'
-import { test } from '../../util/Endpoints'
+//import { test } from '../../util/Endpoints'
 
 export default function Map() {
 
@@ -67,7 +67,6 @@ export default function Map() {
             </table>
                 
             <RoutesView />
-            <ImageZoom />
         </div>
     )
 }
