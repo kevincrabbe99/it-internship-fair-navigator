@@ -11,6 +11,7 @@ import { YearContext } from '../../contexts/yearContext.js';
 import { structureYearState } from '../../contexts/yearContext.js';
 import { getAvailableYears } from '../../util/Endpoints.js';
 import { SidebarContext } from '../../contexts/sidebarContext.js';
+import { RoutesContext } from '../../contexts/routesContext';
 
 function Navbar() {
 
@@ -18,6 +19,7 @@ function Navbar() {
 
   const { sidebarState, setSidebarState } = useContext(SidebarContext)
   const { yearData, setYearData } = useContext(YearContext)
+  const { routesContext, setRoutesContext } = useContext(RoutesContext)
 
   // const [sidebar, setSidebar] = useState(false);
 
@@ -120,11 +122,28 @@ function Navbar() {
     )
   }
 
+  const generateRoutesButton = () => {
+    var label = "SHOW YOUR ROUTES"
+    if (routesContext.showing) {
+      label = "HIDE ROUTES"
+    } 
+
+    return (
+      <li>
+        <div className='button' onClick={() => clickToggleRoute()}> 
+          {label}
+        </div>
+      </li>
+    )
+  }
+
+  const clickToggleRoute = () => {
+    setRoutesContext({...routesContext, showing: !routesContext.showing}) 
+  }
+
   const setYearTo = (val) => {
     setYearData(structureYearState(val, yearData.available))
   }
-
-
 
   const [tableId, setTableId] = useState(null);
   const [x, setX] = useState(null);
@@ -176,8 +195,9 @@ function Navbar() {
                     }
                 </select>
                 </div>
-            </li>
+            </li> 
             {generateAdminButtons()}
+            {generateRoutesButton()}
             </ul>
         </div>
         

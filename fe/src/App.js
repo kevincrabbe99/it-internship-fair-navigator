@@ -17,6 +17,7 @@ import { UserContext } from './contexts/userContext';
 import { YearContext } from './contexts/yearContext';
 import Feedback from './pages/feedback/Feedback';
 import { SidebarContext } from './contexts/sidebarContext';
+import { RoutesContext } from './contexts/routesContext';
 
 function App() { 
 
@@ -29,6 +30,9 @@ function App() {
   const [sidebarState, setSidebarState] = useState(false);
   const sidebarProviderValue = useMemo(() => ({sidebarState, setSidebarState}), [sidebarState, setSidebarState]);
 
+  const [routesContext, setRoutesContext] = useState([]);
+  const routesProviderValue = useMemo(() => ({routesContext, setRoutesContext}), [routesContext, setRoutesContext]);
+
   useEffect(() => {
     const u = JSON.parse(localStorage.getItem('adminToken'));
     if (u && u.uuid) {
@@ -37,23 +41,25 @@ function App() {
   }, [window])
 
   return (
-    <SidebarContext.Provider value={sidebarProviderValue}>
-      <UserContext.Provider value={userProviderValue}>
-          <YearContext.Provider value={yearDataProviderValue}>
-          <Router> 
-            <div className="App">
-              <Switch>
-                <Route exact path="/" component={Map}/>
-                <Route exact path="/login" component={Login}/>
-                <Route exact path="/feedback" component={Feedback}/> 
-              </Switch>
-              <Navbar/>
-              <Sidebar />
-            </div>
-          </Router>
-        </YearContext.Provider>
-      </UserContext.Provider>
-    </SidebarContext.Provider>
+    <RoutesContext.Provider value={routesProviderValue}>
+      <SidebarContext.Provider value={sidebarProviderValue}>
+        <UserContext.Provider value={userProviderValue}>
+            <YearContext.Provider value={yearDataProviderValue}>
+            <Router> 
+              <div className="App">
+                <Switch>
+                  <Route exact path="/" component={Map}/>
+                  <Route exact path="/login" component={Login}/>
+                  <Route exact path="/feedback" component={Feedback}/> 
+                </Switch>
+                <Navbar/>
+                <Sidebar />
+              </div>
+            </Router>
+          </YearContext.Provider>
+        </UserContext.Provider>
+      </SidebarContext.Provider>
+    </RoutesContext.Provider>
   );
 }
 
