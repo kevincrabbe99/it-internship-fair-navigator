@@ -126,24 +126,22 @@ function Navbar() {
   }
 
 
-
   const [submitCreateMap, setSubmitCreateMap] = useState(false);
-  const [tableId, setTableId] = useState(null);
+  // const [tableId, setTableId] = useState(null);
   const [x, setX] = useState(null);
   const [y, setY] = useState(null);
   const [cName, setName] = useState(null);
   const [numReps, setNumReps] = useState(null);
   const [website, setWebsite] = useState(null);
   const [notes, setNotes] = useState(null);
-  const [year, setYear] = useState(null);
 
   useEffect(() => {
     async function createNewTableAsyncWrapper(){
-      console.log("async working");
-      const response = await createTableEndpoint(user.uuid, tableId, x, y, cName, numReps, website, notes, year);
+      console.log("async admin working");
+      const response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, yearData.selected);
       return response;
     }
-    console.log("async working");
+    console.log("async working", user);
     if(user && user.uuid){
       createNewTableAsyncWrapper();
     }
