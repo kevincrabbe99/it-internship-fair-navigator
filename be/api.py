@@ -354,7 +354,7 @@ def get_emaillist():
 # ENDPOINTS FOR FEEDBACK
 
 @navigator_api.route('/feedback', methods=['PUT'])
-@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+@cross_origin()
 def submit_feedback():
     if request.method != 'PUT':
         return bad_request
@@ -462,9 +462,9 @@ def admin_login():
     return response
 
 @navigator_api.route('/logout', methods=['DELETE'])
-@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+@cross_origin()
 def admin_logout():
-    uuid = request.get_json()['uuid']
+    uuid = request.get_json['sessionUUID']
     if request.method != 'DELETE':
         return bad_request
     elif uuid:

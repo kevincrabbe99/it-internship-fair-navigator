@@ -25,8 +25,8 @@ function App() {
   const yearDataProviderValue = useMemo(() => ({yearData, setYearData}), [yearData, setYearData]);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('adminToken'));
-    if (user !== null) {
+    const u = JSON.parse(localStorage.getItem('adminToken'));
+    if (u && u.uuid) {
       setUser(user)
     }
   }, [window])
