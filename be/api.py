@@ -138,12 +138,12 @@ def add_table():
         if 'Authorization' not in request.headers:
             return refuse_credentials
         if check_token(request.headers['Authorization']):
-            if 'x_coord' and 'y_coord' and 'company' and 'year' not in req_json:
+            if 'x_coord' and 'y_coord' and 'website' and 'year' not in req_json:
                 return bad_request
 
             x_coord = req_json['x_coord']
             y_coord = req_json['y_coord']
-            company = req_json['company']
+            company = req_json['website']
             year = req_json['year']
 
             company_name = company['name']
