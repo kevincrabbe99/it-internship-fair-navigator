@@ -16,6 +16,7 @@ import { YearContext } from '../../contexts/yearContext.js';
 import { structureYearState } from '../../contexts/yearContext.js';
 import { getAvailableYears } from '../../util/Endpoints.js';
 import { logoutUser } from '../../contexts/userContext.js';
+import { createTableEndpoint } from '../../util/Endpoints.js';
 
 function Navbar() {
 
@@ -145,18 +146,19 @@ function Navbar() {
   const [tableId, setTableId] = useState(null);
   const [x, setX] = useState(null);
   const [y, setY] = useState(null);
-  const [name, setName] = useState(null);
+  const [cName, setName] = useState(null);
   const [numReps, setNumReps] = useState(null);
   const [website, setWebsite] = useState(null);
   const [notes, setNotes] = useState(null);
   const [year, setYear] = useState(null);
 
-  function submit(){
-    const url = "api.itfnavigator.com/api/navigator/" + 
-        "{_id: " + tableId + ", _x_coord: " + x + ", _y_coord: " + y + ", _company: {_name: " + name + ", _number_of_reps: " + numReps + ",_website: " + website + ", _other_info: " + notes + "}, _year: " + year + "}";
-    const response = fetch(url);
-    return response;
-  }
+  // useEffect(() => {
+  //   async function submit(){
+  //     const response = await createTableEndpoint(tableId, x, y, cName, numReps, website, notes, year);
+  //     return response;
+  //   }
+  // }, [tableId, x, y, cName, numReps, website, notes, year])
+  
 
   return (
     <>
@@ -283,7 +285,7 @@ function Navbar() {
                           <div id = "inputLabel">
                               <label>
                                   Company Name:
-                                  <input type = "text" value = {name} onChange = {e => setName(e.target.value)} />
+                                  <input type = "text" value = {cName} onChange = {e => setName(e.target.value)} />
                               </label>
                           </div>
                           <br />
@@ -321,7 +323,7 @@ function Navbar() {
 
                   <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateTableModal(false)}>CLOSE</Button>
-                    <Button variant="primary" onClick = {submit()}>CREATE</Button>
+                    <Button variant="primary" onClick = {''}>CREATE</Button>
                   </Modal.Footer>
                 </Modal.Dialog>
             }

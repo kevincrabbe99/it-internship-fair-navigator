@@ -4,6 +4,8 @@ import Header from './components/header/Header';
 import Sidebar from './components/sideBar/Navbar.js';
 import Map from './pages/map/Map';
 import Login from './pages/login/Login';
+import Checklist from './pages/files/Checklist';
+import Worksheet from './pages/files/Worksheet';
 import './App.css';
 
 import { 
@@ -40,6 +42,8 @@ function App() {
               <Route exact path="/" component={Map}/>
               <Route exact path="/login" component={Login}/>
               <Route exact path="/feedback" component={Feedback}/> 
+              <Route exact path="/checklist" component={Checklist}/>
+              <Route exact path="/worksheet" component={Worksheet}/>
             </Switch>
             <Sidebar />
           </div>

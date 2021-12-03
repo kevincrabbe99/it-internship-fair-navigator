@@ -79,3 +79,21 @@ export async function logoutEndpoint(sessionUUID) {
     console.log("LOGOUT RESPONSE: ", response.data);
 
 }
+
+export async function createTableEndpoint(tableId, x, y, cName, numReps, website, notes, year){
+    const response = await axios.post(`${process.env.REACT_APP_ITIFN_API}/table`,
+    {
+        _id: tableId, 
+        _x_coord: x, 
+        _y_coord: y, 
+        _company: {
+                name: cName, 
+                _number_of_reps: numReps,
+                _website: website, 
+                _other_info: notes
+        }, 
+        _year: year
+    }
+    
+    );
+}
