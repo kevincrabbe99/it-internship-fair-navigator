@@ -3,7 +3,7 @@ import * as FaIcons from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import { isAdmin, UserContext } from '../../contexts/userContext.js';
-import { addNewYear } from '../../util/Endpoints.js';
+import { addNewYear, getTablesEndpoint, updateTableEndpoint } from '../../util/Endpoints.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
@@ -12,6 +12,8 @@ import { structureYearState } from '../../contexts/yearContext.js';
 import { getAvailableYears } from '../../util/Endpoints.js';
 import { SidebarContext } from '../../contexts/sidebarContext.js';
 import { createTableEndpoint } from '../../util/Endpoints.js';
+import { MdAirlineSeatLegroomExtra } from 'react-icons/md';
+import { arrow } from '@popperjs/core';
 
 function Navbar() {
 
@@ -109,7 +111,7 @@ function Navbar() {
     <>
       <li>
         <div className='button' onClick={() => setShowCreateTableModal(true)}> 
-          CREATE TABLE
+          MAKE TABLE
         </div>
       </li>
       <li>
@@ -127,23 +129,32 @@ function Navbar() {
 
 
   const [submitCreateMap, setSubmitCreateMap] = useState(false);
-  // const [tableId, setTableId] = useState(null);
+  const [id, setId] = useState(null);
   const [x, setX] = useState(null);
   const [y, setY] = useState(null);
   const [cName, setName] = useState(null);
   const [numReps, setNumReps] = useState(null);
   const [website, setWebsite] = useState(null);
   const [notes, setNotes] = useState(null);
+  const [logoFile, setLogo] = useState(null);
 
   useEffect(() => {
-    async function createNewTableAsyncWrapper(){
+    async function makeTableAsyncWrapper(){
       console.log("async admin working");
-      const response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, yearData.selected);
+      const getTables = await getTablesEndpoint(user.uuid);
+      var response;
+      if(getTables.some(item => item.x_coord === x) && getTables.some(item => item.y_coord === y)){
+        response = await updateTableEndpoint(user.uuid, id, x, y, cName, numReps, website, notes, yearData);
+      }
+      else{
+        response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, yearData);
+      }
+      
       return response;
     }
     console.log("async working", user);
     if(user && user.uuid){
-      createNewTableAsyncWrapper();
+      makeTableAsyncWrapper();
     }
   }, [submitCreateMap])
   
@@ -259,8 +270,22 @@ function Navbar() {
                           <br />
                           <div id = "inputLabel">
                               <label>
+                                  x-Coordinate:
+                                  <input type = "text" value = {x} onChange = {e => setX(e.target.value)} />
+                              </label>
+                          </div>
+                          <br />
+                          <div id = "inputLabel">
+                              <label>
+                                  y-Coordinate:
+                                  <input type = "text" value = {y} onChange = {e => setY(e.target.value)} />
+                              </label>
+                          </div>
+                          <br />
+                          <div id = "inputLabel">
+                              <label>
                                   Company Logo:
-                                  <input type = "file" />
+                                  <input type = "text" value = {logoFile} onChange = {e => setLogo(e.target.value)}/>
                               </label>
                           </div>
                           <br />
@@ -269,7 +294,7 @@ function Navbar() {
 
                   <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateTableModal(false)}>CLOSE</Button>
-                    <Button variant="primary" onClick = {() => setSubmitCreateMap(!submitCreateMap)}>CREATE</Button>
+                    <Button variant="primary" onClick = {() => setSubmitCreateMap(!submitCreateMap)}>SUBMIT</Button>
                   </Modal.Footer>
                 </Modal.Dialog>
             }

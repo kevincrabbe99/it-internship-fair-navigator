@@ -127,6 +127,20 @@ def archive_map():
 
 # ENDPOINTS FOR TABLE
 
+@navigator_api.route('/tables', methods=['GET'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+def get_all_tables():
+    if request.method != 'GET':
+        return bad_request
+    else:
+        ch = TableHandler(m)
+        response = ch.readAllTables()
+        ch.closeConnection()
+        response = json.dumps(response, default=str)
+        if response is None:
+            response = bad_request
+    return response
+
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['PUT'])
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
@@ -138,12 +152,12 @@ def add_table():
         if 'Authorization' not in request.headers:
             return refuse_credentials
         if check_token(request.headers['Authorization']):
-            if 'x_coord' and 'y_coord' and 'website' and 'year' not in req_json:
+            if 'x_coord' and 'y_coord' and 'company' and 'year' not in req_json:
                 return bad_request
 
             x_coord = req_json['x_coord']
             y_coord = req_json['y_coord']
-            company = req_json['website']
+            company = req_json['company']
             year = req_json['year']
 
             company_name = company['name']
