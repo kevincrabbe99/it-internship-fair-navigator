@@ -5,8 +5,6 @@ import Sidebar from './components/sideBar/Sidebar';
 import Navbar from './components/navbar/Navbar';
 import Map from './pages/map/Map';
 import Login from './pages/login/Login';
-import Checklist from './pages/files/Checklist';
-import Worksheet from './pages/files/Worksheet';
 import './App.css';
 
 import { 
@@ -48,7 +46,10 @@ function App() {
                 <Route exact path="/" component={Map}/>
                 <Route exact path="/login" component={Login}/>
                 <Route exact path="/feedback" component={Feedback}/> 
-                <Route exact path="/checklist" component={Checklist}/>
+                <Route path='/checklist' component={() => { 
+                    window.location.href = "./Internship Fair Checklist.pdf"; 
+                    return null;
+                }}/>
                 <Route path='/worksheet' component={() => { 
                     window.location.href = "./Internship Fair Preparation Worksheet.pdf"; 
                     return null;
