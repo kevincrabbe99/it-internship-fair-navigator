@@ -26,9 +26,6 @@ export default function Feedback() {
         }
 
         // clean
-        return () => {
-            setSubmitFeedback(false)
-        }
     }, [submitFeedback])
 
     return (
@@ -42,7 +39,7 @@ export default function Feedback() {
                     </div>
 
                     <div className="feedback-body">
-                        <form>
+                        {/* <form> */}
                             <div className="fbf-email input-group">
                                 <label htmlFor="email">Email</label>
                                 <input type="email" id="email" name="email" placeholder="Enter your email" 
@@ -56,10 +53,10 @@ export default function Feedback() {
                             </div>
 
                             <div className="fbf-submit">
-                                <button type="submit" onClick={() => setSubmitFeedback(true)}>Submit</button>
+                                <button onClick={() => setSubmitFeedback(!submitFeedback)}>Submit</button>
                             </div>
 
-                        </form>
+                        {/* </form> */}
                     </div>
                 </div>
 

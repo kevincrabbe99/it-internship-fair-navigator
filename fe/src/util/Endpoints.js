@@ -66,3 +66,16 @@ export async function loginEndpoint(username, password) {
 
 }
 
+export async function logoutEndpoint(sessionUUID) {
+
+    headers['Authorization'] = sessionUUID;
+
+    const response = await axios.delete(`${process.env.REACT_APP_ITIFN_API}/logout`, {
+        sessionUUID
+    }, {
+        headers
+    });
+
+    console.log("LOGOUT RESPONSE: ", response.data);
+
+}
