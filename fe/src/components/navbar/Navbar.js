@@ -14,6 +14,7 @@ import { SidebarContext } from '../../contexts/sidebarContext.js';
 import { createTableEndpoint } from '../../util/Endpoints.js';
 import { MdAirlineSeatLegroomExtra } from 'react-icons/md';
 import { arrow } from '@popperjs/core';
+import { RoutesContext } from '../../contexts/routesContext';
 
 function Navbar() {
 
@@ -21,6 +22,7 @@ function Navbar() {
 
   const { sidebarState, setSidebarState } = useContext(SidebarContext)
   const { yearData, setYearData } = useContext(YearContext)
+  const { routesContext, setRoutesContext } = useContext(RoutesContext)
 
   // const [sidebar, setSidebar] = useState(false);
 
@@ -124,13 +126,32 @@ function Navbar() {
     )
   }
 
+  const generateRoutesButton = () => {
+    var label = "SHOW YOUR ROUTES"
+    if (routesContext.showing) {
+      label = "HIDE ROUTES"
+    } 
+
+    return (
+      <li>
+        <div className='button' onClick={() => clickToggleRoute()}> 
+          {label}
+        </div>
+      </li>
+    )
+  }
+
+  const clickToggleRoute = () => {
+    setRoutesContext({...routesContext, showing: !routesContext.showing}) 
+  }
+
+  const [submitCreateMap, setSubmitCreateMap] = useState(false);
+  const [id, setId] = useState(null);
   const setYearTo = (val) => {
     setYearData(structureYearState(val, yearData.available))
   }
 
-
-  const [submitCreateMap, setSubmitCreateMap] = useState(false);
-  const [id, setId] = useState(null);
+  const [tableId, setTableId] = useState(null);
   const [x, setX] = useState(null);
   const [y, setY] = useState(null);
   const [cName, setName] = useState(null);
@@ -194,8 +215,9 @@ function Navbar() {
                     }
                 </select>
                 </div>
-            </li>
+            </li> 
             {generateAdminButtons()}
+            {generateRoutesButton()}
             </ul>
         </div>
         

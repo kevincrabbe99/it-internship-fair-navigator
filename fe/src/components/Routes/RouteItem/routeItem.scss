@@ -1,0 +1,80 @@
+@import "../../../util/colors.scss";
+
+.routes_list_item {
+  height: 3em;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.routes_list_item:hover {
+  background-color: var(--hover-color);
+  cursor: pointer;
+}
+
+.routes_list_item .row {
+  margin-left: 1em;
+}
+
+.hide {
+  display: none;
+}
+
+.r-number {
+  width: 1em;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.r-number span {
+  margin: 0em;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.r-icon {
+  width: 2em;
+
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin-left: 0.3em;
+}
+
+.r-icon img {
+  width: 2em;
+  height: 2em;
+  overflow: hidden;
+  border-radius: 3px;
+}
+
+.r-name {
+  width: 11em;
+  height: 3em;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  font-size: 0.9em;
+}
+
+.r-icon-opt {
+  display: flex;
+  align-items: center;
+}
+
+.r-icon-opt svg {
+  color: var(--blackish);
+}
+
+.r-link svg:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.r-trash svg:hover {
+  color: red;
+  cursor: pointer;
+}

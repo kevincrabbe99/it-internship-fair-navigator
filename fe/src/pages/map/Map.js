@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import RoutesView from '../../components/Routes/RoutesView'
 import "./map.scss"
 
 import Table from './table/Table'
 
 import { test } from '../../util/Endpoints'
+import { RoutesContext } from '../../contexts/routesContext'
 
 export default function Map() {
+    const { routesContext, setRoutesContext } = useContext(RoutesContext)
 
     const rows = 5
     const columns = 6
@@ -66,8 +68,11 @@ export default function Map() {
                 }
                 </tbody>
             </table>
+            
+            {
                 
-            <RoutesView />
+                <RoutesView/>
+            }
         </div>
     )
 }
