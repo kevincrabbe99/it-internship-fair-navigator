@@ -27,6 +27,7 @@ function Navbar() {
   const [modalShowing, setModalShowing] = useState(false);
   const [showAddYearModal, setShowAddYearModal] = useState(false);
   const [showCreateTableModal, setShowCreateTableModal] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   
   const [availableYears, setAvailableYears] = useState([]);
   const [newYearValue, setNewYearValue] = useState(null);
@@ -144,10 +145,10 @@ function Navbar() {
       const getTables = await getTablesEndpoint(user.uuid);
       var response;
       if(getTables.some(item => item.x_coord === x) && getTables.some(item => item.y_coord === y)){
-        response = await updateTableEndpoint(user.uuid, id, x, y, cName, numReps, website, notes, yearData);
+        response = await updateTableEndpoint(user.uuid, id, x, y, cName, numReps, website, notes, '2021');
       }
       else{
-        response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, yearData);
+        response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, '2021');
       }
       
       return response;
@@ -233,6 +234,7 @@ function Navbar() {
             {
                 isAdmin() &&
                 showCreateTableModal &&
+                !showPreview &&
                 <Modal.Dialog>
                   <Modal.Header>
                     <Modal.Title>Create a Table</Modal.Title>
@@ -240,49 +242,49 @@ function Navbar() {
 
                   <Modal.Body>
                     <div>
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   Company Name:
                                   <input type = "text" value = {cName} onChange = {e => setName(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   Number of Representatives:
                                   <input type = "text" value = {numReps} onChange = {e => setNumReps(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   Company Website:
                                   <input type = "text" value = {website} onChange = {e => setWebsite(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   Notes:
                                   <input type = "text" value = {notes} onChange = {e => setNotes(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   x-Coordinate:
                                   <input type = "text" value = {x} onChange = {e => setX(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   y-Coordinate:
                                   <input type = "text" value = {y} onChange = {e => setY(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   Company Logo:
                                   <input type = "text" value = {logoFile} onChange = {e => setLogo(e.target.value)}/>
@@ -294,6 +296,78 @@ function Navbar() {
 
                   <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateTableModal(false)}>CLOSE</Button>
+                    <Button variant="tertiary" onClick={() => setShowPreview(!showPreview)}>PREVIEW</Button>
+                    <Button variant="primary" onClick = {() => setSubmitCreateMap(!submitCreateMap)}>SUBMIT</Button>
+                  </Modal.Footer>
+                </Modal.Dialog>
+            }
+
+{
+                isAdmin() &&
+                showCreateTableModal &&
+                showPreview &&
+                <Modal.Dialog>
+                  <Modal.Header>
+                    <Modal.Title>View Table</Modal.Title>
+                  </Modal.Header>
+
+                  <Modal.Body>
+                    <div>
+                          <div>
+                              <label>
+                                  Company Name:
+                                  <p>{cName}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  Number of Representatives:
+                                  <p>{numReps}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  Company Website:
+                                  <p>{website}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  Notes:
+                                  <p>{notes}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  x-Coordinate:
+                                  <p>{x}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  y-Coordinate:
+                                  <p>{y}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  Company Logo:
+                                  <img src={logoFile} alt = 'Company Logo' width = '70' height = '70' />
+                              </label>
+                          </div>
+                          <br />
+                    </div>
+                  </Modal.Body>
+
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowCreateTableModal(false)}>CLOSE</Button>
+                    <Button variant="tertiary" onClick={() => setShowPreview(!showPreview)}>EDIT</Button>
                     <Button variant="primary" onClick = {() => setSubmitCreateMap(!submitCreateMap)}>SUBMIT</Button>
                   </Modal.Footer>
                 </Modal.Dialog>

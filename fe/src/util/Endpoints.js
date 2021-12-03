@@ -89,7 +89,7 @@ export async function createTableEndpoint(sessionUUID, x, y, cName, numReps, web
         company:
         {'name': cName,
         'number_of_reps': numReps,
-        //'website': website,
+        'website': website,
         'other_info': notes},
         'year': year
     }, { headers });
