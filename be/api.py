@@ -127,20 +127,6 @@ def archive_map():
 
 # ENDPOINTS FOR TABLE
 
-@navigator_api.route('/tables', methods=['GET'])
-@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
-def get_all_tables():
-    if request.method != 'GET':
-        return bad_request
-    else:
-        ch = TableHandler(m)
-        response = ch.readAllTables()
-        ch.closeConnection()
-        response = json.dumps(response, default=str)
-        if response is None:
-            response = bad_request
-    return response
-
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['PUT'])
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
@@ -304,6 +290,19 @@ def delete_table():
         else:
             return refuse_credentials
 
+@navigator_api.route('/tables', methods=['GET'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+def get_all_tables():
+    if request.method != 'GET':
+        return bad_request
+    else:
+        ch = TableHandler(m)
+        response = ch.readAllTables()
+        ch.closeConnection()
+        response = json.dumps(response, default=str)
+        if response is None:
+            response = bad_request
+    return response
 
 # ENDPOINTS FOR EMAIL LIST
 

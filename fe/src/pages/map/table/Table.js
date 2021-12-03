@@ -5,10 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar, faRoute, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { UserContext } from '../../../contexts/userContext'
 import { isAdmin } from '../../../contexts/userContext'
+//import { getTablesEndpoint } from '../../util/Endpoints.js';
 
-export default function Table() {
+export default function Table(x, y) {
 
-    const { user } = useContext(UserContext)
+    const { user } = useContext(UserContext);
+
+    // const getTables = await getTablesEndpoint(user.uuid);
+
+
 
     return (
         <div className="table-container border">
@@ -16,17 +21,14 @@ export default function Table() {
                 <div className="row companyName">
                     Company Name
                 </div>
-                <div className="row contactTitle">
-                    Primary Contact Title
+                <div className="row numReps">
+                    Number of Representatives: {''}
                 </div>
-                <div className="row contactInfo">
-                    Primary Contact Name
+                <div className="row website">
+                    Website: {''}
                 </div>
-                <div className="row contactInfo">
-                    Primary Contact Email
-                </div>
-                <div className="row contactInfo">
-                    (000) 000-0000
+                <div className="row notes">
+                    Notes: {''}
                 </div>
             </div>    
             <div className="table-footer">

@@ -151,7 +151,6 @@ function Navbar() {
     setYearData(structureYearState(val, yearData.available))
   }
 
-  const [tableId, setTableId] = useState(null);
   const [x, setX] = useState(null);
   const [y, setY] = useState(null);
   const [cName, setName] = useState(null);
@@ -165,7 +164,8 @@ function Navbar() {
       console.log("async admin working");
       const getTables = await getTablesEndpoint(user.uuid);
       var response;
-      if(getTables.some(item => item.x_coord === x) && getTables.some(item => item.y_coord === y)){
+      if(getTables.some(item => item.x_coord === x && item.y_coord === y)){
+        var id = getTables.results.find(item => item.x_coord === x && item.y_coord === y);
         response = await updateTableEndpoint(user.uuid, id, x, y, cName, numReps, website, notes, '2021');
       }
       else{
@@ -324,7 +324,7 @@ function Navbar() {
                 </Modal.Dialog>
             }
 
-{
+            {
                 isAdmin() &&
                 showCreateTableModal &&
                 showPreview &&
