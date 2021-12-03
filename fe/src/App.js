@@ -5,6 +5,9 @@ import Sidebar from './components/sideBar/Sidebar';
 import Navbar from './components/navbar/Navbar';
 import Map from './pages/map/Map';
 import Login from './pages/login/Login';
+import Subscribe from './pages/subscribe/Subscribe';
+import Unsubscribe from './pages/unsubscribe/Unsubscribe';
+
 import './App.css';
 
 import { 
@@ -18,7 +21,6 @@ import { YearContext } from './contexts/yearContext';
 import Feedback from './pages/feedback/Feedback';
 import { SidebarContext } from './contexts/sidebarContext';
 import { RoutesContext } from './contexts/routesContext';
-
 function App() { 
 
   const [user, setUser] = useState(null);
@@ -51,6 +53,8 @@ function App() {
                   <Route exact path="/" component={Map}/>
                   <Route exact path="/login" component={Login}/>
                   <Route exact path="/feedback" component={Feedback}/> 
+                  <Route exact path="/subscribe" component={Subscribe}/> 
+                  <Route exact path="/unsubscribe" component={Unsubscribe}/> 
                 </Switch>
                 <Navbar/>
                 <Sidebar />

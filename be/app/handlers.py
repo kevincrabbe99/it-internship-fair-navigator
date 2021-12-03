@@ -730,7 +730,7 @@ class EmailListHandler(DatabaseObject):
             try:
                 raw = super()._write(self.collection, data)
                 new_id = raw.inserted_id
-                return str(new_id)
+                return "Thanks for subscribing!"
             except:
                 return None
         else:
