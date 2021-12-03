@@ -10,12 +10,8 @@ import { Button } from 'react-bootstrap';
 import { YearContext } from '../../contexts/yearContext.js';
 import { structureYearState } from '../../contexts/yearContext.js';
 import { getAvailableYears } from '../../util/Endpoints.js';
-<<<<<<< HEAD:fe/src/components/sideBar/Navbar.js
-import { logoutUser } from '../../contexts/userContext.js';
-import { createTableEndpoint } from '../../util/Endpoints.js';
-=======
 import { SidebarContext } from '../../contexts/sidebarContext.js';
->>>>>>> 6091de6f69e1539ea720c459fdfe3866a4d143bd:fe/src/components/navbar/Navbar.js
+import { createTableEndpoint } from '../../util/Endpoints.js';
 
 function Navbar() {
 
@@ -131,6 +127,7 @@ function Navbar() {
 
 
 
+  const [submitCreateMap, setSubmitCreateMap] = useState(false);
   const [tableId, setTableId] = useState(null);
   const [x, setX] = useState(null);
   const [y, setY] = useState(null);
@@ -140,12 +137,17 @@ function Navbar() {
   const [notes, setNotes] = useState(null);
   const [year, setYear] = useState(null);
 
-  // useEffect(() => {
-  //   async function submit(){
-  //     const response = await createTableEndpoint(tableId, x, y, cName, numReps, website, notes, year);
-  //     return response;
-  //   }
-  // }, [tableId, x, y, cName, numReps, website, notes, year])
+  useEffect(() => {
+    async function createNewTableAsyncWrapper(){
+      console.log("async working");
+      const response = await createTableEndpoint(user.uuid, tableId, x, y, cName, numReps, website, notes, year);
+      return response;
+    }
+    console.log("async working");
+    if(user && user.uuid){
+      createNewTableAsyncWrapper();
+    }
+  }, [submitCreateMap])
   
 
   return (
@@ -229,7 +231,6 @@ function Navbar() {
 
                   <Modal.Body>
                     <div>
-                      <form onSubmit = {''}>
                           <div id = "inputLabel">
                               <label>
                                   Company Name:
@@ -265,13 +266,12 @@ function Navbar() {
                               </label>
                           </div>
                           <br />
-                      </form>
                     </div>
                   </Modal.Body>
 
                   <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateTableModal(false)}>CLOSE</Button>
-                    <Button variant="primary" onClick = {''}>CREATE</Button>
+                    <Button variant="primary" onClick = {() => setSubmitCreateMap(!submitCreateMap)}>CREATE</Button>
                   </Modal.Footer>
                 </Modal.Dialog>
             }

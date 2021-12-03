@@ -8,8 +8,8 @@ import { test } from '../../util/Endpoints'
 
 export default function Map() {
 
-    const rows = 15
-    const columns = 15
+    const rows = 5
+    const columns = 6
     const locations = [[0,1], [0,3], [2,3], [2,1], [3,3], [3,1]]
 
 

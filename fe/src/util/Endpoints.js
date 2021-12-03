@@ -80,20 +80,19 @@ export async function logoutEndpoint(sessionUUID) {
 
 }
 
-export async function createTableEndpoint(tableId, x, y, cName, numReps, website, notes, year){
-    const response = await axios.post(`${process.env.REACT_APP_ITIFN_API}/table`,
-    {
-        _id: tableId, 
-        _x_coord: x, 
-        _y_coord: y, 
-        _company: {
-                name: cName, 
-                _number_of_reps: numReps,
-                _website: website, 
-                _other_info: notes
-        }, 
-        _year: year
-    }
-    
-    );
+export async function createTableEndpoint(sessionUUID, x, y, cName, numReps, website, notes, year){
+    headers['Authorization'] = sessionUUID;
+    console.log('endpoint');
+    const response = await axios.put(`${process.env.REACT_APP_ITIFN_API}/table`, {
+        'x_coord': x,
+        'y_coord': y,
+        'name': cName,
+        'number_of_reps': numReps,
+        'website': website,
+        'other_info': notes,
+        'year': year
+    }, { headers });
+
+    console.log("ADD YEAR RESPONSE: ", response);
+    return response.data;
 }

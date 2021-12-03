@@ -39,24 +39,6 @@ function App() {
   }, [window])
 
   return (
-<<<<<<< HEAD
-    <UserContext.Provider value={userProviderValue}>
-        <YearContext.Provider value={yearDataProviderValue}>
-        <Router> 
-          <div className="App">
-            <Switch>
-              <Route exact path="/" component={Map}/>
-              <Route exact path="/login" component={Login}/>
-              <Route exact path="/feedback" component={Feedback}/> 
-              <Route exact path="/checklist" component={Checklist}/>
-              <Route exact path="/worksheet" component={Worksheet}/>
-            </Switch>
-            <Sidebar />
-          </div>
-        </Router>
-      </YearContext.Provider>
-    </UserContext.Provider>
-=======
     <SidebarContext.Provider value={sidebarProviderValue}>
       <UserContext.Provider value={userProviderValue}>
           <YearContext.Provider value={yearDataProviderValue}>
@@ -66,6 +48,11 @@ function App() {
                 <Route exact path="/" component={Map}/>
                 <Route exact path="/login" component={Login}/>
                 <Route exact path="/feedback" component={Feedback}/> 
+                <Route exact path="/checklist" component={Checklist}/>
+                <Route path='/worksheet' component={() => { 
+                    window.location.href = "./Internship Fair Preparation Worksheet.pdf"; 
+                    return null;
+                }}/>
               </Switch>
               <Navbar/>
               <Sidebar />
@@ -74,7 +61,6 @@ function App() {
         </YearContext.Provider>
       </UserContext.Provider>
     </SidebarContext.Provider>
->>>>>>> 6091de6f69e1539ea720c459fdfe3866a4d143bd
   );
 }
 
