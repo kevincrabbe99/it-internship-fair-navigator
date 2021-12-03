@@ -3,7 +3,7 @@ import RoutesView from '../../components/Routes/RoutesView'
 import "./map.scss"
 
 import Table from './table/Table'
-
+import PanZoom from '@sasza/react-panzoom'
 import { test } from '../../util/Endpoints'
 
 export default function Map() {
@@ -54,7 +54,14 @@ export default function Map() {
     // test();
 
     return (
+        
         <div className="map-container">
+            <PanZoom
+            boundary={{
+            parent: true
+            }}
+            disableUserSelect
+            >
             <table>
                 <tbody>
                 {
@@ -66,7 +73,7 @@ export default function Map() {
                 }
                 </tbody>
             </table>
-                
+            </PanZoom>
             <RoutesView />
         </div>
     )
