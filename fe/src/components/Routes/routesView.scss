@@ -3,10 +3,12 @@
 #routes_list {
   position: absolute;
   top: 3em;
+  width: 100%;
 }
 
 #routes_list ul {
   list-style-type: none;
+  padding-left: 0;
 }
 
 #routes_container {
@@ -18,13 +20,17 @@
   border-radius: 5px;
   width: 20em;
   background-color: white;
+  overflow-y: scroll;
 }
 
-#routes_heaer {
+.routes_header {
   position: relative;
+  height: 3em;
+  display: flex;
+  align-items: center;
 }
 
-#routes_header ul {
+.routes_header ul {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -33,18 +39,27 @@
   right: 0.5em;
 }
 
-#routes_header li {
-  display: inline;
-  padding: 0.3em;
+#routes_header_title {
+  width: 10em;
 }
 
-#routes_header_title {
+#routes_header_title h4 {
+  font-weight: bold;
+}
+
+.routes_header li {
+  display: inline;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.routes_header_title {
   position: absolute;
   top: 0.5em;
   left: 0.5em;
 }
 
-#routes_header_title h4 {
+.routes_header_title h4 {
   margin: 0;
   padding: 0;
 }
