@@ -95,9 +95,9 @@ export async function subscribeEmail(email) {
 
 export async function unsubscribeEmail(email) {
 
-    const response = await axios.delete(`${process.env.REACT_APP_ITIFN_API}/unsubscribe`, {
+    const response = await axios.delete(`${process.env.REACT_APP_ITIFN_API}/unsubscribe`, {data: {
         email,
-    }, {
+    }}, {
         headers
     });
 

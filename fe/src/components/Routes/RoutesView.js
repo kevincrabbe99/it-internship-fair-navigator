@@ -1,22 +1,54 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import '../../util/colors.scss'
 import RouteItem from './RouteItem/RouteItem'
 import './routesView.scss'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPrint, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+import { RoutesContext } from '../../contexts/routesContext'
 
 export default function RoutesView() {
+
+    const {routesContext} = useContext(RoutesContext)
+
+
+    const data = [
+        {
+            logoUrl: "https://logodix.com/logo/340298.png",
+            name: "StateFarm",
+            website: "https://www.statefarm.com/",
+            favorited: true
+        },
+        {
+            logoUrl: "https://media-exp1.licdn.com/dms/image/C4E22AQEspo2YZwWHaw/feedshare-shrink_2048_1536/0/1617820112220?e=1640217600&v=beta&t=h11sycUY20ORLihSXIjkv_QlecwMVQMLiK2BGqg9gcA",
+            name: "Country Financial",
+            website: "https://www.countryfinancial.com/",
+            favorited: true
+        },
+        {
+            logoUrl: "https://rivianownersforum.com/attachments/rivian-logo-png.479/",
+            name: "Rivian",
+            website: "https://www.fivian.com/",
+            favorited: false
+        }
+    ]
+
     return (
-        <div>
+        <div  className={   routesContext &&
+                            routesContext.showing ? '':'hide'} >
             <div id="routes_container">
 
                 {/* Header */}
-                <div id="routes_header">
+                <div className="routes_header">
                     <div id="routes_header_title">
                         <h4>Your Routes</h4>
                     </div>
                     <ul>
-                        <li>Print</li>
-                        <li>Email</li>
-                        <li>Reset</li>
+                        <li>
+                            <FontAwesomeIcon icon={faPrint} />
+                        </li>
+                        <li>
+                            <FontAwesomeIcon icon={faEnvelope} />
+                        </li>
                     </ul>
                 </div>
 
@@ -24,9 +56,9 @@ export default function RoutesView() {
                 <div id="routes_list">
                     <ul>
                       {
-                            [...Array(10)].map(i => (
+                            [...Array(3)].map((i, index) => (
                                 <li>
-                                    <RouteItem key={i} />
+                                    <RouteItem index={index} data={data} />
                                 </li>
                             ))
                       }

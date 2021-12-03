@@ -5,7 +5,7 @@ import './unsubscribe.scss'
 import { unsubscribeEmail } from '../../util/Endpoints'
 
 
-export default function Subscribe() {
+export default function Unsubscribe() {
 
 
     const [email, setEmail] = React.useState('')
