@@ -142,6 +142,22 @@ function Navbar() {
     // })
   }
 
+  const [tableId, setTableId] = useState(null);
+  const [x, setX] = useState(null);
+  const [y, setY] = useState(null);
+  const [name, setName] = useState(null);
+  const [numReps, setNumReps] = useState(null);
+  const [website, setWebsite] = useState(null);
+  const [notes, setNotes] = useState(null);
+  const [year, setYear] = useState(null);
+
+  function submit(){
+    const url = "api.itfnavigator.com/api/navigator/" + 
+        "{_id: " + tableId + ", _x_coord: " + x + ", _y_coord: " + y + ", _company: {_name: " + name + ", _number_of_reps: " + numReps + ",_website: " + website + ", _other_info: " + notes + "}, _year: " + year + "}";
+    const response = fetch(url);
+    return response;
+  }
+
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
@@ -262,12 +278,50 @@ function Navbar() {
                   </Modal.Header>
 
                   <Modal.Body>
-                    TODO: add fields to create table
+                    <div>
+                      <form onSubmit = {''}>
+                          <div id = "inputLabel">
+                              <label>
+                                  Company Name:
+                                  <input type = "text" value = {name} onChange = {e => setName(e.target.value)} />
+                              </label>
+                          </div>
+                          <br />
+                          <div id = "inputLabel">
+                              <label>
+                                  Number of Representatives:
+                                  <input type = "text" value = {numReps} onChange = {e => setNumReps(e.target.value)} />
+                              </label>
+                          </div>
+                          <br />
+                          <div id = "inputLabel">
+                              <label>
+                                  Company Website:
+                                  <input type = "text" value = {website} onChange = {e => setWebsite(e.target.value)} />
+                              </label>
+                          </div>
+                          <br />
+                          <div id = "inputLabel">
+                              <label>
+                                  Notes:
+                                  <input type = "text" value = {notes} onChange = {e => setNotes(e.target.value)} />
+                              </label>
+                          </div>
+                          <br />
+                          <div id = "inputLabel">
+                              <label>
+                                  Company Logo:
+                                  <input type = "file" />
+                              </label>
+                          </div>
+                          <br />
+                      </form>
+                    </div>
                   </Modal.Body>
 
                   <Modal.Footer>
                     <Button variant="secondary" onClick={() => setShowCreateTableModal(false)}>CLOSE</Button>
-                    <Button variant="primary">CREATE</Button>
+                    <Button variant="primary" onClick = {submit()}>CREATE</Button>
                   </Modal.Footer>
                 </Modal.Dialog>
             }
