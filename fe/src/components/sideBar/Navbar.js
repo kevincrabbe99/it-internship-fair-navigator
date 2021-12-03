@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
@@ -15,10 +15,11 @@ import { Button } from 'react-bootstrap';
 import { YearContext } from '../../contexts/yearContext.js';
 import { structureYearState } from '../../contexts/yearContext.js';
 import { getAvailableYears } from '../../util/Endpoints.js';
+import { logoutUser } from '../../contexts/userContext.js';
 
 function Navbar() {
 
-  const { user } = useContext(UserContext)
+  const { user, setUser } = useContext(UserContext)
   const { yearData, setYearData } = useContext(YearContext)
 
   const [sidebar, setSidebar] = useState(false);
@@ -130,6 +131,17 @@ function Navbar() {
     setYearData(structureYearState(val, yearData.available))
   }
 
+  const logoutUserClick = () => {
+
+    localStorage.removeItem("adminToken")
+    setUser(null)
+
+    // TODO: delete from database
+    // logoutUser(user.uuid).then(() => {
+
+    // })
+  }
+
   return (
     <>
       <IconContext.Provider value={{ color: '#fff' }}>
@@ -180,6 +192,22 @@ function Navbar() {
               </Link>
             </li>
             {SidebarData.map((item, index) => {
+
+              if (isAdmin()) {
+                if (item.title == 'Admin Login') {
+                  return (
+                    <li key={index} className={item.cName}>
+                      <Link to={item.link}>
+                        <div className='nav-icon'>
+                          <FontAwesomeIcon icon={faSignOutAlt} />
+                        </div>
+                        <span onClick={logoutUserClick}>Logout</span>
+                      </Link>
+                    </li>
+                  )
+                }
+              }
+
               return (
                 <li key={index} className={item.cName}>
                   <Link to={item.path}>
