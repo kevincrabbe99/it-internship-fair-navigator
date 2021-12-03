@@ -2,10 +2,17 @@ import React from 'react';
 import * as MdIcons from 'react-icons/md';
 import * as BiIcons from 'react-icons/bi'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserCog } from '@fortawesome/free-solid-svg-icons';
+import { faUserCog, faHome } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 
 export const SidebarData = [
+  {
+    title: 'Home',
+    path: '/', 
+    icon: <FontAwesomeIcon icon={faHome} />,
+    cName: 'nav-text',
+    address: '/'
+  },
   {
     title: 'Internship Fair Checklist',
     path: '/',

@@ -1,7 +1,8 @@
 // import logo from './logo.svg';
 import React, { useState, useMemo, useEffect } from 'react';
 import Header from './components/header/Header';
-import Sidebar from './components/sideBar/Navbar.js';
+import Sidebar from './components/sideBar/Sidebar';
+import Navbar from './components/navbar/Navbar';
 import Map from './pages/map/Map';
 import Login from './pages/login/Login';
 import Checklist from './pages/files/Checklist';
@@ -17,6 +18,7 @@ import {
 import { UserContext } from './contexts/userContext';
 import { YearContext } from './contexts/yearContext';
 import Feedback from './pages/feedback/Feedback';
+import { SidebarContext } from './contexts/sidebarContext';
 
 function App() { 
 
@@ -26,6 +28,9 @@ function App() {
   const [yearData, setYearData] = useState(null);
   const yearDataProviderValue = useMemo(() => ({yearData, setYearData}), [yearData, setYearData]);
 
+  const [sidebarState, setSidebarState] = useState(false);
+  const sidebarProviderValue = useMemo(() => ({sidebarState, setSidebarState}), [sidebarState, setSidebarState]);
+
   useEffect(() => {
     const u = JSON.parse(localStorage.getItem('adminToken'));
     if (u && u.uuid) {
@@ -34,6 +39,7 @@ function App() {
   }, [window])
 
   return (
+<<<<<<< HEAD
     <UserContext.Provider value={userProviderValue}>
         <YearContext.Provider value={yearDataProviderValue}>
         <Router> 
@@ -50,6 +56,25 @@ function App() {
         </Router>
       </YearContext.Provider>
     </UserContext.Provider>
+=======
+    <SidebarContext.Provider value={sidebarProviderValue}>
+      <UserContext.Provider value={userProviderValue}>
+          <YearContext.Provider value={yearDataProviderValue}>
+          <Router> 
+            <div className="App">
+              <Switch>
+                <Route exact path="/" component={Map}/>
+                <Route exact path="/login" component={Login}/>
+                <Route exact path="/feedback" component={Feedback}/> 
+              </Switch>
+              <Navbar/>
+              <Sidebar />
+            </div>
+          </Router>
+        </YearContext.Provider>
+      </UserContext.Provider>
+    </SidebarContext.Provider>
+>>>>>>> 6091de6f69e1539ea720c459fdfe3866a4d143bd
   );
 }
 

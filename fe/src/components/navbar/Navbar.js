@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import * as FaIcons from 'react-icons/fa';
-import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import { SidebarData } from './SidebarData.js';
 import './Navbar.css';
-import { IconContext } from 'react-icons';
 import { isAdmin, UserContext } from '../../contexts/userContext.js';
 import { addNewYear } from '../../util/Endpoints.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,15 +10,21 @@ import { Button } from 'react-bootstrap';
 import { YearContext } from '../../contexts/yearContext.js';
 import { structureYearState } from '../../contexts/yearContext.js';
 import { getAvailableYears } from '../../util/Endpoints.js';
+<<<<<<< HEAD:fe/src/components/sideBar/Navbar.js
 import { logoutUser } from '../../contexts/userContext.js';
 import { createTableEndpoint } from '../../util/Endpoints.js';
+=======
+import { SidebarContext } from '../../contexts/sidebarContext.js';
+>>>>>>> 6091de6f69e1539ea720c459fdfe3866a4d143bd:fe/src/components/navbar/Navbar.js
 
 function Navbar() {
 
   const { user, setUser } = useContext(UserContext)
+
+  const { sidebarState, setSidebarState } = useContext(SidebarContext)
   const { yearData, setYearData } = useContext(YearContext)
 
-  const [sidebar, setSidebar] = useState(false);
+  // const [sidebar, setSidebar] = useState(false);
 
   const [modalShowing, setModalShowing] = useState(false);
   const [showAddYearModal, setShowAddYearModal] = useState(false);
@@ -34,12 +35,8 @@ function Navbar() {
   const [submitAddYear, setSubmitAddYear] = useState(null);
   const [selectedYear, setSelectedYear] = useState(null);
 
-  const showSidebar = () => setSidebar(!sidebar);
+  const showSidebar = () => setSidebarState(!sidebarState);
 
-
-  const handleClick = (address) => {
-    window.open(address);
-  }
 
   // use effect for when window loads
   // load years
@@ -132,16 +129,7 @@ function Navbar() {
     setYearData(structureYearState(val, yearData.available))
   }
 
-  const logoutUserClick = () => {
 
-    localStorage.removeItem("adminToken")
-    setUser(null)
-
-    // TODO: delete from database
-    // logoutUser(user.uuid).then(() => {
-
-    // })
-  }
 
   const [tableId, setTableId] = useState(null);
   const [x, setX] = useState(null);
@@ -162,84 +150,44 @@ function Navbar() {
 
   return (
     <>
-      <IconContext.Provider value={{ color: '#fff' }}>
-        <div className='navbar'>
-          <Link to='#' className='menu-bars'>
+      <div className='navbar'>
+        <Link to='#' className='menu-bars'>
             <FaIcons.FaBars onClick={showSidebar} />
-          </Link>
-          <div className='logo'>
+        </Link>
+        <div className='logo'>
             <h1>
                 <Link to = "/">IT Navigator</Link>
             </h1>
-          </div>
+        </div>
 
-          <div className='nav-right'>
+        <div className='nav-right'>
             <ul>
-              <li>
+            <li>
                 <div className='dropdown'>
-                  <select onChange={e => setYearTo(e.target.value)} value = {yearData && yearData.selected}>
+                <select onChange={e => setYearTo(e.target.value)} value = {yearData && yearData.selected}>
                     {
-                      // create 10 options
-                      yearData &&
-                      yearData.available &&
-                      yearData.available.length > 0 &&
-                      [...Array(yearData.available.length).keys()].map(i => {
+                    // create 10 options
+                    yearData &&
+                    yearData.available &&
+                    yearData.available.length > 0 &&
+                    [...Array(yearData.available.length).keys()].map(i => {
                         
                         var val = <option value={yearData.available[i]} >{yearData.available[i]}</option>
                         if (yearData.selected == yearData.available[i]) {
-                          val = <option value={yearData.available[i]} selected>{yearData.available[i]}</option>
+                        val = <option value={yearData.available[i]} selected>{yearData.available[i]}</option>
                         }
 
                         return val
-                      })
-                      
+                    })
                     }
-                  </select>
+                </select>
                 </div>
-              </li>
-              {generateAdminButtons()}
-            </ul>
-          </div>
-          
-        </div>
-        <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
-          <ul className='nav-menu-items' onClick={showSidebar}>
-            <li className='navbar-toggle'>
-              <Link to='#' className='menu-bars'>
-                <FontAwesomeIcon icon={faWindowClose} />
-              </Link>
             </li>
-            {SidebarData.map((item, index) => {
-
-              if (isAdmin()) {
-                if (item.title == 'Admin Login') {
-                  return (
-                    <li key={index} className={item.cName}>
-                      <Link to={item.link}>
-                        <div className='nav-icon'>
-                          <FontAwesomeIcon icon={faSignOutAlt} />
-                        </div>
-                        <span onClick={logoutUserClick}>Logout</span>
-                      </Link>
-                    </li>
-                  )
-                }
-              }
-
-              return (
-                <li key={index} className={item.cName}>
-                  <Link to={item.path}>
-                    <div className='nav-icon'>
-                      {item.icon}
-                    </div>
-                    <span onClick={() => handleClick(item.address)}>{item.title}</span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-      </IconContext.Provider>
+            {generateAdminButtons()}
+            </ul>
+        </div>
+        
+      </div>
 
       {
         modalShowing &&
