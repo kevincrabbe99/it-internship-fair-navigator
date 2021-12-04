@@ -309,29 +309,39 @@ def subscribe():
         eh.closeConnection()
         if response is not None:
             response = json.dumps(response)
-            return jsonify(response)
+            return "Thanks for signing up!"
 
     return bad_request
 
 @navigator_api.route('/unsubscribe', methods=['DELETE'])
-@cross_origin()
+@cross_origin(origin='*', headers=['Content-Type'])
 def unsubscribe():
     if request.method != 'DELETE':
         return bad_request
     else:
-        req_json = request.get_json()
-        if 'email' not in req_json:
+        try:
+            req_json = request.get_json()
+        except:
+            return bad_request
+        try:
+            if 'email' not in req_json:
+                return bad_request
+        except:
             return bad_request
         
         email = req_json['email']
         eh = EmailListHandler(m)
-        email_data = eh.readEmail(email)
-        id = email_data['_id']
+        try:
+            email_data = eh.readEmail(email)
+            id = email_data['_id']
+        except:
+            return "Email not found"
+        
         response = eh.deleteEmail(str(id))
         eh.closeConnection()
         if response is not None:
             response = json.dumps(response)
-            return jsonify(response)
+            return "Unsubscribed!"
 
     return bad_request
 

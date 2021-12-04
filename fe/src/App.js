@@ -1,9 +1,13 @@
 // import logo from './logo.svg';
 import React, { useState, useMemo, useEffect } from 'react';
 import Header from './components/header/Header';
-import Sidebar from './components/sideBar/Navbar.js';
+import Sidebar from './components/sideBar/Sidebar';
+import Navbar from './components/navbar/Navbar';
 import Map from './pages/map/Map';
 import Login from './pages/login/Login';
+import Subscribe from './pages/subscribe/Subscribe';
+import Unsubscribe from './pages/unsubscribe/Unsubscribe';
+
 import './App.css';
 
 import { 
@@ -15,7 +19,8 @@ import {
 import { UserContext } from './contexts/userContext';
 import { YearContext } from './contexts/yearContext';
 import Feedback from './pages/feedback/Feedback';
-
+import { SidebarContext } from './contexts/sidebarContext';
+import { RoutesContext } from './contexts/routesContext';
 function App() { 
 
   const [user, setUser] = useState(null);
@@ -23,6 +28,12 @@ function App() {
 
   const [yearData, setYearData] = useState(null);
   const yearDataProviderValue = useMemo(() => ({yearData, setYearData}), [yearData, setYearData]);
+
+  const [sidebarState, setSidebarState] = useState(false);
+  const sidebarProviderValue = useMemo(() => ({sidebarState, setSidebarState}), [sidebarState, setSidebarState]);
+
+  const [routesContext, setRoutesContext] = useState([]);
+  const routesProviderValue = useMemo(() => ({routesContext, setRoutesContext}), [routesContext, setRoutesContext]);
 
   useEffect(() => {
     const u = JSON.parse(localStorage.getItem('adminToken'));
@@ -32,20 +43,27 @@ function App() {
   }, [window])
 
   return (
-    <UserContext.Provider value={userProviderValue}>
-        <YearContext.Provider value={yearDataProviderValue}>
-        <Router> 
-          <div className="App">
-            <Switch>
-              <Route exact path="/" component={Map}/>
-              <Route exact path="/login" component={Login}/>
-              <Route exact path="/feedback" component={Feedback}/> 
-            </Switch>
-            <Sidebar />
-          </div>
-        </Router>
-      </YearContext.Provider>
-    </UserContext.Provider>
+    <RoutesContext.Provider value={routesProviderValue}>
+      <SidebarContext.Provider value={sidebarProviderValue}>
+        <UserContext.Provider value={userProviderValue}>
+            <YearContext.Provider value={yearDataProviderValue}>
+            <Router> 
+              <div className="App">
+                <Switch>
+                  <Route exact path="/" component={Map}/>
+                  <Route exact path="/login" component={Login}/>
+                  <Route exact path="/feedback" component={Feedback}/> 
+                  <Route exact path="/subscribe" component={Subscribe}/> 
+                  <Route exact path="/unsubscribe" component={Unsubscribe}/> 
+                </Switch>
+                <Navbar/>
+                <Sidebar />
+              </div>
+            </Router>
+          </YearContext.Provider>
+        </UserContext.Provider>
+      </SidebarContext.Provider>
+    </RoutesContext.Provider>
   );
 }
 
