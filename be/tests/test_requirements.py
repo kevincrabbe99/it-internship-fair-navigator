@@ -98,7 +98,7 @@ def test_remove_table_correct_credentials_existing_table():
 
     table_to_delete = res.json()['tables'][-1]['_id']
     print(table_to_delete)
-    res = requests.delete('https://api.itfnavigator.com/api/navigator/table', json={'_id': table_to_delete, 'year': '2021'}, headers=header)
+    res = requests.put('https://api.itfnavigator.com/api/navigator/delete_table', json={'_id': table_to_delete, 'year': '2021'}, headers=header)
 
     requests.delete('https://api.itfnavigator.com/api/navigator/table', json={'sessionUUID': uuid})
 
