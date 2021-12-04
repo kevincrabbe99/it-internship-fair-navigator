@@ -10,6 +10,9 @@ export default function Table({data}) {
 
     const { user } = useContext(UserContext)
 
+    // const getTables = await getTablesEndpoint(user.uuid);
+
+
     return (
         <div className="table-container border">
             {/* <div className="image-container">

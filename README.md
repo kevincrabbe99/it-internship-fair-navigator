@@ -23,6 +23,12 @@ Runs on `localhost:8080`
 $ cd ../be
 $ python3 -u app.py
 ```
+### Python Unit Testing
+```
+$ cd ../be
+$ python3 -m pytest -rx
+```
+
 ### .env file for local environment <br>
 `/be/.env` SCHEMA
 ```

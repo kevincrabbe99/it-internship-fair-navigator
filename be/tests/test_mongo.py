@@ -1,4 +1,4 @@
-from ..app.mongo_connection import *
+from app.mongo_connection import *
 import pytest
 
 def test_mongo_singleton():

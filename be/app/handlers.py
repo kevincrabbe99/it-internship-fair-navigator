@@ -437,8 +437,8 @@ class TableHandler(DatabaseObject):
                             'x_coord': data['x_coord'],
                             'y_coord': data['y_coord'],
                             'company': company_data}
-
         return json.dumps(new_table_data, default=str)
+
 
     @staticmethod
     def setTableLocation(table: Table, x: int, y: int):

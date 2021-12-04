@@ -21,6 +21,7 @@ export default function Map() {
     const [locations, setLocations] = useState([])
     const [tableMatrix, setTableMatrix] = useState([...Array(rows)].map(e => Array(columns)))
 
+
     // const locations = [[0,1], [0,3], [2,3], [2,1], [3,3], [3,1]]
 
     // use effect for on load fetch map
