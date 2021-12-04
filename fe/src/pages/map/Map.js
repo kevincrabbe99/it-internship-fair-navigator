@@ -15,6 +15,9 @@ import { isAdmin } from '../../contexts/userContext'
 import { CreateTableModalContext } from '../../contexts/createTableModalContext'
 import { generateBlankTableTemplate } from '../../util/Shared'
 import { TableMatrixContext } from '../../contexts/tableMatrixContext'
+import { PanZoom } from 'react-easy-panzoom'
+
+
 export default function Map() {
 
     const { routesContext, setRoutesContext } = useContext(RoutesContext)
@@ -103,9 +106,14 @@ export default function Map() {
     // }
 
 
-    return (
-        <div className="map-container">
-            <table>
+    return (  
+       <div className="map-container">
+           <PanZoom
+            boundaryRatioVertical={0.01} 
+            boundaryRatioHorizontal={0.8} 
+            enableBoundingBox>
+            {
+          <table>
                 <tbody>
                 {
                     [...Array(rows)].map((e, row) => (
@@ -122,10 +130,18 @@ export default function Map() {
                 }
                 </tbody>
             </table>
-            {
+            }
+            </PanZoom>
+            {   
                 
                 <RoutesView/>
             }
+            
         </div>
+
     )
+
+    
+
+
 }
