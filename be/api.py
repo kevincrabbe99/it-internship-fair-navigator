@@ -488,8 +488,9 @@ def submit_feedback():
         if 'message' is None:
             return bad_request
         feedback = req_json['message']
+        email = req_json['email']
         fh = FeedbackHandler(m)
-        response = fh.submit_feedback(feedback)
+        response = fh.submit_feedback(email, feedback)
         fh.closeConnection()
         response = json.dumps(response, default=str)
         if response is None:
