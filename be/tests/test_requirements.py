@@ -178,7 +178,7 @@ def test_add_table_partial_input_nonexisting_table():
 
     requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
 
-    assert res.status_code == 200, "Test Failed"
+    assert res.status_code == 400, "Test Failed"
 
 def test_add_table_no_input_nonexisting_table():
     load_dotenv()
@@ -200,7 +200,7 @@ def test_add_table_no_input_nonexisting_table():
 
     requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
 
-    assert res.status_code == 200, "Test Failed"
+    assert res.status_code == 400, "Test Failed"
 
 
 # Requirement 6
@@ -265,7 +265,7 @@ def test_change_table_data_partial_input_table_not_changed():
 
     requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
 
-    assert res.status_code == 200, "Test Failed"
+    assert res.status_code == 400, "Test Failed"
 
 def test_change_table_data_no_input_table_not_changed():
     load_dotenv()
@@ -296,4 +296,4 @@ def test_change_table_data_no_input_table_not_changed():
 
     requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
 
-    assert res.status_code == 200, "Test Failed"
+    assert res.status_code == 400, "Test Failed"
