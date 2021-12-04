@@ -10,23 +10,23 @@ export default function Table() {
 
     const { user } = useContext(UserContext)
 
+    // const getTables = await getTablesEndpoint(user.uuid);
+
+
     return (
         <div className="table-container border">
             <div className="container tableInfoRow">
                 <div className="row companyName">
                     Company Name
                 </div>
-                <div className="row contactTitle">
-                    Primary Contact Title
+                <div className="row contactInfo">
+                    Number of Representatives: {''}
                 </div>
                 <div className="row contactInfo">
-                    Primary Contact Name
+                    Website: {''}
                 </div>
                 <div className="row contactInfo">
-                    Primary Contact Email
-                </div>
-                <div className="row contactInfo">
-                    (000) 000-0000
+                    Notes: {''}
                 </div>
             </div>    
             <div className="table-footer">
