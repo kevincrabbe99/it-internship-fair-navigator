@@ -6,6 +6,7 @@ import pytest
 
 # RUN TESTS USING: python -m pytest -rx
 
+
 # Requirement 20
 # Signup for Email List
 def test_signup_valid_email():
@@ -133,6 +134,22 @@ def test_remove_table_no_credentials():
     
     assert res.status_code == 401, "Test Failed"
 
+
+
+
+# Requirement 24
+# Archive Maps
+def test_submit_feedback_invalid_email():
+    feedback_json = {'dqk39d'}
+    res = requests.put('https://api.itfnavigator.com/api/navigator/year', json=feedback_json)
+    print("Response: " + res.text)
+    assert res.status_code == 401, "Test Failed"
+
+def test_submit_feedback_valid_email():
+    feedback_json = {2021}
+    res = requests.put('https://api.itfnavigator.com/api/navigator/year', json=feedback_json)
+
+    assert res.text == "Invalid email", "Test Failed"
 
 # Requirement 17
 # Add Table
@@ -298,3 +315,4 @@ def test_change_table_data_no_input_table_not_changed():
     requests.delete('https://api.itfnavigator/api/navigator/logout', json={'sessionUUID': uuid})
 
     assert res.status_code == 400, "Test Failed"
+
