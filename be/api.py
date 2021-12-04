@@ -65,7 +65,7 @@ def add_year():
             if mh.readMapByYear(year) is not None:
                 return "Map already exists for this year"
             
-            new_map = Map(0, year, "false", "[]")
+            new_map = Map(0, year, "false", [])
             mh.createMap(new_map)
             years = jsonify(mh.getAllYears())
 
