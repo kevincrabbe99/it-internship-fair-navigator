@@ -58,8 +58,8 @@ function App() {
                     return null;
                   }}/>
                   <Route path='/worksheet' component={() => { 
-                      window.location.href = "./Internship Fair Preparation Worksheet.pdf"; 
-                      return null;
+                    window.location.href = "./Internship Fair Preparation Worksheet.pdf"; 
+                    return null;
                   }}/>
                 </Switch>
                 <Navbar/>
