@@ -20,7 +20,26 @@ export default function Table({xPos, yPos}) {
     const { mapContext, setMapContext} = useContext(MapContext)
     const { yearData, setYearData } = useContext(YearContext)
     const [data, setTable] = useState(generateBlankTableTemplate(xPos, yPos))
+    const [isFavorite, setFavorite] = useState(false)
     const {tableMatrix, setTableMatrix} = useContext(TableMatrixContext)
+
+    // useEffect(() => {
+    //     if (!data._id) { return }
+
+    //     // get favorite table from localStorate
+    //     let favoriteTable = JSON.parse(localStorage.getItem("favoriteTables"))
+
+    //     if (favoriteTable) {
+    //         favoriteTable.forEach(favId => {
+    //             if (favId === data._id) {
+    //                 setFavorite(true)
+    //                 return
+    //             }
+    //         })
+    //     }
+
+
+    // }, [data])
 
     // 
     // const getTables = await getTablesEndpoint(user.uuid);
@@ -38,6 +57,28 @@ export default function Table({xPos, yPos}) {
         console.log("DATA IS: ", data)
 
     }, [mapContext,yearData, tableMatrix])
+
+    const setFavoriteClick = () => {
+        
+        // add data.uuid to favoriteTavles localStorage
+        let favoriteTable = JSON.parse(localStorage.getItem("favoriteTables"))
+        if (favoriteTable && data._id) {
+            if (favoriteTable.includes(data._id)) {
+                favoriteTable = favoriteTable.filter(id => id !== data._id)
+                setFavorite(false)
+            } else {
+                favoriteTable.push(data._id)
+                setFavorite(true)
+            }
+        } else {
+            favoriteTable = [[data._id]]
+            setFavorite(true)
+            // localStorage.setItem("favoriteTables", JSON.stringify(favoriteTable))
+        }
+
+        localStorage.setItem("favoriteTables", JSON.stringify(favoriteTable))
+
+    }
 
     return  (
         data && data.company && data.company.name != "" ? 
@@ -78,8 +119,8 @@ export default function Table({xPos, yPos}) {
                                 </>
                             : // admin view
                                 <>
-                                    <div className="col-md-6">
-                                        <FontAwesomeIcon icon={faStar} />
+                                    <div className="col-md-6" onClick={setFavoriteClick}>
+                                        <FontAwesomeIcon icon={faStar} className={data && data.favorite || isFavorite ? 'fav' : ''} />
                                     </div>
                                     <div className="col-md-6">
                                         <FontAwesomeIcon icon={faRoute} />
