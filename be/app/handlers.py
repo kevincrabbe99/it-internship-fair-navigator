@@ -417,6 +417,29 @@ class TableHandler(DatabaseObject):
         except: 
             return None
 
+    def jsonifyAllTableData(self, table: Table):
+        """
+        Method to return a json object of the table model including all sub models
+
+        Parameters:
+        table (Table): The Table to use
+
+        Returns:
+        str: The json object
+        """ 
+        ch = CompanyHandler(self.databaseCon)
+
+        data = table.data
+        company = table['company']
+
+        company_data = ch.readCompanyByID(company)
+        new_table_data = {'_id': table,
+                            'x_coord': data['x_coord'],
+                            'y_coord': data['y_coord'],
+                            'company': company_data}
+
+        return json.dumps(new_table_data, default=str)
+
     @staticmethod
     def setTableLocation(table: Table, x: int, y: int):
         """
