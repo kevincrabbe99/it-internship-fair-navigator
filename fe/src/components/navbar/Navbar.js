@@ -15,6 +15,7 @@ import { createTableEndpoint } from '../../util/Endpoints.js';
 import { MdAirlineSeatLegroomExtra } from 'react-icons/md';
 import { arrow } from '@popperjs/core';
 import { RoutesContext } from '../../contexts/routesContext';
+import { MapContext } from '../../contexts/mapContext';
 
 function Navbar() {
 
@@ -23,6 +24,7 @@ function Navbar() {
   const { sidebarState, setSidebarState } = useContext(SidebarContext)
   const { yearData, setYearData } = useContext(YearContext)
   const { routesContext, setRoutesContext } = useContext(RoutesContext)
+  const { mapContext, setMapContext } = useContext(MapContext)
 
   // const [sidebar, setSidebar] = useState(false);
 
@@ -35,6 +37,19 @@ function Navbar() {
   const [newYearValue, setNewYearValue] = useState(null);
   const [submitAddYear, setSubmitAddYear] = useState(null);
   const [selectedYear, setSelectedYear] = useState(null);
+
+
+  const [submitCreateMap, setSubmitCreateMap] = useState(false);
+  const [id, setId] = useState(null);
+ 
+  const [x, setX] = useState(null);
+  const [y, setY] = useState(null);
+  const [cName, setName] = useState(null);
+  const [numReps, setNumReps] = useState(null);
+  const [website, setWebsite] = useState(null);
+  const [notes, setNotes] = useState(null);
+  const [logoFile, setLogo] = useState(null);
+
 
   const showSidebar = () => setSidebarState(!sidebarState);
 
@@ -145,38 +160,38 @@ function Navbar() {
     setRoutesContext({...routesContext, showing: !routesContext.showing}) 
   }
 
-  const [submitCreateMap, setSubmitCreateMap] = useState(false);
-  const [id, setId] = useState(null);
   const setYearTo = (val) => {
     setYearData(structureYearState(val, yearData.available))
   }
 
-  const [x, setX] = useState(null);
-  const [y, setY] = useState(null);
-  const [cName, setName] = useState(null);
-  const [numReps, setNumReps] = useState(null);
-  const [website, setWebsite] = useState(null);
-  const [notes, setNotes] = useState(null);
-  const [logoFile, setLogo] = useState(null);
+
+
+  
 
   useEffect(() => {
     async function makeTableAsyncWrapper(){
       console.log("async admin working");
-      const getTables = await getTablesEndpoint(user.uuid);
-      var response;
-      if(getTables.some(item => item.x_coord === x && item.y_coord === y)){
-        var id = getTables.results.find(item => item.x_coord === x && item.y_coord === y);
-        response = await updateTableEndpoint(user.uuid, id, x, y, cName, numReps, website, notes, '2021');
-      }
-      else{
-        response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, '2021');
-      }
-      
-      return response;
+
+
+      // const getTables = await getTablesEndpoint(user.uuid);
+      // var response;
+      // if(getTables.some(item => item.x_coord === x && item.y_coord === y)){
+      //   var id = getTables.results.find(item => item.x_coord === x && item.y_coord === y);
+      //   response = await updateTableEndpoint(user.uuid, id, x, y, cName, numReps, website, notes, '2021');
+      // }
+      // else{
+      //   response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, '2021');
+      // }
+
+      const response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, yearData.selected, logoFile); 
+      console.log("CREATE TABLE RESPONSE: ", response);
+      setMapContext(response)
+      setShowCreateTableModal(false)
     }
     console.log("async working", user);
-    if(user && user.uuid){
+    if(user && user.uuid && submitCreateMap){
       makeTableAsyncWrapper();
+      setSubmitCreateMap(false);
     }
   }, [submitCreateMap])
   

@@ -434,16 +434,11 @@ class TableHandler(DatabaseObject):
 
         company_data = ch.readCompanyByID(company)
         new_table_data = {'_id': table,
-                            'x_coord': table_data['x_coord'],
-                            'y_coord': table_data['y_coord'],
+                            'x_coord': data['x_coord'],
+                            'y_coord': data['y_coord'],
                             'company': company_data}
-        tables_list.append(new_table_data)
+        return json.dumps(new_table_data, default=str)
 
-        new_data = {'_id': data['id'],
-                    'tables': tables_list,
-                    'archived': data['archived'],
-                    'year': data['year']}
-        return json.dumps(new_data, default=str)
 
     @staticmethod
     def setTableLocation(table: Table, x: int, y: int):

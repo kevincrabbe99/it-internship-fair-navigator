@@ -6,7 +6,7 @@ import { faStar, faRoute, faEdit, faTrash } from '@fortawesome/free-solid-svg-ic
 import { UserContext } from '../../../contexts/userContext'
 import { isAdmin } from '../../../contexts/userContext'
 
-export default function Table() {
+export default function Table({data}) {
 
     const { user } = useContext(UserContext)
 
@@ -15,18 +15,26 @@ export default function Table() {
 
     return (
         <div className="table-container border">
+            {/* <div className="image-container">
+                <img src={data.} alt=""/>
+            </div> */}
             <div className="container tableInfoRow">
                 <div className="row companyName">
-                    Company Name
+                    {data.name}
                 </div>
-                <div className="row contactInfo">
-                    Number of Representatives: {''}
+                <div className="row">
+                    <div className="col-auto repsC_key">
+                        # of Reps:
+                    </div>
+                    <div className="col-auto repsC_val">
+                        {data.number_of_reps}
+                    </div>
                 </div>
-                <div className="row contactInfo">
-                    Website: {''}
+                <div className="row websiteLink">
+                    {data.website}
                 </div>
-                <div className="row contactInfo">
-                    Notes: {''}
+                <div className="row otherInfo">
+                    {data.other_info}
                 </div>
             </div>    
             <div className="table-footer">

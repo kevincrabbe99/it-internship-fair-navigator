@@ -20,13 +20,15 @@ refuse_credentials = Response(response="401 Refused Credentials",
 
 # ENDPOINTS FOR YEAR/MAP
 
-@navigator_api.route('/year', methods=['GET'])
-@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+@navigator_api.route('/year', methods=['PUT'])
+# @cross_origin()
+@cross_origin(origin='*', headers=['Content-Type'])
 def get_year():
-    if request.method != 'GET':
+    if request.method != 'PUT':
         return bad_request
     else:
         req_json = request.get_json()
+        print("req_json: ", request.get_data())
         if 'year' not in req_json:
             return bad_request
         year = req_json['year']
@@ -126,6 +128,22 @@ def archive_map():
             return refuse_credentials
 
 # ENDPOINTS FOR TABLE
+
+@navigator_api.route('/tables', methods=['GET'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+def get_all_tables():
+    if request.method != 'GET':
+        return bad_request
+    else: 
+        # TODO: embed company instead of only company id
+        ch = TableHandler(m)
+        response = ch.readAllTables()
+        ch.closeConnection()
+        response = json.dumps(response, default=str)
+        if response is None:
+            response = bad_request
+    return response
+
 
 # REQUIRES AUTH
 @navigator_api.route('/table', methods=['PUT'])

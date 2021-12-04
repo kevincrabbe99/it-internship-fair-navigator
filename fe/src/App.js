@@ -21,6 +21,7 @@ import { YearContext } from './contexts/yearContext';
 import Feedback from './pages/feedback/Feedback';
 import { SidebarContext } from './contexts/sidebarContext';
 import { RoutesContext } from './contexts/routesContext';
+import { MapContext } from './contexts/mapContext';
 function App() { 
 
   const [user, setUser] = useState(null);
@@ -35,6 +36,10 @@ function App() {
   const [routesContext, setRoutesContext] = useState([]);
   const routesProviderValue = useMemo(() => ({routesContext, setRoutesContext}), [routesContext, setRoutesContext]);
 
+  const [mapContext, setMapContext] = useState(null);
+  const mapProviderValue = useMemo(() => ({mapContext, setMapContext}), [mapContext, setMapContext]);
+
+
   useEffect(() => {
     const u = JSON.parse(localStorage.getItem('adminToken'));
     if (u && u.uuid) {
@@ -43,33 +48,35 @@ function App() {
   }, [window])
 
   return (
-    <RoutesContext.Provider value={routesProviderValue}>
-      <SidebarContext.Provider value={sidebarProviderValue}>
-        <UserContext.Provider value={userProviderValue}>
-            <YearContext.Provider value={yearDataProviderValue}>
-            <Router> 
-              <div className="App">
-                <Switch>
-                  <Route exact path="/" component={Map}/>
-                  <Route exact path="/login" component={Login}/>
-                  <Route exact path="/feedback" component={Feedback}/> 
-                  <Route path='/checklist' component={() => { 
-                    window.location.href = "./Internship Fair Checklist.pdf"; 
-                    return null;
-                  }}/>
-                  <Route path='/worksheet' component={() => { 
-                    window.location.href = "./Internship Fair Preparation Worksheet.pdf"; 
-                    return null;
-                  }}/>
-                </Switch>
-                <Navbar/>
-                <Sidebar />
-              </div>
-            </Router>
-          </YearContext.Provider>
-        </UserContext.Provider>
-      </SidebarContext.Provider>
-    </RoutesContext.Provider>
+    <MapContext.Provider value={mapProviderValue}>
+      <RoutesContext.Provider value={routesProviderValue}>
+        <SidebarContext.Provider value={sidebarProviderValue}>
+          <UserContext.Provider value={userProviderValue}>
+              <YearContext.Provider value={yearDataProviderValue}>
+              <Router> 
+                <div className="App">
+                  <Switch>
+                    <Route exact path="/" component={Map}/>
+                    <Route exact path="/login" component={Login}/>
+                    <Route exact path="/feedback" component={Feedback}/> 
+                    <Route path='/checklist' component={() => { 
+                      window.location.href = "./Internship Fair Checklist.pdf"; 
+                      return null;
+                    }}/>
+                    <Route path='/worksheet' component={() => { 
+                        window.location.href = "./Internship Fair Preparation Worksheet.pdf"; 
+                        return null;
+                    }}/>
+                  </Switch>
+                  <Navbar/>
+                  <Sidebar />
+                </div>
+              </Router>
+            </YearContext.Provider>
+          </UserContext.Provider>
+        </SidebarContext.Provider>
+      </RoutesContext.Provider>
+    </MapContext.Provider>
   );
 }
 
