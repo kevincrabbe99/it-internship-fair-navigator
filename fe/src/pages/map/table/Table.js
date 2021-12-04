@@ -10,9 +10,9 @@ import { CreateTableModalContext } from '../../../contexts/createTableModalConte
 import { MapContext } from '../../../contexts/mapContext'
 import { YearContext } from '../../../contexts/yearContext'
 import { TableMatrixContext } from '../../../contexts/tableMatrixContext'
+import { removeTableEndpoint } from '../../../util/Endpoints'
 
 export default function Table({xPos, yPos}) {
-
 
 
     const { user } = useContext(UserContext)
@@ -21,6 +21,7 @@ export default function Table({xPos, yPos}) {
     const { yearData, setYearData } = useContext(YearContext)
     const [data, setTable] = useState(generateBlankTableTemplate(xPos, yPos))
     const {tableMatrix, setTableMatrix} = useContext(TableMatrixContext)
+
     // 
     // const getTables = await getTablesEndpoint(user.uuid);
     useEffect(() => {
@@ -71,8 +72,8 @@ export default function Table({xPos, yPos}) {
                                     <div className="col-md-6" onClick={() => setCreateTableModal(data)}>
                                         <FontAwesomeIcon icon={faEdit} />
                                     </div>
-                                    <div className="col-md-6">
-                                        <FontAwesomeIcon icon={faTrash} />
+                                    <div className="col-md-6" onClick={() => removeTableEndpoint(user.uuid, data._id, yearData.selected)}>
+                                    <FontAwesomeIcon icon={faTrash} />
                                     </div>
                                 </>
                             : // admin view

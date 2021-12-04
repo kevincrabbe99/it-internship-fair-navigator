@@ -6,6 +6,7 @@ import pytest
 
 # RUN TESTS USING: python -m pytest -rx
 
+
 # Requirement 20
 # Signup for Email List
 def test_signup_valid_email():
@@ -99,7 +100,7 @@ def test_remove_table_correct_credentials_existing_table():
     print(table_to_delete)
     res = requests.delete('https://api.itfnavigator.com/api/navigator/table', json={'_id': table_to_delete, 'year': '2021'}, headers=header)
 
-    requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
+    requests.delete('https://api.itfnavigator.com/api/navigator/table', json={'sessionUUID': uuid})
 
     assert res.status_code == 200, "Test Failed"
 
@@ -116,7 +117,7 @@ def test_remove_table_correct_credentials_nonexisting_table():
     header = {'Authorization': uuid}
 
     table_to_delete = "nonexisting_table_id"
-    res = requests.delete('https://api.itfnavigator.com/api/navigator/table', json={'_id': table_to_delete, 'year': '2021'}, headers=header)
+    res = requests.put('https://api.itfnavigator.com/api/navigator/delete_table', json={'_id': table_to_delete, 'year': '2021'}, headers=header)
 
     requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
 
@@ -129,6 +130,189 @@ def test_remove_table_no_credentials():
     data = {'username': navuser, 'password': navpwd}
 
     table_to_delete = "nonexisting_table_id"
-    res = requests.delete('https://api.itfnavigator.com/api/navigator/table', json={'_id': table_to_delete, 'year': '2021'})
+    res = requests.put('https://api.itfnavigator.com/api/navigator/delete_table', json={'_id': table_to_delete, 'year': '2021'})
     
     assert res.status_code == 401, "Test Failed"
+
+
+
+
+# Requirement 24
+# Archive Maps
+def test_submit_feedback_invalid_email():
+    feedback_json = {'dqk39d'}
+    res = requests.put('https://api.itfnavigator.com/api/navigator/year', json=feedback_json)
+    print("Response: " + res.text)
+    assert res.status_code == 401, "Test Failed"
+
+def test_submit_feedback_valid_email():
+    feedback_json = {2021}
+    res = requests.put('https://api.itfnavigator.com/api/navigator/year', json=feedback_json)
+
+    assert res.text == "Invalid email", "Test Failed"
+
+# Requirement 17
+# Add Table
+def test_add_table_full_input_existing_table():
+    load_dotenv()
+    navuser = os.getenv('NAVUSER')
+    navpwd = os.getenv('NAVPWD')
+    data = {'username': navuser, 'password': navpwd}
+
+    res = requests.post('https://api.itfnavigator.com/api/navigator/login', json=data)
+    res_json = res.json()
+    uuid = res_json['uuid']
+
+    header = {'Authorization': uuid}
+    
+    table_to_add = {
+        'x_coord': 0, 'y_coord': 0,'imageUrl': 'image.com', 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021'
+    }
+
+    res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
+
+    requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
+
+    assert res.status_code == 200, "Test Failed"
+
+
+def test_add_table_partial_input_nonexisting_table():
+    load_dotenv()
+    navuser = os.getenv('NAVUSER')
+    navpwd = os.getenv('NAVPWD')
+    data = {'username': navuser, 'password': navpwd}
+
+    res = requests.post('https://api.itfnavigator.com/api/navigator/login', json=data)
+    res_json = res.json()
+    uuid = res_json['uuid']
+
+    header = {'Authorization': uuid}
+    
+    table_to_add = {
+        'x_coord': 0, 'y_coord': 0,'imageUrl': None, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None
+    }
+
+    res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
+
+    requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
+
+    assert res.status_code == 400, "Test Failed"
+
+def test_add_table_no_input_nonexisting_table():
+    load_dotenv()
+    navuser = os.getenv('NAVUSER')
+    navpwd = os.getenv('NAVPWD')
+    data = {'username': navuser, 'password': navpwd}
+
+    res = requests.post('https://api.itfnavigator.com/api/navigator/login', json=data)
+    res_json = res.json()
+    uuid = res_json['uuid']
+
+    header = {'Authorization': uuid}
+    
+    table_to_add = {
+        'x_coord': None, 'y_coord': None,'imageUrl': None, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None
+    }
+
+    res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
+
+    requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
+
+    assert res.status_code == 400, "Test Failed"
+
+
+# Requirement 6
+# Change Table Data
+def test_change_table_data_full_input_table_changed():
+    load_dotenv()
+    navuser = os.getenv('NAVUSER')
+    navpwd = os.getenv('NAVPWD')
+    data = {'username': navuser, 'password': navpwd}
+
+    res = requests.post('https://api.itfnavigator.com/api/navigator/login', json=data)
+    res_json = res.json()
+    uuid = res_json['uuid']
+
+    header = {'Authorization': uuid}
+    
+    table_to_add = {
+        'x_coord': 0, 'y_coord': 0,'imageUrl': 'image.com', 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021'
+    }
+
+    res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
+
+    table_to_change_id = res.json()['tables'][-1]['_id']
+    print(table_to_change_id)
+
+    table_to_change = {
+        '_id': table_to_change_id, 'x_coord': 1, 'y_coord': 1,'imageUrl': 'anotherImage.com', 'company': {'name': 'Test Company 2', 'number_of_reps': 3, 'website': 'test2.com', 'other_info': 'none'}, 'year': '2021'
+    }
+
+    res = requests.post('https://api.itfnavigator.com/api/navigator/table', json=table_to_change, headers=header)
+
+    requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
+
+    assert res.status_code == 200, "Test Failed"
+
+def test_change_table_data_partial_input_table_not_changed():
+    load_dotenv()
+    navuser = os.getenv('NAVUSER')
+    navpwd = os.getenv('NAVPWD')
+    data = {'username': navuser, 'password': navpwd}
+
+    res = requests.post('https://api.itfnavigator.com/api/navigator/login', json=data)
+    res_json = res.json()
+    uuid = res_json['uuid']
+
+    header = {'Authorization': uuid}
+    
+    table_to_add = {
+        'x_coord': 0, 'y_coord': 0,'imageUrl': 'image.com', 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021'
+    }
+
+    res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
+
+    table_to_change_id = res.json()['tables'][-1]['_id']
+    print(table_to_change_id)
+
+    table_to_change = {
+        '_id': table_to_change_id, 'x_coord': 1, 'y_coord': 1,'imageUrl': None, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None
+    }
+
+    res = requests.post('https://api.itfnavigator.com/api/navigator/table', json=table_to_change, headers=header)
+
+    requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
+
+    assert res.status_code == 400, "Test Failed"
+
+def test_change_table_data_no_input_table_not_changed():
+    load_dotenv()
+    navuser = os.getenv('NAVUSER')
+    navpwd = os.getenv('NAVPWD')
+    data = {'username': navuser, 'password': navpwd}
+
+    res = requests.post('https://api.itfnavigator.com/api/navigator/login', json=data)
+    res_json = res.json()
+    uuid = res_json['uuid']
+
+    header = {'Authorization': uuid}
+    
+    table_to_add = {
+        'x_coord': 0, 'y_coord': 0,'imageUrl': 'image.com', 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021'
+    }
+
+    res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
+
+    table_to_change_id = res.json()['tables'][-1]['_id']
+    print(table_to_change_id)
+
+    table_to_change = {
+        '_id': table_to_change_id, 'x_coord': None, 'y_coord': None,'imageUrl': None, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None
+    }
+
+    res = requests.post('https://api.itfnavigator.com/api/navigator/table', json=table_to_change, headers=header)
+
+    requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
+
+    assert res.status_code == 400, "Test Failed"
+

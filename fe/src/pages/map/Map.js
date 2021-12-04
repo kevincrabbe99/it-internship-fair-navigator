@@ -48,7 +48,8 @@ export default function Map() {
     }, [yearData])
 
     useEffect(() => {
-        if (!mapContext || !mapContext.tables.length > 0) {return}
+        if(!mapContext || !mapContext.tables || !mapContext.tables.length > 0) {return}
+
         setTableMatrix([...Array(15)].map(e => Array(15)))
         for (let i = 0; i < mapContext.tables.length; i++) {
 
@@ -121,7 +122,6 @@ export default function Map() {
                 }
                 </tbody>
             </table>
-            
             {
                 
                 <RoutesView/>
