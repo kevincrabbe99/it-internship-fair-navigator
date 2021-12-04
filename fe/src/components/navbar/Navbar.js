@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
@@ -19,7 +19,8 @@ import { MapContext } from '../../contexts/mapContext';
 import { AddYearModalContext } from '../../contexts/addYearModalContext';
 import { CreateTableModalContext } from '../../contexts/createTableModalContext';
 import { ModalShowingContext } from '../../contexts/modalShowingContext';
-
+import { useReactToPrint } from "react-to-print";
+import Map from '../../pages/map/Map';
 function Navbar() {
 
   const { user, setUser } = useContext(UserContext)
@@ -188,6 +189,28 @@ function Navbar() {
     )
   }
 
+  const PrintMapButton = () => {
+    const componentRef = useRef();
+    const handlePrint = useReactToPrint({
+    content: () => componentRef.current
+    });
+    return (
+      <div>
+        <button
+          type="button"
+          onClick={handlePrint}
+        >
+          Print Map
+        </button>
+        {/* <h1 ref={componentRef}>HELLO?</h1> */}
+        <div ref={componentRef}>
+          <Map>
+          </Map>
+        </div> 
+      </div>
+    );
+  };
+
   const clickToggleRoute = () => {
     setRoutesContext({...routesContext, showing: !routesContext.showing}) 
   }
@@ -262,7 +285,8 @@ function Navbar() {
                     }
                 </select>
                 </div>
-            </li> 
+            </li>
+            {PrintMapButton()} 
             {generateAdminButtons()}
             {generateRoutesButton()}
             </ul>
