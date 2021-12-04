@@ -90,13 +90,14 @@ def test_remove_table_correct_credentials_existing_table():
     table_to_add = {'x_coord': 0, 'y_coord': 0, 'company': {'name': 'Test Company', 
                                                             'number_of_reps': '0', 
                                                             'website': 'test.org', 
-                                                            'other_info': 'none'}
-                                                            ,'year': '2021'}
+                                                            'other_info': 'none'},
+                                                            'imageUrl': 'none',
+                                                            'year': '2021'}
     res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
 
     table_to_delete = res.json()['tables'][-1]['_id']
     print(table_to_delete)
-    res = requests.delete('http://localhost:8080/api/navigator/table', json={'_id': table_to_delete, 'year': '2021'}, headers=header)
+    res = requests.delete('https://api.itfnavigator.com/api/navigator/table', json={'_id': table_to_delete, 'year': '2021'}, headers=header)
 
     requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
 
