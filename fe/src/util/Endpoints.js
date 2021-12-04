@@ -80,6 +80,32 @@ export async function logoutEndpoint(sessionUUID) {
 
 }
 
+export async function subscribeEmail(email) {
+
+    const response = await axios.put(`${process.env.REACT_APP_ITIFN_API}/subscribe`, {
+        email,
+    }, {
+        headers
+    });
+
+    console.log("SUBSCRIBE RESPONSE: ", response.data);
+    return response.data;
+
+}
+
+export async function unsubscribeEmail(email) {
+
+    const response = await axios.delete(`${process.env.REACT_APP_ITIFN_API}/unsubscribe`, {data: {
+        email,
+    }}, {
+        headers
+    });
+
+    console.log("UNSUBSCRIBE RESPONSE: ", response.data);
+    return response.data;
+
+}
+
 export async function createTableEndpoint(sessionUUID, x, y, cName, numReps, website, notes, year){
     headers['Authorization'] = sessionUUID;
     console.log('endpoint');
