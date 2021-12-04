@@ -314,6 +314,8 @@ def delete_table():
         return bad_request
     else:
         req_json = request.get_json()
+        if not request.headers:
+            return refuse_credentials
         if 'Authorization' not in request.headers:
             return refuse_credentials
         if check_token(request.headers['Authorization']):
@@ -330,11 +332,21 @@ def delete_table():
             map_json = json.dumps(temp_map, default=str)
 
             the_map = MapHandler.buildMapFromJSON(map_json)
-            MapHandler.removeTable(the_map, id)
-            mh.updateMap(temp_map['_id'], the_map)
+            try:
+                MapHandler.removeTable(the_map, id)
+            except:
+                return bad_request
+            
+            try:
+                mh.updateMap(temp_map['_id'], the_map)
+            except:
+                return bad_request
 
-            th.deleteTable(id)
-
+            try:
+                th.deleteTable(id)
+            except:
+                return bad_request
+            
             data_json = mh.jsonifyAllMapData(the_map)
             return data_json
         else:
@@ -369,13 +381,15 @@ def subscribe():
             return bad_request
         
         email = req_json['email']
-        eh = EmailListHandler(m)
-        response = eh.createEmail(email)
-        eh.closeConnection()
-        if response is not None:
-            response = json.dumps(response)
-            return "Thanks for signing up!"
-
+        if check_email(email):
+            eh = EmailListHandler(m)
+            response = eh.createEmail(email)
+            eh.closeConnection()
+            if response is not None:
+                response = json.dumps(response)
+                return "Thanks for signing up!"
+        else:
+            return "Invalid email"
     return bad_request
 
 @navigator_api.route('/unsubscribe', methods=['DELETE'])
@@ -395,12 +409,15 @@ def unsubscribe():
             return bad_request
         
         email = req_json['email']
-        eh = EmailListHandler(m)
-        try:
-            email_data = eh.readEmail(email)
-            id = email_data['_id']
-        except:
-            return "Email not found"
+        if check_email(email):
+            eh = EmailListHandler(m)
+            try:
+                email_data = eh.readEmail(email)
+                id = email_data['_id']
+            except:
+                return "Email not found"
+        else:
+            return "Invalid email"
         
         response = eh.deleteEmail(str(id))
         eh.closeConnection()
@@ -539,7 +556,7 @@ def admin_login():
 @navigator_api.route('/logout', methods=['DELETE'])
 @cross_origin()
 def admin_logout():
-    uuid = request.get_json['sessionUUID']
+    uuid = request.get_json()['sessionUUID']
     if request.method != 'DELETE':
         return bad_request
     elif uuid:
