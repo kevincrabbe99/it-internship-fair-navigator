@@ -15,7 +15,6 @@ import { isAdmin } from '../../contexts/userContext'
 import { CreateTableModalContext } from '../../contexts/createTableModalContext'
 import { generateBlankTableTemplate } from '../../util/Shared'
 import { TableMatrixContext } from '../../contexts/tableMatrixContext'
-import PanZoom from '@sasza/react-panzoom'
 export default function Map() {
 
     const { routesContext, setRoutesContext } = useContext(RoutesContext)
@@ -106,12 +105,6 @@ export default function Map() {
 
     return (
         <div className="map-container">
-            <PanZoom
-            boundary={{
-            parent: true
-            }}
-            disableUserSelect
-            >
             <table>
                 <tbody>
                 {
@@ -129,8 +122,6 @@ export default function Map() {
                 }
                 </tbody>
             </table>
-            </PanZoom>
-            
             {
                 
                 <RoutesView/>
