@@ -38,7 +38,7 @@ function App() {
   useEffect(() => {
     const u = JSON.parse(localStorage.getItem('adminToken'));
     if (u && u.uuid) {
-      setUser(user)
+      setUser(u)
     }
   }, [window])
 
