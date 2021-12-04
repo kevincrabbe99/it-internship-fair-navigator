@@ -3,7 +3,7 @@ import * as FaIcons from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import './Navbar.css';
 import { isAdmin, UserContext } from '../../contexts/userContext.js';
-import { addNewYear } from '../../util/Endpoints.js';
+import { addNewYear, getTablesEndpoint, updateTableEndpoint } from '../../util/Endpoints.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
@@ -11,7 +11,14 @@ import { YearContext } from '../../contexts/yearContext.js';
 import { structureYearState } from '../../contexts/yearContext.js';
 import { getAvailableYears } from '../../util/Endpoints.js';
 import { SidebarContext } from '../../contexts/sidebarContext.js';
+import { createTableEndpoint } from '../../util/Endpoints.js';
+import { MdAirlineSeatLegroomExtra } from 'react-icons/md';
+import { arrow } from '@popperjs/core';
 import { RoutesContext } from '../../contexts/routesContext';
+import { MapContext } from '../../contexts/mapContext';
+import { AddYearModalContext } from '../../contexts/addYearModalContext';
+import { CreateTableModalContext } from '../../contexts/createTableModalContext';
+import { ModalShowingContext } from '../../contexts/modalShowingContext';
 
 function Navbar() {
 
@@ -20,20 +27,62 @@ function Navbar() {
   const { sidebarState, setSidebarState } = useContext(SidebarContext)
   const { yearData, setYearData } = useContext(YearContext)
   const { routesContext, setRoutesContext } = useContext(RoutesContext)
+  const { mapContext, setMapContext } = useContext(MapContext)
 
   // const [sidebar, setSidebar] = useState(false);
 
-  const [modalShowing, setModalShowing] = useState(false);
-  const [showAddYearModal, setShowAddYearModal] = useState(false);
-  const [showCreateTableModal, setShowCreateTableModal] = useState(false);
+  // const [modalShowing, setModalShowing] = useState(false);
+  const {modalShowing, setModalShowing} = useContext(ModalShowingContext)
+  // const [showAddYearModal, setShowAddYearModal] = useState(false);
+  const {showAddYearModal, setShowAddYearModal} = useContext(AddYearModalContext)
+  // const [createTableModal, setCreateTableModal] = useState(false);
+  const {createTableModal, setCreateTableModal} = useContext(CreateTableModalContext)
+  const [showPreview, setShowPreview] = useState(false);
   
   const [availableYears, setAvailableYears] = useState([]);
   const [newYearValue, setNewYearValue] = useState(null);
   const [submitAddYear, setSubmitAddYear] = useState(null);
   const [selectedYear, setSelectedYear] = useState(null);
 
+
+  const [submitCreateMap, setSubmitCreateMap] = useState(false);
+  const [id, setId] = useState(null);
+ 
+  const [x, setX] = useState(null);
+  const [y, setY] = useState(null);
+  const [cName, setName] = useState(null);
+  const [numReps, setNumReps] = useState(null);
+  const [website, setWebsite] = useState(null);
+  const [notes, setNotes] = useState(null);
+  const [logoFile, setLogo] = useState(null);
+
+
   const showSidebar = () => setSidebarState(!sidebarState);
 
+
+  // for settings auto cords
+  useEffect(() => {
+    if(createTableModal && createTableModal.company) {
+      setX(createTableModal.x_coord);
+      setY(createTableModal.y_coord);
+      setName(createTableModal.company.name);
+      setNumReps(createTableModal.company.number_of_reps);
+      setWebsite(createTableModal.company.website);
+      setNotes(createTableModal.company.other_info);
+      setLogo(createTableModal.imageUrl);
+      console.log("cre settings")
+    } else {
+      setX(null)
+        setY(null)
+        setName(null)
+        setNumReps(null)
+        setWebsite(null)
+        setNotes(null)
+        setLogo(null)
+    }
+    console.log("setCreateTableModal", createTableModal)
+
+  }, [createTableModal])
 
   // use effect for when window loads
   // load years
@@ -87,18 +136,20 @@ function Navbar() {
   useEffect(() => {
     if (!modalShowing) {
       setShowAddYearModal(false)
-      setShowCreateTableModal(false)
+      setCreateTableModal(false)
     }
+
   }, [modalShowing])
 
   // for triggering the shader behind the modal
   useEffect(() => {
-    if (showAddYearModal || showCreateTableModal) {
+    if (showAddYearModal || createTableModal) {
       setModalShowing(true);
     } else {
       setModalShowing(false);
     }
-  }, [showAddYearModal, showCreateTableModal])
+  }, [showAddYearModal, createTableModal])
+
 
 
   const generateAdminButtons = () => {
@@ -109,8 +160,8 @@ function Navbar() {
     return ( 
     <>
       <li>
-        <div className='button' onClick={() => setShowCreateTableModal(true)}> 
-          CREATE TABLE
+        <div className='button' onClick={() => setCreateTableModal(true)}> 
+          MAKE TABLE
         </div>
       </li>
       <li>
@@ -145,21 +196,37 @@ function Navbar() {
     setYearData(structureYearState(val, yearData.available))
   }
 
-  const [tableId, setTableId] = useState(null);
-  const [x, setX] = useState(null);
-  const [y, setY] = useState(null);
-  const [name, setName] = useState(null);
-  const [numReps, setNumReps] = useState(null);
-  const [website, setWebsite] = useState(null);
-  const [notes, setNotes] = useState(null);
-  const [year, setYear] = useState(null);
 
-  function submit(){
-    const url = "api.itfnavigator.com/api/navigator/" + 
-        "{_id: " + tableId + ", _x_coord: " + x + ", _y_coord: " + y + ", _company: {_name: " + name + ", _number_of_reps: " + numReps + ",_website: " + website + ", _other_info: " + notes + "}, _year: " + year + "}";
-    const response = fetch(url);
-    return response;
-  }
+
+  
+
+  useEffect(() => {
+    async function makeTableAsyncWrapper(){
+      console.log("async admin working");
+
+
+      // const getTables = await getTablesEndpoint(user.uuid);
+      // var response;
+      // if(getTables.some(item => item.x_coord === x && item.y_coord === y)){
+      //   var id = getTables.results.find(item => item.x_coord === x && item.y_coord === y);
+      //   response = await updateTableEndpoint(user.uuid, id, x, y, cName, numReps, website, notes, '2021');
+      // }
+      // else{
+      //   response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, '2021');
+      // }
+
+      const response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, yearData.selected, logoFile); 
+      console.log("CREATE TABLE RESPONSE: ", response);
+      setMapContext(response)
+      setCreateTableModal(false)
+    }
+    console.log("async working", user);
+    if(user && user.uuid && submitCreateMap){
+      makeTableAsyncWrapper();
+      setSubmitCreateMap(false);
+    }
+  }, [submitCreateMap])
+  
 
   return (
     <>
@@ -235,7 +302,8 @@ function Navbar() {
 
             {
                 isAdmin() &&
-                showCreateTableModal &&
+                createTableModal &&
+                !showPreview &&
                 <Modal.Dialog>
                   <Modal.Header>
                     <Modal.Title>Create a Table</Modal.Title>
@@ -243,49 +311,133 @@ function Navbar() {
 
                   <Modal.Body>
                     <div>
-                      <form onSubmit = {''}>
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   Company Name:
-                                  <input type = "text" value = {name} onChange = {e => setName(e.target.value)} />
+                                  <input type = "text" value = {cName} onChange = {e => setName(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   Number of Representatives:
                                   <input type = "text" value = {numReps} onChange = {e => setNumReps(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   Company Website:
                                   <input type = "text" value = {website} onChange = {e => setWebsite(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                          <div id = "inputLabel">
+                          <div>
                               <label>
                                   Notes:
                                   <input type = "text" value = {notes} onChange = {e => setNotes(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                          <div id = "inputLabel">
+                          <div>
                               <label>
-                                  Company Logo:
-                                  <input type = "file" />
+                                  x-Coordinate:
+                                  <input type = "text" value = {x} onChange = {e => setX(e.target.value)} />
                               </label>
                           </div>
                           <br />
-                      </form>
+                          <div>
+                              <label>
+                                  y-Coordinate:
+                                  <input type = "text" value = {y} onChange = {e => setY(e.target.value)} />
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  Company Logo:
+                                  <input type = "text" value = {logoFile} onChange = {e => setLogo(e.target.value)}/>
+                              </label>
+                          </div>
+                          <br />
                     </div>
                   </Modal.Body>
 
                   <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowCreateTableModal(false)}>CLOSE</Button>
-                    <Button variant="primary" onClick = {submit()}>CREATE</Button>
+                    <Button variant="secondary" onClick={() => setCreateTableModal(false)}>CLOSE</Button>
+                    <Button variant="tertiary" onClick={() => setShowPreview(!showPreview)}>PREVIEW</Button>
+                    <Button variant="primary" onClick = {() => setSubmitCreateMap(!submitCreateMap)}>SUBMIT</Button>
+                  </Modal.Footer>
+                </Modal.Dialog>
+            }
+
+            {
+                isAdmin() &&
+                createTableModal &&
+                showPreview &&
+                <Modal.Dialog>
+                  <Modal.Header>
+                    <Modal.Title>View Table</Modal.Title>
+                  </Modal.Header>
+
+                  <Modal.Body>
+                    <div>
+                          <div>
+                              <label>
+                                  Company Name:
+                                  <p>{cName}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  Number of Representatives:
+                                  <p>{numReps}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  Company Website:
+                                  <p>{website}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  Notes:
+                                  <p>{notes}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  x-Coordinate:
+                                  <p>{x}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  y-Coordinate:
+                                  <p>{y}</p>
+                              </label>
+                          </div>
+                          <br />
+                          <div>
+                              <label>
+                                  Company Logo:
+                                  <img src={logoFile} alt = 'Company Logo' width = '70' height = '70' />
+                              </label>
+                          </div>
+                          <br />
+                    </div>
+                  </Modal.Body>
+
+                  <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setCreateTableModal(false)}>CLOSE</Button>
+                    <Button variant="tertiary" onClick={() => setShowPreview(!showPreview)}>EDIT</Button>
+                    <Button variant="primary" onClick = {() => setSubmitCreateMap(!submitCreateMap)}>SUBMIT</Button>
                   </Modal.Footer>
                 </Modal.Dialog>
             }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
@@ -105,3 +105,54 @@ export async function unsubscribeEmail(email) {
     return response.data;
 
 }
+
+export async function createTableEndpoint(sessionUUID, x, y, cName, numReps, website, notes, year, logoUrl){
+    headers['Authorization'] = sessionUUID;
+    console.log('endpoint');
+    const response = await axios.put(`${process.env.REACT_APP_ITIFN_API}/table`, {
+        'x_coord': x,
+        'y_coord': y,
+        company:
+        {'name': cName,
+        'number_of_reps': numReps,
+        'website': website,
+        'other_info': notes},
+        'year': year,
+        'imageUrl': logoUrl
+    }, { headers });
+
+    console.log("ADD YEAR RESPONSE: ", response);
+    return response.data;
+}
+
+
+export async function getTablesEndpoint(year){
+
+    console.log("SENDING year: ", year)
+    const response = await axios.put(`${process.env.REACT_APP_ITIFN_API}/year`, {
+        year
+    }, {
+        headers
+    })
+
+    console.log("GET TABLES RESPONSE: ", response)
+    return response.data;
+}
+
+// export async function updateTableEndpoint(sessionUUID, id, x, y, cName, numReps, website, notes, year){
+//     headers['Authorization'] = sessionUUID;
+
+//     const response = await axios.post(`${process.env.REACT_APP_ITIFN_API}/table`, {
+//         '_id': id,
+//         'x_coord': x,
+//         'y_coord': y,
+//         company:
+//         {'name': cName,
+//         'number_of_reps': numReps,
+//         'website': website,
+//         'other_info': notes},
+//         'year': year
+//     }, { headers });
+
+//     return response.data;
+// }
