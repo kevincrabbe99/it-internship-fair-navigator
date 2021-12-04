@@ -204,10 +204,9 @@ def update_table():
         if 'Authorization' not in request.headers:
             return refuse_credentials
         if check_token(request.headers['Authorization']):
-            if '_id' and 'x_coord' and 'y_coord' and 'company' and 'year' not in req_json:
+            if 'x_coord' and 'y_coord' and 'company' and 'year' not in req_json:
                 return bad_request
-
-            id = req_json['_id']
+            
             x_coord = req_json['x_coord']
             y_coord = req_json['y_coord']
             company = req_json['company']
@@ -219,40 +218,91 @@ def update_table():
             th = TableHandler(m)
             ch = CompanyHandler(m)
 
-            # check if the company exists
-            if ch.readCompanyByName(company_name):
-                existing_company = ch.readCompanyByName(company_name)
-                company_id = existing_company['_id']
-                table_data = {'_id': company_id,
-                            'x_coord': x_coord,
-                            'y_coord': y_coord,
-                            'company': company_id}
-                table_data = json.dumps(table_data, default=str)
-                new_table = th.buildTableFromJSON(table_data)
+            if '_id' in req_json and th.readTableByID(req_json['_id']):
+                # check if the company exists
+                if ch.readCompanyByName(company_name):
+                    existing_company = ch.readCompanyByName(company_name)
+                    company_id = existing_company['_id']
+                    table_data = {'_id': company_id,
+                                'x_coord': x_coord,
+                                'y_coord': y_coord,
+                                'company': company_id}
+                    table_data = json.dumps(table_data, default=str)
+                    new_table = th.buildTableFromJSON(table_data)
+                else:
+                    company['_id'] = "n/a"
+                    new_company = ch.buildCompanyFromJSON(json.dumps(company, default=str))
+                    company_id = ch.createCompany(new_company)
+                    table_data = {'_id': company_id,
+                                'x_coord': x_coord,
+                                'y_coord': y_coord,
+                                'company': company_id}
+                    table_data = json.dumps(table_data, default=str)
+                    new_table = th.buildTableFromJSON(table_data)
+
+                th.updateTable(id, new_table)
+
+                current_map = mh.readMapByYear(year)
+                map_json = json.dumps(current_map, default=str)
+
+                the_map = MapHandler.buildMapFromJSON(map_json)
+
+                map_json = mh.jsonifyAllMapData(the_map)
+
+                mh.closeConnection()
+                th.closeConnection()
+                ch.closeConnection()
+                return map_json
             else:
-                company['_id'] = "n/a"
-                new_company = ch.buildCompanyFromJSON(json.dumps(company, default=str))
-                company_id = ch.createCompany(new_company)
-                table_data = {'_id': company_id,
-                            'x_coord': x_coord,
-                            'y_coord': y_coord,
-                            'company': company_id}
-                table_data = json.dumps(table_data, default=str)
-                new_table = th.buildTableFromJSON(table_data)
+                x_coord = req_json['x_coord']
+                y_coord = req_json['y_coord']
+                company = req_json['company']
+                year = req_json['year']
 
-            th.updateTable(id, new_table)
+                company_name = company['name']
 
-            current_map = mh.readMapByYear(year)
-            map_json = json.dumps(current_map, default=str)
+                mh = MapHandler(m)
+                th = TableHandler(m)
+                ch = CompanyHandler(m)
 
-            the_map = MapHandler.buildMapFromJSON(map_json)
+                # check if the company exists
+                if ch.readCompanyByName(company_name):
+                    existing_company = ch.readCompanyByName(company_name)
+                    company_id = existing_company['_id']
+                    table_data = {'_id': company_id,
+                                'x_coord': x_coord,
+                                'y_coord': y_coord,
+                                'company': company_id}
+                    table_data = json.dumps(table_data, default=str)
+                    new_table = th.buildTableFromJSON(table_data)
+                else:
+                    company['_id'] = "n/a"
+                    new_company = ch.buildCompanyFromJSON(json.dumps(company, default=str))
+                    company_id = ch.createCompany(new_company)
+                    table_data = {'_id': company_id,
+                                'x_coord': x_coord,
+                                'y_coord': y_coord,
+                                'company': company_id}
+                    table_data = json.dumps(table_data, default=str)
+                    new_table = th.buildTableFromJSON(table_data)
 
-            map_json = mh.jsonifyAllMapData(the_map)
+                new_table_id = th.createTable(new_table)
 
-            mh.closeConnection()
-            th.closeConnection()
-            ch.closeConnection()
-            return map_json
+                current_map = mh.readMapByYear(year)
+                map_json = json.dumps(current_map, default=str)
+
+                new_map = MapHandler.buildMapFromJSON(map_json)
+                mh.addTable(new_map, new_table_id)
+
+                item = new_map.data['id']
+                mh.updateMap(item, new_map)
+
+                map_json = mh.jsonifyAllMapData(new_map)
+
+                mh.closeConnection()
+                th.closeConnection()
+                ch.closeConnection()
+                return map_json
         else:
             return refuse_credentials
 
