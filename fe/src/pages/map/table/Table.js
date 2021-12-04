@@ -45,14 +45,29 @@ export default function Table({xPos, yPos}) {
     // const getTables = await getTablesEndpoint(user.uuid);
     useEffect(() => {
 
-        [...Array(15).keys()].forEach(i => {
-            [...Array(15).keys()].forEach(j => {
-                if (i === xPos && j === yPos) {
-                    setTable(tableMatrix[i][j])
-                    return
-                }
-            })
-        })
+        var userFavorites = JSON.parse(localStorage.getItem("favoriteTables"))
+        if (!tableMatrix || !tableMatrix.length > 0) { return }
+
+
+        // [...Array(15).keys()].forEach(i => {
+        //     [...Array(15).keys()].forEach(j => {
+        //         if (i === xPos && j === yPos) {
+        setTable(tableMatrix[xPos][yPos])
+
+        if (tableMatrix[xPos][yPos] &&  tableMatrix[xPos][yPos]._id) {
+            if(userFavorites && userFavorites.includes(tableMatrix[xPos][yPos]._id)) {
+                setFavorite(true)
+            }
+        }
+
+                    // set favorite
+                    // if (tableMatrix[xPos][yPos].favorite) {
+                    //     setFavorite(true)
+                    // }
+                    // return
+        //         }
+        //     })
+        // })
 
         console.log("DATA IS: ", data)
 
@@ -60,21 +75,29 @@ export default function Table({xPos, yPos}) {
 
     const setFavoriteClick = () => {
         
+        var res;
+
         // add data.uuid to favoriteTavles localStorage
         let favoriteTable = JSON.parse(localStorage.getItem("favoriteTables"))
         if (favoriteTable && data._id) {
             if (favoriteTable.includes(data._id)) {
                 favoriteTable = favoriteTable.filter(id => id !== data._id)
-                setFavorite(false)
+                // setFavorite(false)
+                res = false
             } else {
                 favoriteTable.push(data._id)
-                setFavorite(true)
+                // setFavorite(true)
+                res = true
             }
         } else {
             favoriteTable = [[data._id]]
-            setFavorite(true)
-            // localStorage.setItem("favoriteTables", JSON.stringify(favoriteTable))
+            res = true
+            // setFavorite(true)
+            localStorage.setItem("favoriteTables", JSON.stringify(favoriteTable))
         }
+        
+        // remove .favorite from tableMatrix
+        setFavorite(res)
 
         localStorage.setItem("favoriteTables", JSON.stringify(favoriteTable))
 
@@ -120,7 +143,7 @@ export default function Table({xPos, yPos}) {
                             : // admin view
                                 <>
                                     <div className="col-md-6" onClick={setFavoriteClick}>
-                                        <FontAwesomeIcon icon={faStar} className={data && data.favorite || isFavorite ? 'fav' : ''} />
+                                        <FontAwesomeIcon icon={faStar} className={ isFavorite ? 'fav' : ''} />
                                     </div>
                                     <div className="col-md-6">
                                         <FontAwesomeIcon icon={faRoute} />
