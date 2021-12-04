@@ -53,8 +53,14 @@ function App() {
                   <Route exact path="/" component={Map}/>
                   <Route exact path="/login" component={Login}/>
                   <Route exact path="/feedback" component={Feedback}/> 
-                  <Route exact path="/subscribe" component={Subscribe}/> 
-                  <Route exact path="/unsubscribe" component={Unsubscribe}/> 
+                  <Route path='/checklist' component={() => { 
+                    window.location.href = "./Internship Fair Checklist.pdf"; 
+                    return null;
+                  }}/>
+                  <Route path='/worksheet' component={() => { 
+                      window.location.href = "./Internship Fair Preparation Worksheet.pdf"; 
+                      return null;
+                  }}/>
                 </Switch>
                 <Navbar/>
                 <Sidebar />
