@@ -16,6 +16,9 @@ import { MdAirlineSeatLegroomExtra } from 'react-icons/md';
 import { arrow } from '@popperjs/core';
 import { RoutesContext } from '../../contexts/routesContext';
 import { MapContext } from '../../contexts/mapContext';
+import { AddYearModalContext } from '../../contexts/addYearModalContext';
+import { CreateTableModalContext } from '../../contexts/createTableModalContext';
+import { ModalShowingContext } from '../../contexts/modalShowingContext';
 
 function Navbar() {
 
@@ -28,9 +31,12 @@ function Navbar() {
 
   // const [sidebar, setSidebar] = useState(false);
 
-  const [modalShowing, setModalShowing] = useState(false);
-  const [showAddYearModal, setShowAddYearModal] = useState(false);
-  const [showCreateTableModal, setShowCreateTableModal] = useState(false);
+  // const [modalShowing, setModalShowing] = useState(false);
+  const {modalShowing, setModalShowing} = useContext(ModalShowingContext)
+  // const [showAddYearModal, setShowAddYearModal] = useState(false);
+  const {showAddYearModal, setShowAddYearModal} = useContext(AddYearModalContext)
+  // const [createTableModal, setCreateTableModal] = useState(false);
+  const {createTableModal, setCreateTableModal} = useContext(CreateTableModalContext)
   const [showPreview, setShowPreview] = useState(false);
   
   const [availableYears, setAvailableYears] = useState([]);
@@ -53,6 +59,30 @@ function Navbar() {
 
   const showSidebar = () => setSidebarState(!sidebarState);
 
+
+  // for settings auto cords
+  useEffect(() => {
+    if(createTableModal && createTableModal.company) {
+      setX(createTableModal.x_coord);
+      setY(createTableModal.y_coord);
+      setName(createTableModal.company.name);
+      setNumReps(createTableModal.company.number_of_reps);
+      setWebsite(createTableModal.company.website);
+      setNotes(createTableModal.company.other_info);
+      setLogo(createTableModal.imageUrl);
+      console.log("cre settings")
+    } else {
+      setX(null)
+        setY(null)
+        setName(null)
+        setNumReps(null)
+        setWebsite(null)
+        setNotes(null)
+        setLogo(null)
+    }
+    console.log("setCreateTableModal", createTableModal)
+
+  }, [createTableModal])
 
   // use effect for when window loads
   // load years
@@ -106,18 +136,20 @@ function Navbar() {
   useEffect(() => {
     if (!modalShowing) {
       setShowAddYearModal(false)
-      setShowCreateTableModal(false)
+      setCreateTableModal(false)
     }
+
   }, [modalShowing])
 
   // for triggering the shader behind the modal
   useEffect(() => {
-    if (showAddYearModal || showCreateTableModal) {
+    if (showAddYearModal || createTableModal) {
       setModalShowing(true);
     } else {
       setModalShowing(false);
     }
-  }, [showAddYearModal, showCreateTableModal])
+  }, [showAddYearModal, createTableModal])
+
 
 
   const generateAdminButtons = () => {
@@ -128,7 +160,7 @@ function Navbar() {
     return ( 
     <>
       <li>
-        <div className='button' onClick={() => setShowCreateTableModal(true)}> 
+        <div className='button' onClick={() => setCreateTableModal(true)}> 
           MAKE TABLE
         </div>
       </li>
@@ -186,7 +218,7 @@ function Navbar() {
       const response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, yearData.selected, logoFile); 
       console.log("CREATE TABLE RESPONSE: ", response);
       setMapContext(response)
-      setShowCreateTableModal(false)
+      setCreateTableModal(false)
     }
     console.log("async working", user);
     if(user && user.uuid && submitCreateMap){
@@ -270,7 +302,7 @@ function Navbar() {
 
             {
                 isAdmin() &&
-                showCreateTableModal &&
+                createTableModal &&
                 !showPreview &&
                 <Modal.Dialog>
                   <Modal.Header>
@@ -332,7 +364,7 @@ function Navbar() {
                   </Modal.Body>
 
                   <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowCreateTableModal(false)}>CLOSE</Button>
+                    <Button variant="secondary" onClick={() => setCreateTableModal(false)}>CLOSE</Button>
                     <Button variant="tertiary" onClick={() => setShowPreview(!showPreview)}>PREVIEW</Button>
                     <Button variant="primary" onClick = {() => setSubmitCreateMap(!submitCreateMap)}>SUBMIT</Button>
                   </Modal.Footer>
@@ -341,7 +373,7 @@ function Navbar() {
 
             {
                 isAdmin() &&
-                showCreateTableModal &&
+                createTableModal &&
                 showPreview &&
                 <Modal.Dialog>
                   <Modal.Header>
@@ -403,7 +435,7 @@ function Navbar() {
                   </Modal.Body>
 
                   <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShowCreateTableModal(false)}>CLOSE</Button>
+                    <Button variant="secondary" onClick={() => setCreateTableModal(false)}>CLOSE</Button>
                     <Button variant="tertiary" onClick={() => setShowPreview(!showPreview)}>EDIT</Button>
                     <Button variant="primary" onClick = {() => setSubmitCreateMap(!submitCreateMap)}>SUBMIT</Button>
                   </Modal.Footer>
