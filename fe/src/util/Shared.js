@@ -2,6 +2,7 @@
 
 export const generateBlankTableTemplate = (x, y) => {
     return {
+        _id: '',
         x_coord: x,
         y_coord: y,
         tableUrl: '',
