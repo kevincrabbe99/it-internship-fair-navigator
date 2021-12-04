@@ -20,13 +20,15 @@ refuse_credentials = Response(response="401 Refused Credentials",
 
 # ENDPOINTS FOR YEAR/MAP
 
-@navigator_api.route('/year', methods=['GET'])
-@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+@navigator_api.route('/year', methods=['PUT'])
+# @cross_origin()
+@cross_origin(origin='*', headers=['Content-Type'])
 def get_year():
-    if request.method != 'GET':
+    if request.method != 'PUT':
         return bad_request
     else:
         req_json = request.get_json()
+        print("req_json: ", request.get_data())
         if 'year' not in req_json:
             return bad_request
         year = req_json['year']

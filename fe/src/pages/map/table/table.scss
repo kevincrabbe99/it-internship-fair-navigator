@@ -27,14 +27,32 @@
   height: 100%;
 }
 
-.table-container .contactInfo {
-  font-size: 0.8em;
-  padding-left: 1em;
+.table-container .websiteLink {
+  font-size: 0.9em;
 }
 
-.table-container .contactTitle {
-  font-size: 1em;
+.table-container .repsC_val {
+  font-size: 0.9em;
   font-weight: bold;
+  margin-left: 0.5em;
+}
+
+.table-container .otherInfo {
+  font-size: 0.9em;
+  text-align: left;
+  border-top: 1px solid var(--border-color);
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+}
+
+.table-container .col-auto {
+  padding: 0;
+  margin: 0 0.5em;
+}
+
+.table-container .repsC_key {
+  font-size: 0.9em;
+  margin: 0;
 }
 
 .table-container .companyName {
@@ -58,6 +76,7 @@
   position: relative;
   border-radius: 5px;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .border {

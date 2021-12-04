@@ -166,19 +166,7 @@ function Navbar() {
 
 
 
-  useEffect(() => {
-
-    async function getTablesAsyncWrapper() {
-      const res = await getTablesEndpoint()
-      if (res.status !== 200) {
-        console.log("TABLES: ", res)
-        setMapContext(res)
-      }
-      
-    }
-    
-    getTablesAsyncWrapper();
-  }, [window])
+  
 
   useEffect(() => {
     async function makeTableAsyncWrapper(){
@@ -195,12 +183,15 @@ function Navbar() {
       //   response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, '2021');
       // }
 
-      const response = await updateTableEndpoint(user.uuid, id, x, y, cName, numReps, website, notes, '2021'); 
+      const response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, yearData.selected, logoFile); 
       console.log("CREATE TABLE RESPONSE: ", response);
+      setMapContext(response)
+      setShowCreateTableModal(false)
     }
     console.log("async working", user);
-    if(user && user.uuid){
+    if(user && user.uuid && submitCreateMap){
       makeTableAsyncWrapper();
+      setSubmitCreateMap(false);
     }
   }, [submitCreateMap])
   
