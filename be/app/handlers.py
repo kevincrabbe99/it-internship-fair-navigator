@@ -216,6 +216,7 @@ class MapHandler(DatabaseObject):
             new_table_data = {'_id': table,
                               'x_coord': table_data['x_coord'],
                               'y_coord': table_data['y_coord'],
+                              'imageUrl': table_data['imageUrl'],
                               'company': company_data}
             tables_list.append(new_table_data)
 
@@ -436,6 +437,7 @@ class TableHandler(DatabaseObject):
         new_table_data = {'_id': table,
                             'x_coord': data['x_coord'],
                             'y_coord': data['y_coord'],
+                            'imageUrl': data['imageUrl'],
                             'company': company_data}
         return json.dumps(new_table_data, default=str)
 
@@ -487,8 +489,9 @@ class TableHandler(DatabaseObject):
         id = data["_id"]
         x_coord = data["x_coord"]
         y_coord = data["y_coord"]
+        imageUrl = data['imageUrl']
         company = data["company"]
-        t = Table(id, x_coord, y_coord, company)
+        t = Table(id, x_coord, y_coord, company, imageUrl)
         return t
 
     @staticmethod
