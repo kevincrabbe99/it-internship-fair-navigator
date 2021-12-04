@@ -148,7 +148,7 @@ def test_add_table_full_input_existing_table():
     header = {'Authorization': uuid}
     
     table_to_add = {
-        'x_coord': 0, 'y_coord': 0, 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021','imageUrl': 'image.com'
+        'x_coord': 0, 'y_coord': 0,'imageUrl': 'image.com', 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021'
     }
 
     res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
@@ -171,7 +171,7 @@ def test_add_table_partial_input_nonexisting_table():
     header = {'Authorization': uuid}
     
     table_to_add = {
-        'x_coord': 0, 'y_coord': 0, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None,'imageUrl': None
+        'x_coord': 0, 'y_coord': 0,'imageUrl': None, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None
     }
 
     res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
@@ -193,7 +193,7 @@ def test_add_table_no_input_nonexisting_table():
     header = {'Authorization': uuid}
     
     table_to_add = {
-        'x_coord': None, 'y_coord': None, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None,'imageUrl': None
+        'x_coord': None, 'y_coord': None,'imageUrl': None, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None
     }
 
     res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
@@ -218,7 +218,7 @@ def test_change_table_data_full_input_table_changed():
     header = {'Authorization': uuid}
     
     table_to_add = {
-        'x_coord': 0, 'y_coord': 0, 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021','imageUrl': 'image.com'
+        'x_coord': 0, 'y_coord': 0,'imageUrl': 'image.com', 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021'
     }
 
     res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
@@ -227,7 +227,7 @@ def test_change_table_data_full_input_table_changed():
     print(table_to_change_id)
 
     table_to_change = {
-        '_id': table_to_change_id, 'x_coord': 1, 'y_coord': 1, 'company': {'name': 'Test Company 2', 'number_of_reps': 3, 'website': 'test2.com', 'other_info': 'none'}, 'year': '2021','imageUrl': 'anotherImage.com'
+        '_id': table_to_change_id, 'x_coord': 1, 'y_coord': 1,'imageUrl': 'anotherImage.com', 'company': {'name': 'Test Company 2', 'number_of_reps': 3, 'website': 'test2.com', 'other_info': 'none'}, 'year': '2021'
     }
 
     res = requests.post('https://api.itfnavigator.com/api/navigator/table', json=table_to_change, headers=header)
@@ -249,7 +249,7 @@ def test_change_table_data_partial_input_table_not_changed():
     header = {'Authorization': uuid}
     
     table_to_add = {
-        'x_coord': 0, 'y_coord': 0, 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021','imageUrl': 'image.com'
+        'x_coord': 0, 'y_coord': 0,'imageUrl': 'image.com', 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021'
     }
 
     res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
@@ -258,7 +258,7 @@ def test_change_table_data_partial_input_table_not_changed():
     print(table_to_change_id)
 
     table_to_change = {
-        '_id': table_to_change_id, 'x_coord': 1, 'y_coord': 1, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None,'imageUrl': None
+        '_id': table_to_change_id, 'x_coord': 1, 'y_coord': 1,'imageUrl': None, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None
     }
 
     res = requests.post('https://api.itfnavigator.com/api/navigator/table', json=table_to_change, headers=header)
@@ -280,7 +280,7 @@ def test_change_table_data_no_input_table_not_changed():
     header = {'Authorization': uuid}
     
     table_to_add = {
-        'x_coord': 0, 'y_coord': 0, 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021','imageUrl': 'image.com'
+        'x_coord': 0, 'y_coord': 0,'imageUrl': 'image.com', 'company': {'name': 'Test Company', 'number_of_reps': 2, 'website': 'test.com', 'other_info': 'none'}, 'year': '2021'
     }
 
     res = requests.put('https://api.itfnavigator.com/api/navigator/table', json=table_to_add, headers=header)
@@ -289,7 +289,7 @@ def test_change_table_data_no_input_table_not_changed():
     print(table_to_change_id)
 
     table_to_change = {
-        '_id': table_to_change_id, 'x_coord': None, 'y_coord': None, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None,'imageUrl': None
+        '_id': table_to_change_id, 'x_coord': None, 'y_coord': None,'imageUrl': None, 'company': {'name': None, 'number_of_reps': None, 'website': None, 'other_info': None}, 'year': None
     }
 
     res = requests.post('https://api.itfnavigator.com/api/navigator/table', json=table_to_change, headers=header)
