@@ -70,18 +70,21 @@ class Table:
     x_coord (int): The x coordinates in the map
     y_coord (int): The y coordinates in the map
     company (str): The ID of table's company
+    imageUrl (str): The url to the company's logo
     data (dict): A dictionary containing the attributes of the model
         For easy json conversion
     """
-    def __init__(self, id, x_coord, y_coord, company):
+    def __init__(self, id, x_coord, y_coord, company, imageUrl):
         self._id = id
         self._x_coord = x_coord
         self._y_coord = y_coord
         self._company = company
+        self._imageUrl = imageUrl
         self._data = {
             "id": self._id,
             "x_coord": self._x_coord,
             "y_coord": self._y_coord,
+            'imageUrl': self._imageUrl,
             "company": self._company,
         }
 
@@ -109,6 +112,12 @@ class Table:
         self._company = c
         self._data["company"] = c
 
+    def get_url(self):
+        return self._imageUrl
+    def set_url(self, c):
+        self._imageUrl = c
+        self._data["imageUrl"] = c
+
     def get_data(self):
         return self._data
 
@@ -116,6 +125,7 @@ class Table:
     x_coord = property(get_x_coord, set_x_coord)
     y_coord = property(get_y_coord, set_y_coord)
     company = property(get_company, set_company)
+    imageUrl = property(get_url, set_url)
     data = property(get_data)
 
 class Company:
