@@ -167,6 +167,9 @@ def add_table():
 
             company_name = company['name']
 
+            if 'x_coord' or 'y_coord' or 'company' or company['name'] or company['num_of_reps'] or company['website'] or company['other_info'] or 'year' or 'imageUrl' is None:
+                return bad_request
+
             mh = MapHandler(m)
             th = TableHandler(m)
             ch = CompanyHandler(m)
@@ -233,6 +236,9 @@ def update_table():
             company = req_json['company']
             year = req_json['year']
             imageUrl = req_json['imageUrl']
+
+            if '_id' or 'x_coord' or 'y_coord' or 'company' or company['name'] or company['num_of_reps'] or company['website'] or company['other_info'] or 'year' or 'imageUrl' is None:
+                return bad_request
 
             company_name = company['name']
 
@@ -348,6 +354,8 @@ def delete_table():
         if check_token(request.headers['Authorization']):
             if '_id' and 'year' not in req_json:
                 return bad_request
+            if '_id' or 'year' is None:
+                return bad_request
 
             id = req_json['_id']
             year = req_json['year']
@@ -391,6 +399,8 @@ def subscribe():
         req_json = request.get_json()
         if 'email' not in req_json:
             return bad_request
+        if 'email' is None:
+            return bad_request
         
         email = req_json['email']
         if check_email(email):
@@ -416,6 +426,8 @@ def unsubscribe():
             return bad_request
         try:
             if 'email' not in req_json:
+                return bad_request
+            if 'email' is None:
                 return bad_request
         except:
             return bad_request
@@ -465,6 +477,8 @@ def submit_feedback():
     else:
         req_json = request.json
         if 'message' not in req_json:
+            return bad_request
+        if 'message' is None:
             return bad_request
         feedback = req_json['message']
         fh = FeedbackHandler(m)
@@ -519,6 +533,8 @@ def get_company():
     else:
         req_json = request.get_json()
         if 'name' not in req_json:
+            return bad_request
+        if 'name' is None:
             return bad_request
         name = req_json['name']
         ch = CompanyHandler(m)

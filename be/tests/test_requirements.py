@@ -96,7 +96,7 @@ def test_remove_table_correct_credentials_existing_table():
 
     table_to_delete = res.json()['tables'][-1]['_id']
     print(table_to_delete)
-    res = requests.delete('http://localhost:8080/api/navigator/table', json={'_id': table_to_delete, 'year': '2021'}, headers=header)
+    res = requests.delete('https://api.itfnavigator.com/api/navigator/table', json={'_id': table_to_delete, 'year': '2021'}, headers=header)
 
     requests.delete('https://api.itfnavigator.com/api/navigator/logout', json={'sessionUUID': uuid})
 
@@ -227,7 +227,7 @@ def test_change_table_data_full_input_table_changed():
     print(table_to_change_id)
 
     table_to_change = {
-        '_id': table_to_change_id, 'x_coord': 1, 'y_coord': 1, 'company': {'name': "Test Company 2", 'number_of_reps': 3, 'website': 'test2.com', 'other_info': 'none'}, 'year': '2021','imageUrl': 'anotherImage.com'
+        '_id': table_to_change_id, 'x_coord': 1, 'y_coord': 1, 'company': {'name': 'Test Company 2', 'number_of_reps': 3, 'website': 'test2.com', 'other_info': 'none'}, 'year': '2021','imageUrl': 'anotherImage.com'
     }
 
     res = requests.post('https://api.itfnavigator.com/api/navigator/table', json=table_to_change, headers=header)
