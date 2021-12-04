@@ -129,13 +129,28 @@ export async function createTableEndpoint(sessionUUID, x, y, cName, numReps, web
 export async function getTablesEndpoint(year){
 
     console.log("SENDING year: ", year)
-    const response = await axios.put(`${process.env.REACT_APP_ITIFN_API}/year`, {
+    const response = await axios.put(`${process.env.REACT_APP_ITIFN_API}/map`, {
         year
     }, {
         headers
     })
 
     console.log("GET TABLES RESPONSE: ", response)
+    return response.data;
+}
+
+export async function removeTableEndpoint(sessionUUID, _id, year){
+    headers['Authorization'] = sessionUUID;
+    console.log("SESSION UUID: ", sessionUUID)
+    console.log("DELETE Table: ", _id)
+    const response = await axios.put(`${process.env.REACT_APP_ITIFN_API}/delete_table`, {
+        _id,
+        year
+    }, {
+        headers
+    })
+
+    console.log("DELETE TABLE RESPONSE: ", response)
     return response.data;
 }
 

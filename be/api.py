@@ -20,7 +20,7 @@ refuse_credentials = Response(response="401 Refused Credentials",
 
 # ENDPOINTS FOR YEAR/MAP
 
-@navigator_api.route('/year', methods=['PUT'])
+@navigator_api.route('/map', methods=['PUT'])
 # @cross_origin()
 @cross_origin(origin='*', headers=['Content-Type'])
 def get_year():
@@ -153,6 +153,7 @@ def add_table():
         return bad_request
     else:
         req_json = request.get_json()
+        print("REQUEST JSON: ", req_json)
         if 'Authorization' not in request.headers:
             return refuse_credentials
         if check_token(request.headers['Authorization']):
@@ -167,7 +168,7 @@ def add_table():
 
             company_name = company['name']
 
-            if 'x_coord' or 'y_coord' or 'company' or company['name'] or company['num_of_reps'] or company['website'] or company['other_info'] or 'year' or 'imageUrl' is None:
+            if x_coord is None or y_coord is None or 'company' is None or company['name'] is None or company['number_of_reps'] is None or company['website'] is None or company['other_info'] is None or year is None or imageUrl is None:
                 return bad_request
 
             mh = MapHandler(m)
@@ -225,10 +226,11 @@ def update_table():
         return bad_request
     else:
         req_json = request.get_json()
+        print(req_json)
         if 'Authorization' not in request.headers:
             return refuse_credentials
         if check_token(request.headers['Authorization']):
-            if 'x_coord' and 'y_coord' and 'company' and 'year' and 'imageUrl' not in req_json:
+            if 'x_coord' not in req_json and 'y_coord' not in req_json and 'company' not in req_json and 'year' not in req_json and 'imageUrl' not in req_json:
                 return bad_request
             
             x_coord = req_json['x_coord']
@@ -237,7 +239,7 @@ def update_table():
             year = req_json['year']
             imageUrl = req_json['imageUrl']
 
-            if '_id' or 'x_coord' or 'y_coord' or 'company' or company['name'] or company['num_of_reps'] or company['website'] or company['other_info'] or 'year' or 'imageUrl' is None:
+            if x_coord is None or y_coord is None or company is None or company['name'] is None or company['number_of_reps'] is None or company['website'] is None or company['other_info'] is None or year is None or imageUrl is None:
                 return bad_request
 
             company_name = company['name']
@@ -248,10 +250,11 @@ def update_table():
 
             if '_id' in req_json and th.readTableByID(req_json['_id']):
                 # check if the company exists
+                table_id = req_json['_id']
                 if ch.readCompanyByName(company_name):
                     existing_company = ch.readCompanyByName(company_name)
                     company_id = existing_company['_id']
-                    table_data = {'_id': company_id,
+                    table_data = {'_id': table_id,
                                 'x_coord': x_coord,
                                 'y_coord': y_coord,
                                 'imageUrl': imageUrl,
@@ -262,7 +265,7 @@ def update_table():
                     company['_id'] = "n/a"
                     new_company = ch.buildCompanyFromJSON(json.dumps(company, default=str))
                     company_id = ch.createCompany(new_company)
-                    table_data = {'_id': company_id,
+                    table_data = {'_id': table_id,
                                 'x_coord': x_coord,
                                 'y_coord': y_coord,
                                 'imageUrl': imageUrl,
@@ -270,7 +273,7 @@ def update_table():
                     table_data = json.dumps(table_data, default=str)
                     new_table = th.buildTableFromJSON(table_data)
 
-                th.updateTable(id, new_table)
+                th.updateTable(table_id, new_table)
 
                 current_map = mh.readMapByYear(year)
                 map_json = json.dumps(current_map, default=str)
@@ -340,21 +343,25 @@ def update_table():
             return refuse_credentials
 
 # REQUIRES AUTH
-@navigator_api.route('/table', methods=['DELETE'])
+@navigator_api.route('/delete_table', methods=['PUT'])
 @cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def delete_table():
-    if request.method != "DELETE":
+    if request.method != "PUT":
         return bad_request
     else:
-        req_json = request.get_json()
+        req_json = request.json
+        try:
+            print(request.headers)
+        except:
+            print("no header received")
         if not request.headers:
             return refuse_credentials
         if 'Authorization' not in request.headers:
             return refuse_credentials
         if check_token(request.headers['Authorization']):
-            if '_id' and 'year' not in req_json:
+            if '_id' not in req_json and 'year' not in req_json:
                 return bad_request
-            if '_id' or 'year' is None:
+            if req_json['_id'] is None or req_json['year'] is None:
                 return bad_request
 
             id = req_json['_id']
