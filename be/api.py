@@ -309,7 +309,7 @@ def subscribe():
         eh.closeConnection()
         if response is not None:
             response = json.dumps(response)
-            return jsonify(response)
+            return "Thanks for signing up!"
 
     return bad_request
 
