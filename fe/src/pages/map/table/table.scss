@@ -27,6 +27,18 @@
   height: 100%;
 }
 
+.image-container {
+  height: 5em;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-container img {
+  width: 100%;
+}
+
 .table-container .websiteLink {
   font-size: 0.9em;
 }
@@ -61,8 +73,7 @@
   text-align: center;
   width: 100%;
   display: flex;
-  justify-content: center;
-  padding-bottom: 0.5em;
+  justify-content: left;
 }
 
 .table-container .container {
@@ -72,11 +83,31 @@
 
 .table-container {
   width: 15em;
-  height: 11em;
+  height: 15em;
   position: relative;
   border-radius: 5px;
   cursor: pointer;
   overflow: hidden;
+}
+
+.table-container .blank-td {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-container .blank-td svg {
+  color: white;
+  opacity: 0.2;
+}
+
+.table-container .blank-td:hover svg {
+  color: black;
+}
+
+.table-container .blank-td:hover {
+  background-color: var(--border-color);
 }
 
 .border {
