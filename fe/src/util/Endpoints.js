@@ -142,10 +142,9 @@ export async function updateTableEndpoint(sessionUUID, id, x, y, cName, numReps,
     return response.data;
 }
 
-export async function getTablesEndpoint(sessionUUID){
-    headers['Authorization'] = sessionUUID;
+export async function getTablesEndpoint(){
 
     const response = await axios.get(`${process.env.REACT_APP_ITIFN_API}/tables`, {}, {headers});
-
-    return response.data;
+    console.log("GET TABLES RESPONSE: ", response);
+    return response;
 }
