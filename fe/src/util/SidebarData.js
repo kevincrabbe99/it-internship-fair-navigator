@@ -19,14 +19,16 @@ export const SidebarData = [
     path: '/',
     icon: <MdIcons.MdOutlineChecklist size ={55}/>,
     cName: 'nav-text',
-    address: 'checklist'
+    address: 'checklist',
+    target:'_blank'
   },
   {
     title: 'Internship Fair Preparation Worksheet',
     path: '/',
     icon: <BiIcons.BiSpreadsheet size={70} />,
     cName: 'nav-text',
-    address: 'worksheet'
+    address: 'worksheet',
+    target:'_blank'
   },
   {
     title: 'Admin Login',

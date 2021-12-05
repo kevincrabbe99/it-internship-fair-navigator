@@ -53,6 +53,11 @@
   padding-right: 1em;
 }
 
+.routes_header li:hover {
+  cursor: pointer;
+  color: var(--blue);
+}
+
 .routes_header_title {
   position: absolute;
   top: 0.5em;
