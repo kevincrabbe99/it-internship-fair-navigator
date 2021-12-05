@@ -12,6 +12,7 @@ import { YearContext } from '../../../contexts/yearContext'
 import { TableMatrixContext } from '../../../contexts/tableMatrixContext'
 import { removeTableEndpoint } from '../../../util/Endpoints'
 import { RoutesDataContext } from '../../../contexts/routesDataContext'
+import { RoutesShowingContext } from '../../../contexts/routesShowingContext'
 
 export default function Table({xPos, yPos}) {
 
@@ -24,24 +25,28 @@ export default function Table({xPos, yPos}) {
     const [isFavorite, setFavorite] = useState(false)
     const {tableMatrix, setTableMatrix} = useContext(TableMatrixContext)
     const { routesData, setRoutesData } = useContext(RoutesDataContext)
-
-    // useEffect(() => {
-    //     if (!data._id) { return }
-
-    //     // get favorite table from localStorate
-    //     let favoriteTable = JSON.parse(localStorage.getItem("favoriteTables"))
-
-    //     if (favoriteTable) {
-    //         favoriteTable.forEach(favId => {
-    //             if (favId === data._id) {
-    //                 setFavorite(true)
-    //                 return
-    //             }
-    //         })
-    //     }
+    const { routesShowingContext, setRoutesShowingContext } = useContext(RoutesShowingContext)
+    const [isRoute, setIsRoute] = useState(false)
 
 
-    // }, [data])
+    useEffect(() => {
+        
+        setIsRoute(false)
+
+        data &&
+        routesData &&
+        routesData.forEach(route => {
+
+            if (route.year == yearData.selected) {
+                route.tables.forEach(table => {
+                    if (table.id == data._id) { 
+                        setIsRoute(true)
+                    }
+                }) 
+            }
+        })
+
+    }, [routesData, data])
 
     // 
     // const getTables = await getTablesEndpoint(user.uuid);
@@ -51,9 +56,7 @@ export default function Table({xPos, yPos}) {
         if (!tableMatrix || !tableMatrix.length > 0) { return }
 
 
-        // [...Array(15).keys()].forEach(i => {
-        //     [...Array(15).keys()].forEach(j => {
-        //         if (i === xPos && j === yPos) {
+
         setTable(tableMatrix[xPos][yPos])
 
         if (tableMatrix[xPos][yPos] &&  tableMatrix[xPos][yPos]._id) {
@@ -62,14 +65,7 @@ export default function Table({xPos, yPos}) {
             }
         }
 
-                    // set favorite
-                    // if (tableMatrix[xPos][yPos].favorite) {
-                    //     setFavorite(true)
-                    // }
-                    // return
-        //         }
-        //     })
-        // })
+
 
         console.log("DATA IS: ", data)
 
@@ -173,6 +169,8 @@ export default function Table({xPos, yPos}) {
         localStorage.setItem("route", JSON.stringify(routes))
 
         setRoutesData(routes)
+        setRoutesShowingContext({showing: true})
+        
     }
 
     return  (
@@ -218,7 +216,7 @@ export default function Table({xPos, yPos}) {
                                         <FontAwesomeIcon icon={faStar} className={ isFavorite ? 'fav' : ''} />
                                     </div>
                                     <div className="col-md-6" onClick = {addToRouteClick}>
-                                        <FontAwesomeIcon icon={faRoute} />
+                                        <FontAwesomeIcon icon={faRoute} className={ isRoute ? 'isRoute' : ''} />
                                     </div>
                                 </>
                             }       

@@ -18,38 +18,50 @@ export default function RouteItem({index}) {
 
 
         // set itemState to routesData.selectedYear.tables where table[i].id === index
-        routesData && 
+        setItemState(null)
+   
         routesData.forEach(year => {
-            if (year.year == yearData.selectedYear) {
+
+            if (year.year == yearData.selected) {
                 console.log("route found year")
                 year.tables.forEach((table, i) => {
                     console.log("route adding table: ", i)
                     if (i == index) {
                         setItemState(table.data)
                         console.log("ROUTE DATA SET: ", table.data)
+                        return
                     }
                 })
             }
+
         })
-     
-        // routesData && 
-        // routesData.forEach((year, i) => {
-        //     if (year) {
-        //         if(yearData.selectedYear === year.year) {
-        //             year.tables.forEach((table, j) => {
-        //                 if(j == index) {
-        //                     setItemState(table.data)
-        //                     console.log("SETTINGS STATE ROUTE ITEM: ", table.data)
-        //                     return
-        //                 }
-        //             })
-        //         }
-        //     }
-        // })
+
         console.log("ROUTE DATA: ", routesData)
         console.log("ITEM STATE ROUTE: ", itemState)
+        console.log("ROUTES YEAR CONTEXT: ", yearData)
 
     }, [routesData,yearData])
+
+    const removeRouteClick = async () => {
+
+        // setItemState(null)
+
+        let routes = JSON.parse(localStorage.getItem("route"))
+
+         // filter routes where routes.selectedYear.tables.id === data._id
+         routes = routes.filter(route => {
+            if (route.year == yearData.selected) {
+                route.tables = route.tables.filter(table => table.id !== itemState._id)
+            }
+            return route
+        })
+
+        // await setTimeout(2000)
+        localStorage.setItem("route", JSON.stringify(routes))
+
+        setRoutesData(routes)
+
+    }
 
     return (
         itemState ? 
@@ -73,7 +85,7 @@ export default function RouteItem({index}) {
                                     </Link>
                                 </div> 
                                 <div class="col-auto r-icon-opt r-trash">
-                                    <FontAwesomeIcon icon = {faTrash} />
+                                    <FontAwesomeIcon icon = {faTrash} onClick = {removeRouteClick}/>
                                 </div>
                             </div>
                         </div>        

@@ -115,5 +115,9 @@
 }
 
 .fav {
-  color: yellow;
+  color: var(--yellow);
+}
+
+.isRoute {
+  color: var(--blue);
 }

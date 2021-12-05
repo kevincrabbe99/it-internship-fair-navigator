@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import './Navbar.css';
+import './Navbar.scss';
 import { isAdmin, UserContext } from '../../contexts/userContext.js';
 import { addNewYear, getTablesEndpoint, updateTableEndpoint } from '../../util/Endpoints.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -198,6 +198,7 @@ function Navbar() {
       <div>
         <button
           type="button"
+          class="button"
           onClick={handlePrint}
         >
           Print Map
@@ -266,25 +267,32 @@ function Navbar() {
         <div className='nav-right'>
             <ul>
             <li>
-                <div className='dropdown'>
-                <select onChange={e => setYearTo(e.target.value)} value = {yearData && yearData.selected}>
-                    {
-                    // create 10 options
-                    yearData &&
-                    yearData.available &&
-                    yearData.available.length > 0 &&
-                    [...Array(yearData.available.length).keys()].map(i => {
-                        
-                        var val = <option value={yearData.available[i]} >{yearData.available[i]}</option>
-                        if (yearData.selected == yearData.available[i]) {
-                        val = <option value={yearData.available[i]} selected>{yearData.available[i]}</option>
-                        }
-
-                        return val
-                    })
-                    }
-                </select>
+              <div className="row">
+                <div className="col-auto year-label">
+                  YEAR: 
                 </div>
+                <div className="col-auto">
+                  <div className='dropdown'>
+                    <select onChange={e => setYearTo(e.target.value)} value = {yearData && yearData.selected}>
+                        {
+                        // create 10 options
+                        yearData &&
+                        yearData.available &&
+                        yearData.available.length > 0 &&
+                        [...Array(yearData.available.length).keys()].map(i => {
+                            
+                            var val = <option value={yearData.available[i]} >{yearData.available[i]}</option>
+                            if (yearData.selected == yearData.available[i]) {
+                            val = <option value={yearData.available[i]} selected>{yearData.available[i]}</option>
+                            }
+
+                            return val
+                        })
+                        }
+                    </select>
+                  </div>
+                </div>
+              </div>
             </li>
             {PrintMapButton()} 
             {generateAdminButtons()}
