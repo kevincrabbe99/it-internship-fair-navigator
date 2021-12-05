@@ -20,12 +20,15 @@ import { UserContext } from './contexts/userContext';
 import { YearContext } from './contexts/yearContext';
 import Feedback from './pages/feedback/Feedback';
 import { SidebarContext } from './contexts/sidebarContext';
-import { RoutesContext } from './contexts/routesContext';
+import { RoutesShowingContext } from './contexts/routesShowingContext';
 import { MapContext } from './contexts/mapContext';
 import { CreateTableModalContext } from './contexts/createTableModalContext';
 import { AddYearModalContext } from './contexts/addYearModalContext';
 import { ModalShowingContext } from './contexts/modalShowingContext';
 import { TableMatrixContext } from './contexts/tableMatrixContext';
+import { RoutesDataContext } from './contexts/routesDataContext';
+import RoutesView from './components/Routes/RoutesView';
+
 function App() { 
 
   const [user, setUser] = useState(null);
@@ -37,8 +40,8 @@ function App() {
   const [sidebarState, setSidebarState] = useState(false);
   const sidebarProviderValue = useMemo(() => ({sidebarState, setSidebarState}), [sidebarState, setSidebarState]);
 
-  const [routesContext, setRoutesContext] = useState([]);
-  const routesProviderValue = useMemo(() => ({routesContext, setRoutesContext}), [routesContext, setRoutesContext]);
+  const [routesShowingContext, setRoutesShowingContext] = useState([]);
+  const routesProviderValue = useMemo(() => ({routesShowingContext, setRoutesShowingContext}), [routesShowingContext, setRoutesShowingContext]);
 
   const [mapContext, setMapContext] = useState(null);
   const mapProviderValue = useMemo(() => ({mapContext, setMapContext}), [mapContext, setMapContext]);
@@ -55,6 +58,9 @@ function App() {
   const [tableMatrix, setTableMatrix] = useState([...Array(15)].map(e => Array(15)));
   const tableMatrixProviderValue = useMemo(() => ({tableMatrix, setTableMatrix}), [tableMatrix, setTableMatrix]);
 
+  const [routesData, setRoutesData] = useState([]);
+  const routesDataProviderValue = useMemo(() => ({routesData, setRoutesData}), [routesData, setRoutesData]);
+
   useEffect(() => {
     const u = JSON.parse(localStorage.getItem('adminToken'));
     if (u && u.uuid) {
@@ -63,45 +69,48 @@ function App() {
   }, [window])
 
   return (
-  <TableMatrixContext.Provider value={tableMatrixProviderValue}>
-    <ModalShowingContext.Provider value={modalShowingProviderValue}>
-      <AddYearModalContext.Provider value={addYearModalProviderValue}>
-        <CreateTableModalContext.Provider value={createTableModalProviderValue}>
-          <MapContext.Provider value={mapProviderValue}>
-            <RoutesContext.Provider value={routesProviderValue}>
-              <SidebarContext.Provider value={sidebarProviderValue}>
-                <UserContext.Provider value={userProviderValue}>
-                    <YearContext.Provider value={yearDataProviderValue}>
-                    <Router> 
-                      <div className="App">
-                        <Switch>
-                          <Route exact path="/" component={Map}/>
-                          <Route exact path="/login" component={Login}/>
-                          <Route exact path="/feedback" component={Feedback}/> 
-                          <Route exact path="/subscribe" component={Subscribe}/> 
-                          <Route exact path="/unsubscribe" component={Unsubscribe}/>
-                          <Route path='/checklist' component={() => { 
-                            window.location.href = "./Internship Fair Checklist.pdf"; 
-                            return null;
-                          }}/>
-                          <Route path='/worksheet' component={() => { 
-                              window.location.href = "./Internship Fair Preparation Worksheet.pdf"; 
+  <RoutesDataContext.Provider value={routesDataProviderValue}>
+    <TableMatrixContext.Provider value={tableMatrixProviderValue}>
+      <ModalShowingContext.Provider value={modalShowingProviderValue}>
+        <AddYearModalContext.Provider value={addYearModalProviderValue}>
+          <CreateTableModalContext.Provider value={createTableModalProviderValue}>
+            <MapContext.Provider value={mapProviderValue}>
+              <RoutesShowingContext.Provider value={routesProviderValue}>
+                <SidebarContext.Provider value={sidebarProviderValue}>
+                  <UserContext.Provider value={userProviderValue}>
+                      <YearContext.Provider value={yearDataProviderValue}>
+                      <Router> 
+                        <div className="App">
+                          <Switch>
+                            <Route exact path="/" component={Map}/>
+                            <Route exact path="/login" component={Login}/>
+                            <Route exact path="/feedback" component={Feedback}/> 
+                            <Route exact path="/subscribe" component={Subscribe}/> 
+                            <Route exact path="/unsubscribe" component={Unsubscribe}/>
+                            <Route path='/checklist' component={() => { 
+                              window.location.href = "./Internship Fair Checklist.pdf"; 
                               return null;
-                          }}/>
-                        </Switch>
-                        <Navbar/>
-                        <Sidebar />
-                      </div>
-                    </Router>
-                  </YearContext.Provider>
-                </UserContext.Provider>
-              </SidebarContext.Provider>
-            </RoutesContext.Provider>
-          </MapContext.Provider>
-        </CreateTableModalContext.Provider>
-      </AddYearModalContext.Provider>
-    </ModalShowingContext.Provider>
-  </TableMatrixContext.Provider>
+                            }}/>
+                            <Route path='/worksheet' component={() => { 
+                                window.location.href = "./Internship Fair Preparation Worksheet.pdf"; 
+                                return null;
+                            }}/>
+                          </Switch>
+                          <Navbar/>
+                          <RoutesView/>
+                          <Sidebar />
+                        </div>
+                      </Router>
+                    </YearContext.Provider>
+                  </UserContext.Provider>
+                </SidebarContext.Provider>
+              </RoutesShowingContext.Provider>
+            </MapContext.Provider>
+          </CreateTableModalContext.Provider>
+        </AddYearModalContext.Provider>
+      </ModalShowingContext.Provider>
+    </TableMatrixContext.Provider>
+  </RoutesDataContext.Provider>
   );
 }
 

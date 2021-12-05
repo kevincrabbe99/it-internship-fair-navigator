@@ -70,11 +70,11 @@
 }
 
 .r-link svg:hover {
-  color: blue;
+  color: var(--blue);
   cursor: pointer;
 }
 
 .r-trash svg:hover {
-  color: red;
+  color: var(--sidebar);
   cursor: pointer;
 }

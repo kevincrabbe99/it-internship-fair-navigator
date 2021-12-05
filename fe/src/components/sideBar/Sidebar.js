@@ -66,11 +66,12 @@ export default function Sidebar() {
 
                         return (
                             <li key={index} className={item.cName}>
-                            <Link to={item.path}>
+                            <Link to={item.address} target={item.target ? '_blank' : ''}>
                                 <div className='nav-icon'>
                                 {item.icon}
                                 </div>
-                                <span onClick={() => handleClick(item.address)}>{item.title}</span>
+                                {/* <span onClick={() => handleClick(item.address)}>{item.title}</span> */}
+                                <span>{item.title}</span>
                             </Link>
                             </li>
                         );
