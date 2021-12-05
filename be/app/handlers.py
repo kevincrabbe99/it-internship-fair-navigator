@@ -942,7 +942,7 @@ class FeedbackHandler(DatabaseObject):
         """
         super().__init__(databaseCon)
 
-    def submit_feedback(self, feedback: str):
+    def submit_feedback(self, email:str, feedback: str):
         """
         Submits userfeedback to the database
 
@@ -953,7 +953,7 @@ class FeedbackHandler(DatabaseObject):
         dictionary: The inserted object
         """
         try:
-            data = {'feedback': feedback}
+            data = {'email': email, 'feedback': feedback}
             result = super()._write(self.collection, data).inserted_id
             return result
         except:

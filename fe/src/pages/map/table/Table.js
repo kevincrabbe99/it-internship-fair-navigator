@@ -20,24 +20,88 @@ export default function Table({xPos, yPos}) {
     const { mapContext, setMapContext} = useContext(MapContext)
     const { yearData, setYearData } = useContext(YearContext)
     const [data, setTable] = useState(generateBlankTableTemplate(xPos, yPos))
+    const [isFavorite, setFavorite] = useState(false)
     const {tableMatrix, setTableMatrix} = useContext(TableMatrixContext)
+
+    // useEffect(() => {
+    //     if (!data._id) { return }
+
+    //     // get favorite table from localStorate
+    //     let favoriteTable = JSON.parse(localStorage.getItem("favoriteTables"))
+
+    //     if (favoriteTable) {
+    //         favoriteTable.forEach(favId => {
+    //             if (favId === data._id) {
+    //                 setFavorite(true)
+    //                 return
+    //             }
+    //         })
+    //     }
+
+
+    // }, [data])
 
     // 
     // const getTables = await getTablesEndpoint(user.uuid);
     useEffect(() => {
 
-        [...Array(15).keys()].forEach(i => {
-            [...Array(15).keys()].forEach(j => {
-                if (i === xPos && j === yPos) {
-                    setTable(tableMatrix[i][j])
-                    return
-                }
-            })
-        })
+        var userFavorites = JSON.parse(localStorage.getItem("favoriteTables"))
+        if (!tableMatrix || !tableMatrix.length > 0) { return }
+
+
+        // [...Array(15).keys()].forEach(i => {
+        //     [...Array(15).keys()].forEach(j => {
+        //         if (i === xPos && j === yPos) {
+        setTable(tableMatrix[xPos][yPos])
+
+        if (tableMatrix[xPos][yPos] &&  tableMatrix[xPos][yPos]._id) {
+            if(userFavorites && userFavorites.includes(tableMatrix[xPos][yPos]._id)) {
+                setFavorite(true)
+            }
+        }
+
+                    // set favorite
+                    // if (tableMatrix[xPos][yPos].favorite) {
+                    //     setFavorite(true)
+                    // }
+                    // return
+        //         }
+        //     })
+        // })
 
         console.log("DATA IS: ", data)
 
     }, [mapContext,yearData, tableMatrix])
+
+    const setFavoriteClick = () => {
+        
+        var res;
+
+        // add data.uuid to favoriteTavles localStorage
+        let favoriteTable = JSON.parse(localStorage.getItem("favoriteTables"))
+        if (favoriteTable && data._id) {
+            if (favoriteTable.includes(data._id)) {
+                favoriteTable = favoriteTable.filter(id => id !== data._id)
+                // setFavorite(false)
+                res = false
+            } else {
+                favoriteTable.push(data._id)
+                // setFavorite(true)
+                res = true
+            }
+        } else {
+            favoriteTable = [[data._id]]
+            res = true
+            // setFavorite(true)
+            localStorage.setItem("favoriteTables", JSON.stringify(favoriteTable))
+        }
+        
+        // remove .favorite from tableMatrix
+        setFavorite(res)
+
+        localStorage.setItem("favoriteTables", JSON.stringify(favoriteTable))
+
+    }
 
     return  (
         data && data.company && data.company.name != "" ? 
@@ -78,8 +142,8 @@ export default function Table({xPos, yPos}) {
                                 </>
                             : // admin view
                                 <>
-                                    <div className="col-md-6">
-                                        <FontAwesomeIcon icon={faStar} />
+                                    <div className="col-md-6" onClick={setFavoriteClick}>
+                                        <FontAwesomeIcon icon={faStar} className={ isFavorite ? 'fav' : ''} />
                                     </div>
                                     <div className="col-md-6">
                                         <FontAwesomeIcon icon={faRoute} />

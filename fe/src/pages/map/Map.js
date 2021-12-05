@@ -15,6 +15,9 @@ import { isAdmin } from '../../contexts/userContext'
 import { CreateTableModalContext } from '../../contexts/createTableModalContext'
 import { generateBlankTableTemplate } from '../../util/Shared'
 import { TableMatrixContext } from '../../contexts/tableMatrixContext'
+import { PanZoom } from 'react-easy-panzoom'
+
+
 export default function Map() {
 
     const { routesContext, setRoutesContext } = useContext(RoutesContext)
@@ -50,6 +53,9 @@ export default function Map() {
     useEffect(() => {
         if(!mapContext || !mapContext.tables || !mapContext.tables.length > 0) {return}
 
+        // get favorite table from localStorate
+        let userFavorites = JSON.parse(localStorage.getItem("favoriteTables"))
+
         setTableMatrix([...Array(15)].map(e => Array(15)))
         for (let i = 0; i < mapContext.tables.length; i++) {
 
@@ -59,6 +65,13 @@ export default function Map() {
             const yPos = mapContext.tables[i].y_coord
             console.log("Cols inserting ", location)
             
+            // set fav
+            if (userFavorites && userFavorites.length > 0) {
+                if (userFavorites.includes(mapContext.tables[i]._id)) {
+                    mapContext.tables[i].favorite = true
+                }
+            }
+
             // insert table
             setTableMatrix(prevState => { 
                 const newTableMatrix = [...prevState]
@@ -73,39 +86,15 @@ export default function Map() {
         console.log("Cols table matrix: ", tableMatrix)
     }, [mapContext, yearData])
 
-    // const generateTableData = (x, y) => {
-    //     var res;
-    //     if (tableMatrix[x][y]) {
-    //         res = (
-    //             <td>
-    //                 {tableMatrix[x][y]}
-    //             </td>
-    //         )
-    //     } else {
-    //         res = (
-    //             <td > 
-    //                 <div className="table-container">
-    //                     {
-    //                         isAdmin() &&
-    //                         <>
-    //                             <div className = "blank-td" onClick={() => setCreateTableModal(generateBlankTableTemplate(x, y))}>
-    //                                 <FontAwesomeIcon icon = {faPlus} />
-    //                             </div>
-    //                         </>
-    //                     }
-                        
-    //                 </div>
-    //             </td>
-    //         )
-    //     }
 
-    //     return res
-    // }
-
-
-    return (
-        <div className="map-container">
-            <table>
+    return (  
+       <div className="map-container">
+           <PanZoom
+            boundaryRatioVertical={0.01} 
+            boundaryRatioHorizontal={0.8} 
+            enableBoundingBox>
+            {
+          <table>
                 <tbody>
                 {
                     [...Array(rows)].map((e, row) => (
@@ -122,10 +111,18 @@ export default function Map() {
                 }
                 </tbody>
             </table>
-            {
+            }
+            </PanZoom>
+            {   
                 
                 <RoutesView/>
             }
+            
         </div>
+
     )
+
+    
+
+
 }
