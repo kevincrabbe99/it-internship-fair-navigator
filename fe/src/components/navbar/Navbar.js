@@ -14,7 +14,7 @@ import { SidebarContext } from '../../contexts/sidebarContext.js';
 import { createTableEndpoint } from '../../util/Endpoints.js';
 import { MdAirlineSeatLegroomExtra } from 'react-icons/md';
 import { arrow } from '@popperjs/core';
-import { RoutesContext } from '../../contexts/routesContext';
+import { RoutesShowingContext } from '../../contexts/routesShowingContext';
 import { MapContext } from '../../contexts/mapContext';
 import { AddYearModalContext } from '../../contexts/addYearModalContext';
 import { CreateTableModalContext } from '../../contexts/createTableModalContext';
@@ -27,7 +27,7 @@ function Navbar() {
 
   const { sidebarState, setSidebarState } = useContext(SidebarContext)
   const { yearData, setYearData } = useContext(YearContext)
-  const { routesContext, setRoutesContext } = useContext(RoutesContext)
+  const { routesShowingContext, setRoutesShowingContext } = useContext(RoutesShowingContext)
   const { mapContext, setMapContext } = useContext(MapContext)
 
   // const [sidebar, setSidebar] = useState(false);
@@ -176,7 +176,7 @@ function Navbar() {
 
   const generateRoutesButton = () => {
     var label = "SHOW YOUR ROUTES"
-    if (routesContext.showing) {
+    if (routesShowingContext.showing) {
       label = "HIDE ROUTES"
     } 
 
@@ -212,7 +212,7 @@ function Navbar() {
   };
 
   const clickToggleRoute = () => {
-    setRoutesContext({...routesContext, showing: !routesContext.showing}) 
+    setRoutesShowingContext({...routesShowingContext, showing: !routesShowingContext.showing}) 
   }
 
   const setYearTo = (val) => {

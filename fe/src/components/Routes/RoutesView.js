@@ -4,11 +4,11 @@ import RouteItem from './RouteItem/RouteItem'
 import './routesView.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPrint, faEnvelope } from '@fortawesome/free-solid-svg-icons'
-import { RoutesContext } from '../../contexts/routesContext'
+import { RoutesShowingContext } from '../../contexts/routesShowingContext'
 
 export default function RoutesView() {
 
-    const {routesContext} = useContext(RoutesContext)
+    const {routesShowingContext} = useContext(RoutesShowingContext)
 
 
     const data = [
@@ -32,9 +32,11 @@ export default function RoutesView() {
         }
     ]
 
+    
+
     return (
-        <div  className={   routesContext &&
-                            routesContext.showing ? '':'hide'} >
+        <div  className={   routesShowingContext &&
+                            routesShowingContext.showing ? '':'hide'} >
             <div id="routes_container">
 
                 {/* Header */}
@@ -56,9 +58,9 @@ export default function RoutesView() {
                 <div id="routes_list">
                     <ul>
                       {
-                            [...Array(3)].map((i, index) => (
+                            [...Array(15)].map((i, index) => (
                                 <li>
-                                    <RouteItem index={index} data={data} />
+                                    <RouteItem index={index} />
                                 </li>
                             ))
                       }

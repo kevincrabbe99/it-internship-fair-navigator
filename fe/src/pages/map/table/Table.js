@@ -11,6 +11,7 @@ import { MapContext } from '../../../contexts/mapContext'
 import { YearContext } from '../../../contexts/yearContext'
 import { TableMatrixContext } from '../../../contexts/tableMatrixContext'
 import { removeTableEndpoint } from '../../../util/Endpoints'
+import { RoutesDataContext } from '../../../contexts/routesDataContext'
 
 export default function Table({xPos, yPos}) {
 
@@ -22,6 +23,7 @@ export default function Table({xPos, yPos}) {
     const [data, setTable] = useState(generateBlankTableTemplate(xPos, yPos))
     const [isFavorite, setFavorite] = useState(false)
     const {tableMatrix, setTableMatrix} = useContext(TableMatrixContext)
+    const { routesData, setRoutesData } = useContext(RoutesDataContext)
 
     // useEffect(() => {
     //     if (!data._id) { return }
@@ -103,6 +105,76 @@ export default function Table({xPos, yPos}) {
 
     }
 
+    const addToRouteClick = () => {
+        if (!data || !data._id) { return }
+
+        let routes = JSON.parse(localStorage.getItem("route"))
+       
+        if (!routes) {
+            routes = []
+        }
+
+        var exists = false
+        routes.forEach(route => {
+            if (route.year == yearData.selected) {
+                exists = true
+                return 
+            }
+        })
+
+        if (!exists) {
+           
+            routes = [...routes, {year: yearData.selected, tables: [{id: data._id, data: data}]}]
+            console.log("ADDED ROUTE ROUTES: ", routes)
+
+        } else {
+
+             // check if data._id exists in routes
+             var existsDeep = false
+             var yearPos
+             routes.forEach((route, yearI) => {
+                if (route.year == yearData.selected) {
+                    route.tables.forEach(table => {
+                        if(table.id === data._id) {
+                            existsDeep = true
+                            yearPos = yearI
+                            return
+                        }
+                    })
+                }
+            })
+
+
+            if (!existsDeep) { // add 
+                routes.forEach(route => {
+                    if (route.year == yearData.selected) {
+                        route.tables.push({id: data._id, data: data})
+                    }
+                })
+            } else {
+                // remove data._id from routes.selectedYear.tables
+
+                // filter routes where routes.selectedYear.tables.id === data._id
+                routes = routes.filter(route => {
+                    if (route.year == yearData.selected) {
+                        route.tables = route.tables.filter(table => table.id !== data._id)
+                    }
+                    return route
+                })
+
+                // routes = routes[yearPos].tables.filter(table => table != data._id)
+                console.log("REMOVED ROUTE ROUTES: ", routes)
+            }
+
+
+            
+        }
+
+        localStorage.setItem("route", JSON.stringify(routes))
+
+        setRoutesData(routes)
+    }
+
     return  (
         data && data.company && data.company.name != "" ? 
             <div className="table-container border">
@@ -145,7 +217,7 @@ export default function Table({xPos, yPos}) {
                                     <div className="col-md-6" onClick={setFavoriteClick}>
                                         <FontAwesomeIcon icon={faStar} className={ isFavorite ? 'fav' : ''} />
                                     </div>
-                                    <div className="col-md-6">
+                                    <div className="col-md-6" onClick = {addToRouteClick}>
                                         <FontAwesomeIcon icon={faRoute} />
                                     </div>
                                 </>

@@ -6,7 +6,7 @@ import { getTablesEndpoint } from '../../util/Endpoints'
 import Table from './table/Table'
 
 import { test } from '../../util/Endpoints'
-import { RoutesContext } from '../../contexts/routesContext'
+import { RoutesShowingContext } from '../../contexts/routesShowingContext'
 import { MapContext } from '../../contexts/mapContext'
 import { YearContext } from '../../contexts/yearContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -20,7 +20,7 @@ import { PanZoom } from 'react-easy-panzoom'
 
 export default function Map() {
 
-    const { routesContext, setRoutesContext } = useContext(RoutesContext)
+    const { routesShowingContext, setRoutesShowingContext } = useContext(RoutesShowingContext)
     const { mapContext , setMapContext} = useContext(MapContext)
     const { createTableModal, setCreateTableModal } = useContext(CreateTableModalContext)
     const { yearData, setYearData } = useContext(YearContext)
@@ -113,10 +113,6 @@ export default function Map() {
             </table>
             }
             </PanZoom>
-            {   
-                
-                <RoutesView/>
-            }
             
         </div>
 
