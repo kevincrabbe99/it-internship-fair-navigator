@@ -1,6 +1,7 @@
 import React, {useContext, useState, useEffect} from 'react'
 import './sidebar.scss'
 import { SidebarData } from '../../util/SidebarData';
+import Searchbar from '../searchBar/Seachbar';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconContext } from 'react-icons/lib';
@@ -40,8 +41,8 @@ export default function Sidebar() {
             <IconContext.Provider value={{ color: '#fff' }}>
 
                 <nav className={sidebarState ? 'nav-menu active' : 'nav-menu'}>
-                    <ul className='nav-menu-items' onClick={showSidebar}>
-                        <li className='navbar-toggle'>
+                    <ul className='nav-menu-items' >
+                        <li className='navbar-toggle' onClick={showSidebar}>
                         <Link to='#' className='menu-bars'>
                             <FontAwesomeIcon icon={faWindowClose} />
                         </Link>
@@ -74,6 +75,7 @@ export default function Sidebar() {
                             </li>
                         );
                         })}
+                    <Searchbar/>
                     </ul>
                 </nav>
             </IconContext.Provider>
