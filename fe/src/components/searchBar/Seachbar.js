@@ -36,13 +36,13 @@ export default function Searchbar() {
     viewCompanyList = mapContext.tables.filter((val)=> {
       if (searchTerm == "") {
         return val
-      } else if (val.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+      } else if (val.company.name.toLowerCase().includes(searchTerm.toLowerCase())) {
         return val
       }
     }).map((val,key)=> {
       return (
-      <div className="user" key={key} onClick={window.open}> 
-        <p>{val.name}</p>
+      <div className="user" key={key} > 
+        <p>{val.company.name}</p>
       </div>
       );
     })
