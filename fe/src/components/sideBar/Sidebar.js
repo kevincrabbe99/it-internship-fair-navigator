@@ -11,6 +11,7 @@ import { UserContext } from '../../contexts/userContext';
 import { SidebarContext } from '../../contexts/sidebarContext';
 
 import { isAdmin } from '../../contexts/userContext';
+import Searchbar from '../searchBar/Seachbar';
 
 export default function Sidebar() {
 
@@ -40,9 +41,9 @@ export default function Sidebar() {
             <IconContext.Provider value={{ color: '#fff' }}>
 
                 <nav className={sidebarState ? 'nav-menu active' : 'nav-menu'}>
-                    <ul className='nav-menu-items' onClick={showSidebar}>
+                    <ul className='nav-menu-items' >
                         <li className='navbar-toggle'>
-                        <Link to='#' className='menu-bars'>
+                        <Link to='#' className='menu-bars' onClick={showSidebar}>
                             <FontAwesomeIcon icon={faWindowClose} />
                         </Link>
                         </li>
@@ -74,6 +75,7 @@ export default function Sidebar() {
                             </li>
                         );
                         })}
+                        <Searchbar/>
                     </ul>
                 </nav>
             </IconContext.Provider>

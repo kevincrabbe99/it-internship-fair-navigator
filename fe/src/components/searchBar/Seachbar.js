@@ -16,18 +16,24 @@ export default function Searchbar() {
   const [hasFocus, setFocus] = useState(false);
   var viewCompanyList;
 
-  async function getTablesAsyncWrapper() {
-      const res = await getTablesEndpoint(yearData.selected)
-      // if (res.status === 200) {
-      console.log("TABLES: ", yearData)
-      setMapContext(res)
-       }
+  useEffect(() => {
+
+    async function getTablesAsyncWrapper() {
+        const res = await getTablesEndpoint(yearData.selected)
+        // if (res.status === 200) {
+        console.log("TABLES: ", yearData)
+        setMapContext(res)
+        // }
         
-
-
+    }
+    console.log("MAP CONTEXT: ", yearData)
+        if (yearData && yearData.selected) {
+            getTablesAsyncWrapper();
+        }
+    }, [yearData])
+        
   if (hasFocus) {
-    getTablesAsyncWrapper();
-    viewCompanyList = mock.filter((val)=> {
+    viewCompanyList = mapContext.tables.filter((val)=> {
       if (searchTerm == "") {
         return val
       } else if (val.name.toLowerCase().includes(searchTerm.toLowerCase())) {
