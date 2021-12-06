@@ -17,7 +17,6 @@ export default function Sidebar() {
 
     const { user, setUser } = useContext(UserContext)
     const { sidebarState, setSidebarState } = useContext(SidebarContext)
-    // const [sidebar, setSidebar] = useState(false);
 
     const showSidebar = () => setSidebarState(!sidebarState);
 
@@ -29,11 +28,6 @@ export default function Sidebar() {
 
         localStorage.removeItem("adminToken")
         setUser(null)
-    
-        // TODO: delete from database
-        // logoutUser(user.uuid).then(() => {
-    
-        // })
       }
 
     return (

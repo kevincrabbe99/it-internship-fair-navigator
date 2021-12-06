@@ -20,10 +20,8 @@ export default function Searchbar() {
 
     async function getTablesAsyncWrapper() {
         const res = await getTablesEndpoint(yearData.selected)
-        // if (res.status === 200) {
         console.log("TABLES: ", yearData)
         setMapContext(res)
-        // }
         
     }
     console.log("MAP CONTEXT: ", yearData)
@@ -58,7 +56,6 @@ export default function Searchbar() {
       {setSearchTerm(event.target.value)
       }}
     onFocus={() => setFocus(true)}
-    // onBlur={() => setFocus(false)}
     />
     <FontAwesomeIcon icon = {faWindowClose} onClick={() => setFocus(false)}/>
     
