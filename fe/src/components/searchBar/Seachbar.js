@@ -41,7 +41,7 @@ export default function Searchbar() {
       }
     }).map((val,key)=> {
       return (
-      <div className="user" key={key} > 
+      <div className="user" key={key} onClick={() => window.open(val.company.website)}>
         <p>{val.company.name}</p>
       </div>
       );
