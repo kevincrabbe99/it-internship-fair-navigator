@@ -355,8 +355,10 @@ class TableHandler(DatabaseObject):
         Returns:
         dictionary: The queried document
         """
-        search = {'_id': ObjectId(id)}
-
+        try:
+            search = {'_id': ObjectId(id)}
+        except:
+            return None
         try:
             result = super()._read_one(self.collection, search)
             return result
