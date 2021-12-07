@@ -33,14 +33,14 @@ export default function Searchbar() {
  
 
   return (
-  <div className="App">
+  <div className="search_container">
     <input 
     type="text" 
     placeholder="Search for Company"  
     onChange={e => setSearchTerm(e.target.value)}
     onFocus={() => setFocus(true)}
     />
-    <FontAwesomeIcon icon = {faWindowClose} onClick={() => setFocus(false)}/>
+    <FontAwesomeIcon className="exitSearch" icon = {faWindowClose} onClick={() => setFocus(false)}/>
     
     {
       hasFocus &&
@@ -51,7 +51,7 @@ export default function Searchbar() {
             return val
           }
         }).map((val,key)=> (
-            <div className="user" key={key} onClick={() => window.open(val.company.website)}>
+            <div className="search_result" key={key} onClick={() => window.open(val.company.website)}>
               <p>{val && val.company && val.company.name &&
                   val.company.name}</p>
             </div>

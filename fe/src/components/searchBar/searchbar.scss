@@ -1,3 +1,5 @@
+@import "../../util/colors.scss";
+
 .Searchbar input {
   margin-top: 20px;
   width: 300px;
@@ -7,4 +9,57 @@
 
 p {
   color: white;
+}
+
+.search_container {
+  padding-top: 1em;
+}
+
+.search_container input {
+  width: 80%;
+  margin: 0px auto;
+  height: 40px;
+  font-size: 1em;
+  // input stype override
+  border: none;
+  border-bottom: 1px solid white;
+  outline: none;
+  background: none;
+  color: white;
+  // hint color
+  &::-webkit-input-placeholder {
+    color: white;
+  }
+}
+
+.search_container svg {
+  color: var(--border-color);
+  cursor: pointer;
+}
+
+.search_container svg:hover {
+  color: white;
+}
+
+.search_result {
+  text-align: left;
+  width: 100%;
+  // background: var(--background-color);
+  color: white;
+  font-size: 1em;
+  border-radius: 3px;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.search_result p {
+  padding-left: 2em;
+  padding-top: 0.5em;
+  margin: 0;
+}
+
+.search_result:hover p {
+  color: white;
+  text-decoration: underline;
 }

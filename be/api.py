@@ -483,11 +483,15 @@ def submit_feedback():
     else:
         req_json = request.json
         if 'message' not in req_json:
-            return bad_request
+            return "Invalid Message."
         if 'message' is None:
-            return bad_request
+            return "Invalid Message."
         feedback = req_json['message']
+        if feedback == "":
+            return "Please enter a message."
         email = req_json['email']
+        if not (check_email(email)):
+            return "Invalid Email."
         fh = FeedbackHandler(m)
         response = fh.submit_feedback(email, feedback)
         fh.closeConnection()

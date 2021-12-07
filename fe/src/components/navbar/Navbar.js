@@ -415,7 +415,7 @@ function Navbar() {
                   </Modal.Header>
 
                   <Modal.Body>
-                    <div>
+                    <div className="color-black">
                           <div>
                               <label>
                                   Company Name:

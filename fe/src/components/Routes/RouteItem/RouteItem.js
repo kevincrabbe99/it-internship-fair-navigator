@@ -33,9 +33,6 @@ export default function RouteItem({index}) {
 
         })
 
-        console.log("ROUTE DATA: ", routesData)
-        console.log("ITEM STATE ROUTE: ", itemState)
-        console.log("ROUTES YEAR CONTEXT: ", yearData)
 
     }, [routesData,yearData])
 
