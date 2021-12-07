@@ -91,8 +91,10 @@ export default function Map() {
        <div className="map-container">
            <PanZoom
             boundaryRatioVertical={0.01} 
-            boundaryRatioHorizontal={0.8} 
-            enableBoundingBox>
+            boundaryRatioHorizontal={0.9} 
+            enableBoundingBox 
+            maxZoom={1.25}
+            minZoom={.5}>
             {
           <table>
                 <tbody>
