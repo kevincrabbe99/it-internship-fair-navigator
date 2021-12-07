@@ -23,12 +23,9 @@ export default function RouteItem({index}) {
         routesData.forEach(year => {
 
             if (year.year == yearData.selected) {
-                console.log("route found year")
                 year.tables.forEach((table, i) => {
-                    console.log("route adding table: ", i)
                     if (i == index) {
                         setItemState(table.data)
-                        console.log("ROUTE DATA SET: ", table.data)
                         return
                     }
                 })

@@ -39,7 +39,6 @@ export default function Map() {
     async function getTablesAsyncWrapper() {
         const res = await getTablesEndpoint(yearData.selected)
         // if (res.status === 200) {
-        console.log("TABLES: ", yearData)
         setMapContext(res)
         // }
         
@@ -63,7 +62,6 @@ export default function Map() {
             const location = [mapContext.tables[i].x_coord, mapContext.tables[i].y_coord]
             const xPos = mapContext.tables[i].x_coord
             const yPos = mapContext.tables[i].y_coord
-            console.log("Cols inserting ", location)
             
             // set fav
             if (userFavorites && userFavorites.length > 0) {

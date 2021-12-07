@@ -28,6 +28,7 @@ export default function Table({xPos, yPos}) {
     const { routesShowingContext, setRoutesShowingContext } = useContext(RoutesShowingContext)
     const [isRoute, setIsRoute] = useState(false)
 
+    const [deleteTableClick, setDeleteTableClick] = useState(false)
 
     useEffect(() => {
         
@@ -64,10 +65,6 @@ export default function Table({xPos, yPos}) {
                 setFavorite(true)
             }
         }
-
-
-
-        console.log("DATA IS: ", data)
 
     }, [mapContext,yearData, tableMatrix])
 
@@ -173,6 +170,18 @@ export default function Table({xPos, yPos}) {
         
     }
 
+    useEffect(() => {
+        async function removeTableAsyncWrapper() {
+            let response = await removeTableEndpoint(user.uuid, data._id, yearData.selected)
+            setMapContext(response)
+        }
+
+        if (deleteTableClick) {
+            setDeleteTableClick(false)
+            removeTableAsyncWrapper()
+        }
+    }, [deleteTableClick])
+
     return  (
         data && data.company && data.company.name != "" ? 
             <div className="table-container border">
@@ -206,7 +215,7 @@ export default function Table({xPos, yPos}) {
                                     <div className="col-md-6" onClick={() => setCreateTableModal(data)}>
                                         <FontAwesomeIcon icon={faEdit} />
                                     </div>
-                                    <div className="col-md-6" onClick={() => removeTableEndpoint(user.uuid, data._id, yearData.selected)}>
+                                    <div className="col-md-6" onClick={() => setDeleteTableClick(true)}>
                                     <FontAwesomeIcon icon={faTrash} />
                                     </div>
                                 </>

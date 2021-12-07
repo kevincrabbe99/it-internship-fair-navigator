@@ -30,27 +30,7 @@ export default function Searchbar() {
         }
     }, [yearData])
   
-  //useEffect(() => {
-    if (hasFocus) {
-      viewCompanyList = mapContext.tables.filter((val)=> {
-        if (searchTerm == "") {
-          return val
-        } else if (val.company.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-          return val
-        }
-      }).map((val,key)=> {
-        return (
-        <div className="user" key={key} onClick={() => window.open(val.company.website)}>
-          <p>{val.company.name}</p>
-        </div>
-        );
-      })
-    }
-    else {
-      viewCompanyList = null
-    }
-  //}, [hasFocus, searchTerm, mapContext])
-
+ 
 
   return (
   <div className="App">
@@ -62,7 +42,22 @@ export default function Searchbar() {
     />
     <FontAwesomeIcon icon = {faWindowClose} onClick={() => setFocus(false)}/>
     
-    {viewCompanyList}
+    {
+      hasFocus &&
+        mapContext.tables.filter((val)=> {
+          if (searchTerm == "") {
+            return val
+          } else if (val && val.company && val.company.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            return val
+          }
+        }).map((val,key)=> (
+            <div className="user" key={key} onClick={() => window.open(val.company.website)}>
+              <p>{val && val.company && val.company.name &&
+                  val.company.name}</p>
+            </div>
+        ))
+      }
+    }
   </div>
   );
 }
