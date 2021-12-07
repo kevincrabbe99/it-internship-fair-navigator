@@ -1,7 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react'
 import './sidebar.scss'
 import { SidebarData } from '../../util/SidebarData';
-import Searchbar from '../searchBar/Seachbar';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconContext } from 'react-icons/lib';
@@ -12,12 +11,12 @@ import { UserContext } from '../../contexts/userContext';
 import { SidebarContext } from '../../contexts/sidebarContext';
 
 import { isAdmin } from '../../contexts/userContext';
+import Searchbar from '../searchBar/Seachbar';
 
 export default function Sidebar() {
 
     const { user, setUser } = useContext(UserContext)
     const { sidebarState, setSidebarState } = useContext(SidebarContext)
-    // const [sidebar, setSidebar] = useState(false);
 
     const showSidebar = () => setSidebarState(!sidebarState);
 
@@ -29,11 +28,6 @@ export default function Sidebar() {
 
         localStorage.removeItem("adminToken")
         setUser(null)
-    
-        // TODO: delete from database
-        // logoutUser(user.uuid).then(() => {
-    
-        // })
       }
 
     return (
@@ -42,8 +36,8 @@ export default function Sidebar() {
 
                 <nav className={sidebarState ? 'nav-menu active' : 'nav-menu'}>
                     <ul className='nav-menu-items' >
-                        <li className='navbar-toggle' onClick={showSidebar}>
-                        <Link to='#' className='menu-bars'>
+                        <li className='navbar-toggle'>
+                        <Link to='#' className='menu-bars' onClick={showSidebar}>
                             <FontAwesomeIcon icon={faWindowClose} />
                         </Link>
                         </li>
@@ -76,7 +70,7 @@ export default function Sidebar() {
                             </li>
                         );
                         })}
-                    <Searchbar/>
+                        <Searchbar/>
                     </ul>
                 </nav>
             </IconContext.Provider>
