@@ -44,7 +44,9 @@ export default function Sidebar() {
                                     </Link>
                                 </div>
                                 <div className="col-auto">
-                                    YOUR ENV IS: {process.env.NODE_ENV ? process.env.NODE_ENV : 'null'}
+                                    { (process.env.NODE_ENV !== 'production') && <><b>
+                                        YOUR ENV IS: STAGING
+                                    </b></>}
                                 </div>
                             </div>
                         </li>
