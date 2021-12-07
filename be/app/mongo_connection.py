@@ -15,7 +15,7 @@ class MongoConnection(object):
             load_dotenv()
             cls.user = os.getenv('DBUSER')
             cls.pwd = os.getenv('DBPWD')
-            cls.dbname = os.getenv('DBNAMEDEV')
+            cls.dbname = os.getenv('DBNAMEPROD')
             cls.dbstring = f"mongodb+srv://{cls.user}:{cls.pwd}@navigatordb.vkpij.mongodb.net/{cls.dbname}?retryWrites=true&w=majority"
             cls.client = pymongo.MongoClient(cls.dbstring, tlsAllowInvalidCertificates=True)
             cls.db = cls.client[cls.dbname]
