@@ -419,42 +419,42 @@ function Navbar() {
                           <div>
                               <label>
                                   Company Name:
-                                  <p class = "data-preview">{cName}</p>
+                                  <p className = "data-preview">{cName}</p>
                               </label>
                           </div>
                           <br />
                           <div>
                               <label>
                                   Number of Representatives:
-                                  <p class = "data-preview">{numReps}</p>
+                                  <p className = "data-preview">{numReps}</p>
                               </label>
                           </div>
                           <br />
                           <div>
                               <label>
                                   Company Website:
-                                  <p class = "data-preview">{website}</p>
+                                  <p className = "data-preview">{website}</p>
                               </label>
                           </div>
                           <br />
                           <div>
                               <label>
                                   Notes:
-                                  <p class = "data-preview">{notes}</p>
+                                  <p className = "data-preview">{notes}</p>
                               </label>
                           </div>
                           <br />
                           <div>
                               <label>
                                   x-Coordinate:
-                                  <p class = "data-preview">{x}</p>
+                                  <p className = "data-preview">{x}</p>
                               </label>
                           </div>
                           <br />
                           <div>
                               <label>
                                   y-Coordinate:
-                                  <p class = "data-preview">{y}</p>
+                                  <p className = "data-preview">{y}</p>
                               </label>
                           </div>
                           <br />
