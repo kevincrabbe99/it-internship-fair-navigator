@@ -47,7 +47,7 @@ function Navbar() {
 
 
   const [submitCreateMap, setSubmitCreateMap] = useState(false);
-  const [id, setId] = useState(null);
+  const [tableId, setTableId] = useState('no_id');
  
   const [x, setX] = useState(null);
   const [y, setY] = useState(null);
@@ -71,6 +71,7 @@ function Navbar() {
       setWebsite(createTableModal.company.website);
       setNotes(createTableModal.company.other_info);
       setLogo(createTableModal.imageUrl);
+      setTableId(createTableModal._id);
       console.log("cre settings")
     } else {
       setX(null)
@@ -80,6 +81,7 @@ function Navbar() {
         setWebsite(null)
         setNotes(null)
         setLogo(null)
+        setTableId(null)
     }
     console.log("setCreateTableModal", createTableModal)
 
@@ -239,7 +241,7 @@ function Navbar() {
       //   response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, '2021');
       // }
 
-      const response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, yearData.selected, logoFile); 
+      const response = await createTableEndpoint(user.uuid, x, y, cName, numReps, website, notes, yearData.selected, logoFile, tableId) 
       console.log("CREATE TABLE RESPONSE: ", response);
       setMapContext(response)
       setCreateTableModal(false)

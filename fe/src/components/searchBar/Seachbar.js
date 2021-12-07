@@ -29,32 +29,35 @@ export default function Searchbar() {
             getTablesAsyncWrapper();
         }
     }, [yearData])
-        
-  if (hasFocus) {
-    viewCompanyList = mapContext.tables.filter((val)=> {
-      if (searchTerm == "") {
-        return val
-      } else if (val.company.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-        return val
-      }
-    }).map((val,key)=> {
-      return (
-      <div className="user" key={key} onClick={() => window.open(val.company.website)}>
-        <p>{val.company.name}</p>
-      </div>
-      );
-    })
-  }
-  else {viewCompanyList = null}
+  
+  //useEffect(() => {
+    if (hasFocus) {
+      viewCompanyList = mapContext.tables.filter((val)=> {
+        if (searchTerm == "") {
+          return val
+        } else if (val.company.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+          return val
+        }
+      }).map((val,key)=> {
+        return (
+        <div className="user" key={key} onClick={() => window.open(val.company.website)}>
+          <p>{val.company.name}</p>
+        </div>
+        );
+      })
+    }
+    else {
+      viewCompanyList = null
+    }
+  //}, [hasFocus, searchTerm, mapContext])
+
 
   return (
   <div className="App">
     <input 
     type="text" 
     placeholder="Search for Company"  
-    onChange={event => 
-      {setSearchTerm(event.target.value)
-      }}
+    onChange={e => setSearchTerm(e.target.value)}
     onFocus={() => setFocus(true)}
     />
     <FontAwesomeIcon icon = {faWindowClose} onClick={() => setFocus(false)}/>
