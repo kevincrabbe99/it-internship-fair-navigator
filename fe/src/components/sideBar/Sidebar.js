@@ -1,7 +1,6 @@
 import React, {useContext, useState, useEffect} from 'react'
 import './sidebar.scss'
 import { SidebarData } from '../../util/SidebarData';
-import Searchbar from '../searchBar/Seachbar';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconContext } from 'react-icons/lib';
