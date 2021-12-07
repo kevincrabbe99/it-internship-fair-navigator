@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-easy-panzoom": "^0.4.4",
+    "react-to-print": "^2.14.1"
+  }
+}
