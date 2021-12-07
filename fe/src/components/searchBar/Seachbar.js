@@ -57,7 +57,7 @@ export default function Searchbar() {
             </div>
         ))
       }
-    }
+    
   </div>
   );
 }
