@@ -37,9 +37,16 @@ export default function Sidebar() {
                 <nav className={sidebarState ? 'nav-menu active' : 'nav-menu'}>
                     <ul className='nav-menu-items' >
                         <li className='navbar-toggle'>
-                        <Link to='#' className='menu-bars' onClick={showSidebar}>
-                            <FontAwesomeIcon icon={faWindowClose} />
-                        </Link>
+                            <div className="row">
+                                <div className="col-auto">
+                                    <Link to='#' className='menu-bars' onClick={showSidebar}>
+                                        <FontAwesomeIcon icon={faWindowClose} />
+                                    </Link>
+                                </div>
+                                <div className="col-auto">
+                                    YOUR ENV IS: {process.env.NODE_ENV ? process.env.NODE_ENV : 'null'}
+                                </div>
+                            </div>
                         </li>
                         {SidebarData.map((item, index) => {
 
