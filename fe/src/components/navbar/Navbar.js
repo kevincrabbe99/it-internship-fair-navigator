@@ -419,42 +419,42 @@ function Navbar() {
                           <div>
                               <label>
                                   Company Name:
-                                  <p>{cName}</p>
+                                  <p className = "data-preview">{cName}</p>
                               </label>
                           </div>
                           <br />
                           <div>
                               <label>
                                   Number of Representatives:
-                                  <p>{numReps}</p>
+                                  <p className = "data-preview">{numReps}</p>
                               </label>
                           </div>
                           <br />
                           <div>
                               <label>
                                   Company Website:
-                                  <p>{website}</p>
+                                  <p className = "data-preview">{website}</p>
                               </label>
                           </div>
                           <br />
                           <div>
                               <label>
                                   Notes:
-                                  <p>{notes}</p>
+                                  <p className = "data-preview">{notes}</p>
                               </label>
                           </div>
                           <br />
                           <div>
                               <label>
                                   x-Coordinate:
-                                  <p>{x}</p>
+                                  <p className = "data-preview">{x}</p>
                               </label>
                           </div>
                           <br />
                           <div>
                               <label>
                                   y-Coordinate:
-                                  <p>{y}</p>
+                                  <p className = "data-preview">{y}</p>
                               </label>
                           </div>
                           <br />
