@@ -106,10 +106,11 @@ export async function unsubscribeEmail(email) {
 
 }
 
-export async function createTableEndpoint(sessionUUID, x, y, cName, numReps, website, notes, year, logoUrl){
+export async function createTableEndpoint(sessionUUID, x, y, cName, numReps, website, notes, year, logoUrl, tableId){
     headers['Authorization'] = sessionUUID;
     console.log('endpoint');
-    const response = await axios.put(`${process.env.REACT_APP_ITIFN_API}/table`, {
+    const response = await axios.post(`${process.env.REACT_APP_ITIFN_API}/table`, {
+        '_id': tableId,
         'x_coord': x,
         'y_coord': y,
         company:
@@ -151,7 +152,7 @@ export async function removeTableEndpoint(sessionUUID, _id, year){
     })
 
     console.log("DELETE TABLE RESPONSE: ", response)
-    return response.data;
+    return response.data
 }
 
 // export async function updateTableEndpoint(sessionUUID, id, x, y, cName, numReps, website, notes, year){
