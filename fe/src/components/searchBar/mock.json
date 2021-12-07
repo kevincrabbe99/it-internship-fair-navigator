@@ -1,13 +1,13 @@
 [{
   "id": 1,
-  "Company_Name": "Rivian"
+  "name": "Rivian"
 }, {
   "id": 2,
-  "Company_Name": "State Farm"
+  "name": "State Farm"
 }, {
   "id": 3,
-  "Company_Name": "Country Financial"
+  "name": "Country Financial"
 }, {
   "id": 4,
-  "Company_Name": "Illinois State University"
+  "name": "Illinois State University"
 }]
