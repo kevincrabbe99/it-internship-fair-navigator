@@ -1,5 +1,7 @@
+@import "./../../util/colors.scss";
+
 .navbar {
-  background-color: #91170f;
+  background-color: var(--navbar);
   display: flex;
   justify-content: start;
   align-items: center;
@@ -66,6 +68,30 @@
   font-weight: bold;
   font-size: 0.9em;
   border-radius: 2px;
+}
+
+.nav-right .year-label {
+  display: flex;
+  align-items: center;
+  position: relative;
+  left: 1em;
+  font-weight: bold;
+  color: white;
+}
+
+.nav-right select {
+  background-color: #f5f5f5;
+  color: #91170f;
+  border: 1px solid #f5f5f5;
+  height: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 16px;
+  font-weight: bold;
+  font-size: 0.9em;
+  border-radius: 2px;
+  margin-right: 1em;
 }
 
 .nav-right .button:hover {

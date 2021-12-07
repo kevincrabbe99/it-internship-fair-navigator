@@ -1,5 +1,5 @@
 .nav-menu {
-  background-color: #91170f;
+  background-color: var(--sidebar);
   width: 300px;
   height: 100vh;
   display: flex;
@@ -9,6 +9,8 @@
   left: -100%;
   transition: 850ms;
   z-index: 90;
+  // shadow
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5);
 }
 
 .nav-menu.active {
@@ -40,6 +42,7 @@
   height: 100%;
   display: flex;
   align-items: center;
+  font-weight: bold;
 }
 
 .nav-text svg {
@@ -65,7 +68,7 @@
 }
 
 .navbar-toggle {
-  background-color: #91170f;
+  background-color: var(--sidebar);
   width: 100%;
   height: 80px;
   display: flex;

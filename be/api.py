@@ -21,8 +21,7 @@ refuse_credentials = Response(response="401 Refused Credentials",
 # ENDPOINTS FOR YEAR/MAP
 
 @navigator_api.route('/map', methods=['PUT'])
-# @cross_origin()
-@cross_origin(origin='*', headers=['Content-Type'])
+@cross_origin()
 def get_year():
     if request.method != 'PUT':
         return bad_request
@@ -488,8 +487,9 @@ def submit_feedback():
         if 'message' is None:
             return bad_request
         feedback = req_json['message']
+        email = req_json['email']
         fh = FeedbackHandler(m)
-        response = fh.submit_feedback(feedback)
+        response = fh.submit_feedback(email, feedback)
         fh.closeConnection()
         response = json.dumps(response, default=str)
         if response is None:
