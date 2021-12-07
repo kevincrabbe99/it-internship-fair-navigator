@@ -138,18 +138,18 @@ def test_remove_table_no_credentials():
 
 
 # Requirement 24
-# Archive Maps
+# Submit feedback
 def test_submit_feedback_invalid_email():
-    feedback_json = {'dqk39d'}
-    res = requests.put('https://api.itfnavigator.com/api/navigator/year', json=feedback_json)
+    feedback_json = {'email': 'thisisnotarealemailaddress', 'message': 'This is a test feedback'}
+    res = requests.put('https://api.itfnavigator.com/api/navigator/feedback', json=feedback_json)
     print("Response: " + res.text)
-    assert res.status_code == 401, "Test Failed"
+    assert res.data == "Invalid Email.", "Test Failed"
 
 def test_submit_feedback_valid_email():
-    feedback_json = {2021}
-    res = requests.put('https://api.itfnavigator.com/api/navigator/year', json=feedback_json)
+    feedback_json = {'email': 'email@test.com', 'message': 'This is a test feedback'}
+    res = requests.put('https://api.itfnavigator.com/api/navigator/feedback', json=feedback_json)
 
-    assert res.text == "Invalid email", "Test Failed"
+    assert res.data == "Thanks for the feedback! :)", "Test Failed"
 
 # Requirement 17
 # Add Table
